@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{1BD8C7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{894B346D-42C6-4A38-BC35-66DA50BC0A4E}"
 	ProjectSection(SolutionItems) = preProject
+		Documentation\Application diagram.png = Documentation\Application diagram.png
+		Documentation\Architecture diagram.png = Documentation\Architecture diagram.png
 		Documentation\startup-sql.txt = Documentation\startup-sql.txt
 		Documentation\Story Books - Architecture.docx = Documentation\Story Books - Architecture.docx
 		Documentation\Story Books - Diagrams.drawio = Documentation\Story Books - Diagrams.drawio
@@ -36,6 +38,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoryBooks.Features.Identity", "Server\Features\StoryBooks.Features.Identity\StoryBooks.Features.Identity.csproj", "{54BA5C62-6B90-4DCF-A9E3-17CE4D06037E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoryBooks.Libraries.Email", "Server\Libraries\StoryBooks.Libraries.Email\StoryBooks.Libraries.Email.csproj", "{E1D55290-A7FA-410B-9E39-2CC13D340D16}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B70E1FCD-15AF-43EE-B48D-CB69AEFC52CA}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
