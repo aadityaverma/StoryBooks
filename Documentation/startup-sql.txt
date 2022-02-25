@@ -1,0 +1,7 @@
+docker run `
+  -e ACCEPT_EULA=Y `
+  -e SA_PASSWORD=yourStrongPassword12#$ `
+  -p 1433:1433 `
+  -v story_books_sql_data:/var/opt/mssql `
+  --name story_books_sql `
+  -d mcr.microsoft.com/mssql/server:2019-latest
