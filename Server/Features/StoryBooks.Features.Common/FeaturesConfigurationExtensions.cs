@@ -70,5 +70,13 @@
 
             return services;
         }
+        public static IServiceCollection AddSettingsSection<TSettinhs>(
+            this IServiceCollection services,
+            IConfiguration configuration)
+            where TSettinhs : class
+            => services
+                .Configure<TSettinhs>(
+                    configuration.GetSection(nameof(TSettinhs)),
+                    config => config.BindNonPublicProperties = true);
     }
 }

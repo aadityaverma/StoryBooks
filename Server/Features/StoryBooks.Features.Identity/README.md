@@ -1,5 +1,14 @@
 ﻿## Identity Feature
 
+### Description
+This feature contains all user account actions:
+1.Register
+2.Login
+3.Change password
+4.Change user details
+5.Confirm email
+
+### Configuration
 **1. Add this values into the secrets.json:**
 ```
 {

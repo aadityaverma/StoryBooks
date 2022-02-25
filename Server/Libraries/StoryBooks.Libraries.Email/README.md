@@ -1,5 +1,10 @@
-﻿## Email library
+﻿## Email helper library
 
+### Description
+This library contains common Email sender class that is used accross the whole application
+for sending emails. Internaly it uses SendGrid. 
+
+### Configuration
 **Add this variables into the secrets.json:**
 ```
 {

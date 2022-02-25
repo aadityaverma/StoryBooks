@@ -19,20 +19,12 @@
             IConfiguration configuration,
             Assembly featureAssembly)
             => services
-                .AddApplicationSettings(configuration)
+                .AddSettingsSection<ApplicationSettings>(configuration)
                 .AddAutoMapperProfile(featureAssembly)
                 .AddFluentValidation(validation => validation
                     .RegisterValidatorsFromAssembly(featureAssembly))
                 .AddMediatR(featureAssembly)
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-
-        private static IServiceCollection AddApplicationSettings(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            => services
-                .Configure<ApplicationSettings>(
-                    configuration.GetSection(nameof(ApplicationSettings)),
-                    config => config.BindNonPublicProperties = true);
 
         private static IServiceCollection AddAutoMapperProfile(
             this IServiceCollection services,

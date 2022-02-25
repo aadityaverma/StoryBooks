@@ -16,17 +16,9 @@
             this IServiceCollection services,
             IConfiguration configuration)
                 => services
+                    .AddSettingsSection<IdentitySettings>(configuration)
                     .ConfigureFeature<IdentityUserDbContext>(configuration, typeof(IdentityConfigurationExtensions).Assembly)
-                    .AddIdentitySettings(configuration)
                     .AddIdentityLayer<IdentityUserDbContext>(configuration);
-
-        private static IServiceCollection AddIdentitySettings(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            => services
-                .Configure<IdentitySettings>(
-                    configuration.GetSection(nameof(IdentitySettings)),
-                    config => config.BindNonPublicProperties = true);
 
         private static IServiceCollection AddIdentityLayer<TContext>(
             this IServiceCollection services,
