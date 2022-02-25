@@ -1,16 +1,16 @@
 ﻿## Identity Feature
 
-** 1. Add this values into the secrets.json: **
+**1. Add this values into the secrets.json:**
 ```
 {
 	...
 	"Authentication:Secret": "{Secret key}",
-	"ConnectionStrings:DefaultConnection": "{SQL server connection string}"
+	"ConnectionStrings:DefaultConnection": "{SQL server connection string}",
 	...
 }
 ```
 
-** 2. Add this section into appsettings.json: **
+**2. Add this section into appsettings.json:**
 ```
 {
 	...
@@ -25,10 +25,10 @@
 }
 ```
 
-** 3. Add reference to the StoryBooks.Features.Identity to the selected Web Service **
+**3. Add reference to the StoryBooks.Features.Identity to the selected Web Service**
 
 
-** 4. Add this line in application builder services: **
+**4. Add this line in application builder services:**
 ```
 services.AddIdentityFeature(configuration);
 ```
