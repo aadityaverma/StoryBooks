@@ -18,7 +18,7 @@ fan bases, sell or give for free their stories and receive feedback from their c
 have the opportunity to read entartaining stories, learn new things and earn achievements.
 
 ## Architecture Diagram
-![Architecture Diagram](https://github.com/slav40o/StoryBooks/blob/main/Documentation/Architecture-diagram.png?raw=true)
+![Architecture Diagram](https://github.com/slav40o/StoryBooks/blob/main/Documentation/Architecture%20diagram.png?raw=true)
 
 ## Application Diagram
-![Application Diagram](https://github.com/slav40o/StoryBooks/blob/main/Documentation/Application-diagram.png?raw=true)
+![Application Diagram](https://github.com/slav40o/StoryBooks/blob/main/Documentation/Application%20diagram.png?raw=true)
