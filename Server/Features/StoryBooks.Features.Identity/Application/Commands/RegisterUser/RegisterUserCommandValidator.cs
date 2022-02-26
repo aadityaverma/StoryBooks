@@ -24,6 +24,10 @@
                 .MinimumLength(settings.MinPasswordLength)
                 .NotEmpty();
 
+            this.RuleFor(u => u.ConfirmPassword)
+                .Equal(u => u.Password)
+                .WithMessage(ErrorMessages.ConfirmPasswordNotMatching);
+
             this.RuleFor(u => u.FirstName)
                 .MinimumLength(Validation.MinNameLength)
                 .MaximumLength(Validation.MaxNameLength)

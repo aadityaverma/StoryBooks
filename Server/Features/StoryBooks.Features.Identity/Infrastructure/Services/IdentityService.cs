@@ -16,23 +16,22 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using static StoryBooks.Features.Identity.Infrastructure.InfrastructureConstants;
-
+    using static StoryBooks.Features.Identity.Infrastructure.IdentityInfrastructureConstants;
 
     public class IdentityService : IIdentityService
     {
         private readonly ApplicationSettings settings;
-        private readonly ITokenGeneratorService tokenGenerator;
         private readonly UserManager<User> userManager;
-        private readonly IUserFactory userFactory;
         private readonly IEmailSender emailSender;
+        private readonly IUserFactory userFactory;
+        private readonly ITokenGeneratorService tokenGenerator;
 
         public IdentityService(
             IOptions<ApplicationSettings> settings,
-            ITokenGeneratorService tokenGenerator,
             UserManager<User> userManager,
             IUserFactory userFactory,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ITokenGeneratorService tokenGenerator)
         {
             this.settings = settings.Value;
             this.tokenGenerator = tokenGenerator;
@@ -47,7 +46,7 @@
 
             if (user is null)
             {
-                return Result.Fail(IdentityMessages.UserNotFoundError);
+                return Result.Fail(Messages.UserNotFoundError);
             }
 
             var identityResult = await this.userManager.ChangePasswordAsync(
@@ -58,8 +57,8 @@
             var errors = identityResult.Errors.Select(e => new ResultError(e.Code, e.Description));
 
             return identityResult.Succeeded
-                ? Result.Success(IdentityMessages.PasswordChanged)
-                : Result.Fail(IdentityMessages.PasswordChangeError, errors);
+                ? Result.Success(Messages.PasswordChanged)
+                : Result.Fail(Messages.PasswordChangeError, errors);
         }
 
         public async Task<Result<LoginUserSuccessModel>> Login(LoginUserInputModel userInput)
@@ -67,20 +66,20 @@
             var user = await this.userManager.FindByNameAsync(userInput.Email);
             if (user is null)
             {
-                return Result<LoginUserSuccessModel>.Fail(IdentityMessages.InvalidLoginError);
+                return Result<LoginUserSuccessModel>.Fail(Messages.InvalidLoginError);
             }
 
             var passwordValid = await this.userManager.CheckPasswordAsync(user, userInput.Password);
             if (!passwordValid)
             {
-                return Result<LoginUserSuccessModel>.Fail(IdentityMessages.InvalidLoginError);
+                return Result<LoginUserSuccessModel>.Fail(Messages.InvalidLoginError);
             }
 
             var roles = await this.userManager.GetRolesAsync(user);
             var token = this.tokenGenerator.GenerateToken(user, roles);
 
             return Result<LoginUserSuccessModel>.Success(
-                IdentityMessages.LoggedSuccessfully, new LoginUserSuccessModel(user.Id, token));
+                Messages.LoggedSuccessfully, new LoginUserSuccessModel(user.Id, token));
         }
 
         public async Task<Result<IdModel<string>>> Register(RegisterUserInputModel userInput)
@@ -91,19 +90,35 @@
                 .AddLastName(userInput.LastName)
                 .Build();
 
+            bool userCreated = false;
             var identityResult = await this.userManager.CreateAsync(user, userInput.Password);
             if (identityResult.Succeeded)
             {
+                userCreated = true;
                 identityResult = await this.userManager.AddToRoleAsync(user, settings.Roles.User);
+            }
+
+            if (identityResult.Succeeded)
+            {
+                await this.userManager.SetEmailAsync(user, userInput.Email);
+            }
+
+            if (identityResult.Succeeded)
+            {
+                // TODO Create Identity Email Sender and strongly typed email templates
                 await this.emailSender.SendEmailAsync(user.UserName, "Registration confirmation", "You registered into Story books!");
+            }
+            else if (userCreated)
+            {
+                await this.userManager.DeleteAsync(user);
             }
             
             var errors = identityResult.Errors.Select(e => new ResultError(e.Code, e.Description));
 
             return identityResult.Succeeded
                 ? Result<IdModel<string>>.Success(
-                    IdentityMessages.UserRegistrationSuccess, new IdModel<string>(user.Id))
-                : Result<IdModel<string>>.Fail(IdentityMessages.UserRegistrationError, errors);
+                    Messages.UserRegistrationSuccess, new IdModel<string>(user.Id))
+                : Result<IdModel<string>>.Fail(Messages.UserRegistrationError, errors);
         }
     }
 }

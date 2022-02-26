@@ -2,7 +2,7 @@
 {
     public partial class ApplicationSettings
     {
-        public ApplicationRoles Roles { get; private set; } = default!;
+        public ApplicationRoles Roles { get; protected set; } = default!;
     }
 
     public class ApplicationRoles

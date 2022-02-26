@@ -40,7 +40,7 @@
         {
             if (!this.emailSet || !this.firstNameSet || !this.lastNameSet)
             {
-                throw new InvalidIdentityUserException(Validation.InvalidUserFieldsErrorMessage);
+                throw new InvalidIdentityUserException(ErrorMessages.InvalidUserFields);
             }
 
             return new User(email, firstName, lastName);

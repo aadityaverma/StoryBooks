@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity;
 
+    using StoryBooks.Features.Common.Domain.Entities;
     using StoryBooks.Features.Common.Domain.Interfaces;
     using StoryBooks.Features.Identity.Domain.Exceptions;
     using StoryBooks.Libraries.Validation;
@@ -31,6 +32,18 @@
         {
             ValidateName(lastName);
             this.LastName = lastName;
+            return this;
+        }
+
+        public User SetPhoneNumber(string? phoneNumber)
+        {
+            if (phoneNumber == null)
+            {
+                this.PhoneNumber = null;
+                return this;
+            }
+
+            this.PhoneNumber = new PhoneNumber(phoneNumber);
             return this;
         }
 

@@ -9,7 +9,7 @@
 
     public class PhoneNumber : ValueObject
     {
-        internal PhoneNumber(string number)
+        public PhoneNumber(string number)
         {
             this.ValidateModel(number);
 

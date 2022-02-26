@@ -1,6 +1,6 @@
 ﻿namespace StoryBooks.Features.Identity.Domain
 {
-    public static class IdentityDomainConstants
+    internal static class IdentityDomainConstants
     {
         public static class Validation
         {
@@ -8,9 +8,13 @@
             public const int MaxNameLength = 30;
 
             public const int MaxGuidLength = 38;
+        }
 
-            public const string InvalidUserFieldsErrorMessage =
-                "Email, first and last name are required fields.";
+        public static class ErrorMessages
+        {
+            public const string InvalidUserFields = "Email, first and last name are required fields.";
+
+            public const string ConfirmPasswordNotMatching = "'Confirm Password' must be equal to the 'Password' field.";
         }
     }
 }

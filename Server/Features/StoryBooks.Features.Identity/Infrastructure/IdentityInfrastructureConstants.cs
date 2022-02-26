@@ -1,8 +1,8 @@
 ﻿namespace StoryBooks.Features.Identity.Infrastructure
 {
-    public static class InfrastructureConstants
+    public static class IdentityInfrastructureConstants
     {
-        public static class IdentityMessages
+        public static class Messages
         {
             public const string InvalidLoginError = "User or password are invalid!";
 

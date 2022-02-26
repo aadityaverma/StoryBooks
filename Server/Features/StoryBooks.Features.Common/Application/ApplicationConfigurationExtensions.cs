@@ -19,7 +19,7 @@
             IConfiguration configuration,
             Assembly featureAssembly)
             => services
-                .AddSettingsSection<ApplicationSettings>(configuration)
+                .AddApplicationSettings(configuration)
                 .AddAutoMapperProfile(featureAssembly)
                 .AddFluentValidation(validation => validation
                     .RegisterValidatorsFromAssembly(featureAssembly))
@@ -34,6 +34,14 @@
                     (_, config) => config
                         .AddProfile(new MappingProfile(assembly)),
                     Array.Empty<Assembly>());
+
+        private static IServiceCollection AddApplicationSettings(
+            this IServiceCollection services,
+            IConfiguration configuration)
+            => services
+                .Configure<ApplicationSettings>(
+                    configuration.GetSection(nameof(ApplicationSettings)),
+                    config => config.BindNonPublicProperties = true);
 
     }
 }
