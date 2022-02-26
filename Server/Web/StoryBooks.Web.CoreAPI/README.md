@@ -9,7 +9,7 @@ be as much as possible cost effective.
 - Identity
 
 ## Features Under Development
-- Messages
+- Message Bus
 
 ## Future Development
 - Authors/Books

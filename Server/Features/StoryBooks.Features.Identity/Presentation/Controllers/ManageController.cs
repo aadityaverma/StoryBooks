@@ -6,12 +6,11 @@
     using StoryBooks.Features.Common.Presentation.Controllers;
     using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
 
-    [Route("account/[controller]")]
+    [Authorize]
+    [Route("Account/[controller]")]
     public class ManageController : ApiController
     {
-        [HttpPut]
-        [Authorize]
-        [Route(nameof(Password))]
+        [HttpPut(nameof(Password))]
         public async Task<ActionResult> Password(ChangePasswordCommand command)
             => await this.Send(command);
     }

@@ -14,8 +14,8 @@
 
     public class AccountController : ApiController
     {
-        [HttpGet]
         [Authorize]
+        [HttpGet]
         public async Task<ActionResult<UserDetailsModel>> Get()
             => await this.Send(new GetPersonalDetailsQuery());
 
@@ -23,13 +23,12 @@
         public async Task<ActionResult<IdModel<string>>> Post(RegisterUserCommand command)
             => await this.Send(command);
 
-        [HttpPut]
         [Authorize]
+        [HttpPut]
         public async Task<ActionResult> Put(UpdateUserDetailsCommand command)
             => await this.Send(command);
 
-        [HttpPost]
-        [Route(nameof(Login))]
+        [HttpPost(nameof(Login))]
         public async Task<ActionResult<LoginUserSuccessModel>> Login(LoginUserCommand command)
             => await this.Send(command);
     }

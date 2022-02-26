@@ -3,8 +3,6 @@
     using StoryBooks.Features.Common.Domain.Exceptions;
     using StoryBooks.Libraries.Validation;
 
-    using System.Text.RegularExpressions;
-
     using static StoryBooks.Libraries.Validation.CommonValidationConstants;
 
     public class PhoneNumber : ValueObject
@@ -12,12 +10,6 @@
         public PhoneNumber(string number)
         {
             this.ValidateModel(number);
-
-            if (!Regex.IsMatch(number, Phone.RegularExpression))
-            {
-                throw new InvalidPhoneNumberException(Phone.FormatErrorMessage);
-            }
-
             this.Number = number;
         }
 
@@ -33,6 +25,12 @@
                 phoneNumber,
                 Phone.MinLength,
                 Phone.MaxLength,
+                nameof(PhoneNumber));
+
+            Guard.ForValidFormat<InvalidPhoneNumberException>(
+                phoneNumber,
+                Phone.RegularExpression,
+                Phone.FormatErrorMessage,
                 nameof(PhoneNumber));
         }
     }

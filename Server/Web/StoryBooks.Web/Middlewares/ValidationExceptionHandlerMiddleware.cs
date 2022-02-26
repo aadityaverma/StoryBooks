@@ -50,14 +50,14 @@
                     break;
                 case NullReferenceException _:
                     code = HttpStatusCode.BadRequest;
-                    result = SerializeObject(new[] { "Invalid request." });
+                    result = SerializeObject(new[] { WebConstants.InvalidRequest });
                     break;
                 case EntityNotFoundException _:
                     code = HttpStatusCode.NotFound;
                     break;
             }
 
-            context.Response.ContentType = "application/json";
+            context.Response.ContentType = WebConstants.ResponseType;
             context.Response.StatusCode = (int)code;
 
             if (string.IsNullOrEmpty(result))

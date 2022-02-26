@@ -1,7 +1,7 @@
 ﻿namespace StoryBooks.Web.CoreAPI.Configurations
 {
     using StoryBooks.Features.Identity;
-    using StoryBooks.Libraries.Email;
+    using StoryBooks.Web.Configurations;
 
     internal static class BuilderConfigurations
     {
@@ -11,18 +11,6 @@
                             .AddIdentityFeature(builder.Configuration);
 
             return builder;
-        }
-
-        private static IServiceCollection AddWebConfiguration(
-            this IServiceCollection services,
-            IConfiguration configuration)
-        {
-            services.AddEmail(configuration)
-                    .AddSwaggerGen()
-                    .AddEndpointsApiExplorer()
-                    .AddControllers();
-
-            return services;
         }
     }
 }

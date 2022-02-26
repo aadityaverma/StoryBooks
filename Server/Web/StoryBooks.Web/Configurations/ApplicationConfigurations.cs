@@ -4,7 +4,9 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Options;
 
+    using StoryBooks.Features.Common.Application;
     using StoryBooks.Features.Common.Infrastructure.Persistence;
     using StoryBooks.Web.Middlewares;
 
@@ -12,14 +14,19 @@
     {
         public static IApplicationBuilder ConfigureWebApp(this IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var serviceProvider = serviceScope.ServiceProvider;
+
+            var opts = serviceProvider.GetService<IOptions<ApplicationSettings>>();
+            if (opts == null)
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-                app.UseDeveloperExceptionPage();
+                throw new ApplicationException(WebConstants.ApplicationSettingsNotConfigured);
             }
 
+            string apiVersion = opts.Value.Version;
+            string routePrefix = $"/api/{apiVersion}";
             app.UseValidationExceptionHandler()
+                .UsePathBase(routePrefix)
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseCors(options => options
@@ -30,15 +37,24 @@
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints
                     .MapControllers())
-                .Initialize();
+                .Initialize(serviceProvider);
+
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint($"./{apiVersion}/swagger.json", $"Api {apiVersion}");
+                }
+                );
+                app.UseDeveloperExceptionPage();
+            }
 
             return app;
         }
 
-        private static IApplicationBuilder Initialize(this IApplicationBuilder app)
+        private static IApplicationBuilder Initialize(this IApplicationBuilder app, IServiceProvider serviceProvider)
         {
-            using var serviceScope = app.ApplicationServices.CreateScope();
-            var serviceProvider = serviceScope.ServiceProvider;
             var services = serviceProvider.GetServices<IDataInitializer>();
 
             foreach (var initializer in services)

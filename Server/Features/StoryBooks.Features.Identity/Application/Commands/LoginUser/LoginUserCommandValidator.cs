@@ -4,7 +4,7 @@
 
     using Microsoft.Extensions.Options;
 
-    using StoryBooks.Libraries.Validation;
+    using static StoryBooks.Libraries.Validation.CommonValidationConstants;
 
     public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
     {
@@ -13,13 +13,13 @@
             var settings = options.Value;
 
             this.RuleFor(u => u.Email)
-                .MinimumLength(CommonValidationConstants.Email.MinLength)
-                .MaximumLength(CommonValidationConstants.Email.MaxLength)
-                .EmailAddress()
-                .NotEmpty();
+                .NotEmpty()
+                .Matches(Email.RegularExpression)
+                .MinimumLength(Email.MinLength)
+                .MaximumLength(Email.MaxLength)
+                .EmailAddress();
 
             this.RuleFor(u => u.Password)
-                .MinimumLength(settings.MinPasswordLength)
                 .NotEmpty();
         }
     }

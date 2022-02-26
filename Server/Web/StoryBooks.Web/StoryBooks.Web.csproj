@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Features\StoryBooks.Features.Common\StoryBooks.Features.Common.csproj" />
+    <ProjectReference Include="..\..\Libraries\StoryBooks.Libraries.Email\StoryBooks.Libraries.Email.csproj" />
   </ItemGroup>
 
 </Project>

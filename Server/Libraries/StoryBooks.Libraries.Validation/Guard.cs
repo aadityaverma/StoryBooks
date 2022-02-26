@@ -1,6 +1,7 @@
 namespace StoryBooks.Libraries.Validation
 {
     using System;
+    using System.Text.RegularExpressions;
 
     public static class Guard
     {
@@ -119,7 +120,20 @@ namespace StoryBooks.Libraries.Validation
                 return;
             }
 
-            ThrowException<TException>($"{name} must be a valid URL.");
+            ThrowException<TException>($"Value for '{name}' must be a valid URL.");
+        }
+
+        public static void ForValidFormat<TException>(string value, Regex expression, string? message, string name = "Value")
+            where TException : ValidationException, new()
+        {
+            ForEmptyString<TException>(value, message, name);
+            if (expression.IsMatch(value))
+            {
+                return;
+            }
+
+            string msg = message ?? $"Value for '{name}' has incorrect format.";
+            ThrowException<TException>(msg);
         }
 
         private static void ThrowException<TException>(string message)

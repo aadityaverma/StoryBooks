@@ -12,7 +12,7 @@
     using StoryBooks.Features.Common.Presentation.Extensions;
 
     [ApiController]
-    [Route("/api/v1/[controller]")]
+    [Route("[controller]")]
     public abstract class ApiController : ControllerBase
     {
         public const string PathSeparator = "/";

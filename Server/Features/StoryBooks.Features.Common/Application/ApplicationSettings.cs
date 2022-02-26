@@ -2,6 +2,8 @@
 {
     public partial class ApplicationSettings
     {
+        public string Version { get; protected set; } = default!;
+
         public ApplicationRoles Roles { get; protected set; } = default!;
     }
 

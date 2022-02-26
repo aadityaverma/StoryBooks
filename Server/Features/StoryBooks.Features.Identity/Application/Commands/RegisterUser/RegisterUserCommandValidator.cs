@@ -7,6 +7,7 @@
     using StoryBooks.Libraries.Validation;
 
     using static StoryBooks.Features.Identity.Domain.IdentityDomainConstants;
+    using static StoryBooks.Libraries.Validation.CommonValidationConstants;
 
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
@@ -15,8 +16,9 @@
             var settings = options.Value;
 
             this.RuleFor(u => u.Email)
-                .MinimumLength(CommonValidationConstants.Email.MinLength)
-                .MaximumLength(CommonValidationConstants.Email.MaxLength)
+                .Matches(Email.RegularExpression)
+                .MinimumLength(Email.MinLength)
+                .MaximumLength(Email.MaxLength)
                 .EmailAddress()
                 .NotEmpty();
 
