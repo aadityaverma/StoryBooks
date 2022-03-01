@@ -5,7 +5,7 @@
     using StoryBooks.Features.Common.Application.Mapping;
     using StoryBooks.Features.Identity.Domain.Entities;
 
-    public class UserDetailsModel : IMapFrom<User>
+    public class PersonalDetailsModel : IMapFrom<User>
     {
         public string Id { get; internal set; } = default!;
 
@@ -18,7 +18,7 @@
         public string? PhoneNumber { get; internal set; }
 
         public virtual void Mapping(Profile mapper)
-            => mapper.CreateMap<User, UserDetailsModel>()
+            => mapper.CreateMap<User, PersonalDetailsModel>()
                      .ForMember(u => u.Email, cfg => cfg.MapFrom(u => u.UserName));
     }
 }

@@ -2,7 +2,7 @@
 
 ### Description
 This library contains common Email sender class that is used accross the whole application
-for sending emails. Internaly it uses SendGrid. 
+for sending emails. Internaly it uses SendGrid.
 
 ### Configuration
 **Add this variables into the secrets.json:**
@@ -10,6 +10,7 @@ for sending emails. Internaly it uses SendGrid.
 {
 	...
 	"EmailSettings:SendGridKey": "{key}",
+	"EmailSettings:ViewsLocation": "{path}",  // Example: '/Resources/EmailTemplates'
 	...
 }
 ```
@@ -30,3 +31,11 @@ for sending emails. Internaly it uses SendGrid.
 ```
 services.AddEmail(configuration);
 ```
+
+### Razor email templates
+If you want to use Razor templates for email body you must provide relative path to their location
+in the sercrets or appsettings json. In order templates to work straightforward you need to keep a
+naming conventions. Each template should be in its own separate folder in this format:
+{TemplateName}
+	{TemplateName}Email.cshtml
+	{TemplateName}EmailModel.cs

@@ -14,9 +14,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class GetPersonalDetailsQuery : IRequest<UserDetailsModel>
+    public class GetPersonalDetailsQuery : IRequest<PersonalDetailsModel>
     {
-        public class GetPersonalDetailsQueryHandler : IRequestHandler<GetPersonalDetailsQuery, UserDetailsModel>
+        public class GetPersonalDetailsQueryHandler : IRequestHandler<GetPersonalDetailsQuery, PersonalDetailsModel>
         {
             private readonly ICurrentUser currentUser;
             private readonly UserManager<User> userManager;
@@ -32,12 +32,12 @@
                 this.mapper = mapper;
             }
 
-            public async Task<UserDetailsModel> Handle(GetPersonalDetailsQuery request, CancellationToken cancellationToken)
+            public async Task<PersonalDetailsModel> Handle(GetPersonalDetailsQuery request, CancellationToken cancellationToken)
             {
                 var user = await userManager.FindByNameAsync(currentUser.Email);
                 Guard.ForNull<User, UserNotFoundException>(user);
 
-                return this.mapper.Map<UserDetailsModel>(user);
+                return this.mapper.Map<PersonalDetailsModel>(user);
             }
         }
     }

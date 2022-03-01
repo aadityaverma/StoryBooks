@@ -40,7 +40,9 @@
 
             services.AddAuthentication(configuration)
                     .AddTransient<IIdentityService, IdentityService>()
-                    .AddTransient<ITokenGeneratorService, JwtTokenGeneratorService>();
+                    .AddTransient<IIdentityEmailService, IdentityEmailService>()
+                    .AddTransient<ITokenGeneratorService, JwtTokenGeneratorService>()
+                    .AddTransient<IIdentityEmailService, IdentityEmailService>();
 
             return services;
         }

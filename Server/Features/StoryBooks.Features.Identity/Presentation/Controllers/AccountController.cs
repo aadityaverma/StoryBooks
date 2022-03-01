@@ -16,7 +16,7 @@
     {
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<UserDetailsModel>> Get()
+        public async Task<ActionResult<PersonalDetailsModel>> Get()
             => await this.Send(new GetPersonalDetailsQuery());
 
         [HttpPost]

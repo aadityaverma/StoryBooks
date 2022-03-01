@@ -12,6 +12,7 @@
 
     using StoryBooks.Features.Common.Application.Exceptions;
     using StoryBooks.Features.Common.Domain.Exceptions;
+    using StoryBooks.Libraries.Validation;
 
     public class ValidationExceptionHandlerMiddleware
     {
@@ -64,7 +65,7 @@
             {
                 var error = exception.Message;
 
-                if (exception is BaseDomainException baseDomainException)
+                if (exception is ValidationException baseDomainException)
                 {
                     error = baseDomainException.Error;
                 }

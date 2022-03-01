@@ -18,5 +18,10 @@
 
             public const string UserRegistrationSuccess = "User registration is successful.";
         }
+
+        public static class Email
+        {
+            public const string UserRegistrationSubject = "Registration confirmation";
+        }
     }
 }

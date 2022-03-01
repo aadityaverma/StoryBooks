@@ -12,6 +12,7 @@
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            var apiName = configuration.GetValue<string>("ApplicationSettings:ApiName");
             var apiVersion = configuration.GetValue<string>("ApplicationSettings:Version");
 
             services.AddEmail(configuration)
@@ -19,7 +20,7 @@
                     {
                         c.SwaggerDoc(apiVersion, new OpenApiInfo
                         {
-                            Title = "Story Books Core API",
+                            Title = apiName,
                             Version = apiVersion,
                             Description = $"Prepend '/api/{apiVersion}/' for each swagger generated endpoint. This is the global route prefix that is not taken into account by swagger in .net 6."
                         });

@@ -4,6 +4,8 @@
     {
         public string SendGridKey { get; private set; } = default!;
 
+        public string TemplatesLocation { get; private set; } = default!;
+
         public string SenderAddress { get; private set; } = default!;
 
         public string SenderName { get; private set; } = default!;

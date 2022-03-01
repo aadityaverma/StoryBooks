@@ -11,7 +11,6 @@
     using StoryBooks.Features.Identity.Application.Services;
     using StoryBooks.Features.Identity.Domain.Entities;
     using StoryBooks.Features.Identity.Domain.Factories;
-    using StoryBooks.Libraries.Email.Services;
 
     using System.Linq;
     using System.Threading.Tasks;
@@ -22,22 +21,22 @@
     {
         private readonly ApplicationSettings settings;
         private readonly UserManager<User> userManager;
-        private readonly IEmailSender emailSender;
         private readonly IUserFactory userFactory;
+        private readonly IIdentityEmailService emailService;
         private readonly ITokenGeneratorService tokenGenerator;
 
         public IdentityService(
             IOptions<ApplicationSettings> settings,
             UserManager<User> userManager,
             IUserFactory userFactory,
-            IEmailSender emailSender,
+            IIdentityEmailService emailService,
             ITokenGeneratorService tokenGenerator)
         {
             this.settings = settings.Value;
-            this.tokenGenerator = tokenGenerator;
             this.userManager = userManager;
             this.userFactory = userFactory;
-            this.emailSender = emailSender;
+            this.emailService = emailService;
+            this.tokenGenerator = tokenGenerator;
         }
 
         public async Task<Result> ChangePassword(ChangePasswordInputModel changePasswordInput)
@@ -56,9 +55,9 @@
 
             var errors = identityResult.Errors.Select(e => new ResultError(e.Code, e.Description));
 
-            return identityResult.Succeeded
-                ? Result.Success(Messages.PasswordChanged)
-                : Result.Fail(Messages.PasswordChangeError, errors);
+            return identityResult.Succeeded ? 
+                Result.Success(Messages.PasswordChanged) :
+                Result.Fail(Messages.PasswordChangeError, errors);
         }
 
         public async Task<Result<LoginUserSuccessModel>> Login(LoginUserInputModel userInput)
@@ -79,7 +78,8 @@
             var token = this.tokenGenerator.GenerateToken(user, roles);
 
             return Result<LoginUserSuccessModel>.Success(
-                Messages.LoggedSuccessfully, new LoginUserSuccessModel(user.Id, token));
+                Messages.LoggedSuccessfully, 
+                new LoginUserSuccessModel(user.Id, token));
         }
 
         public async Task<Result<IdModel<string>>> Register(RegisterUserInputModel userInput)
@@ -105,8 +105,7 @@
 
             if (identityResult.Succeeded)
             {
-                // TODO Create Identity Email Sender and strongly typed email templates
-                await this.emailSender.SendEmailAsync(user.UserName, "Registration confirmation", "You registered into Story books!");
+                await this.emailService.SendUserRegisteredEmail(user);
             }
             else if (userCreated)
             {
@@ -115,10 +114,11 @@
             
             var errors = identityResult.Errors.Select(e => new ResultError(e.Code, e.Description));
 
-            return identityResult.Succeeded
-                ? Result<IdModel<string>>.Success(
-                    Messages.UserRegistrationSuccess, new IdModel<string>(user.Id))
-                : Result<IdModel<string>>.Fail(Messages.UserRegistrationError, errors);
+            return identityResult.Succeeded ?
+                Result<IdModel<string>>.Success(
+                    Messages.UserRegistrationSuccess, 
+                    new IdModel<string>(user.Id)) :
+                Result<IdModel<string>>.Fail(Messages.UserRegistrationError, errors);
         }
     }
 }
