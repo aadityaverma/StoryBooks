@@ -1,5 +1,5 @@
 ﻿## Identity Feature
-<pre>
+
 ### Description
 This feature contains all user account actions:
 1.Register
@@ -43,4 +43,3 @@ services.AddIdentityFeature(configuration);
 ```
 
 **5. Make sure to include Email service library in your web configurations. This Feature depends on it.
-</pre>
