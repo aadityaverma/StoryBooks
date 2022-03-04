@@ -69,9 +69,9 @@ Each email template has its own folder with template</br>
 file and template model files. Structure:
 </br>
 {TemplateName}</br>
-	{TemplateName}Email.html  => For Fluid templates</br>
-	{TemplateName}Email.cshtml => For Razor templates</br>
-	{TemplateName}EmailModel.cs</br>
+|->{TemplateName}Email.html  => For Fluid templates</br>
+|->{TemplateName}Email.cshtml => For Razor templates</br>
+|->{TemplateName}EmailModel.cs</br>
 
 
 ### Email service with Razor templates
