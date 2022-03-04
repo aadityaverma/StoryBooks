@@ -1,9 +1,15 @@
-﻿@model StoryBooks.Features.Identity.Resources.EmailTemplates.UserRegistration.UserRegistrationEmailModel
+﻿@using System
+@using StoryBooks.Features.Identity.Resources.EmailTemplates.UserRegistration
+
+@model UserRegistrationEmailModel
 
 @{
-    if (Model == null) throw new System.ArgumentNullException();
+    if (Model == null) throw new ArgumentNullException();
 }
 
-Hello @Model.Name,
-
-You have joined Story books!
+<div>
+    Hello @Model.Name,
+</div>
+<div>
+    You have joined Story books!
+</div>

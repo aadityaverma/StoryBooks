@@ -10,14 +10,40 @@
 
     public static class EmailConfigurationExtensions
     {
-        public static IServiceCollection AddEmail(
+        public static IServiceCollection AddEmailWithFluid(
+            this IServiceCollection services,
+            IConfiguration configuration)
+            => services.AddEmail(configuration, EmailServiceType.WithRazor);
+
+        public static IServiceCollection AddEmailWithRazor(
             this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddEmailSettings(configuration)
-                .AddSendGrid()
-                .AddRazorTemplates()
-                .AddTransient<IEmailService, EmailService>();
+                    .AddSendGrid()
+                    .AddRazorTemplates()
+                    .AddTransient<IEmailService, EmailService>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddEmail(
+            this IServiceCollection services,
+            IConfiguration configuration,
+            EmailServiceType type)
+        {
+            services.AddEmailSettings(configuration)
+                    .AddSendGrid()
+                    .AddTransient<IEmailService, EmailService>();
+
+            switch (type)
+            {
+                case EmailServiceType.WithRazor:
+                    services.AddRazorTemplates(); break;
+                case EmailServiceType.WithFluid:
+                    services.AddFluidTemplates(); break;
+                default: services.AddRazorTemplates(); break;
+            }
 
             return services;
         }

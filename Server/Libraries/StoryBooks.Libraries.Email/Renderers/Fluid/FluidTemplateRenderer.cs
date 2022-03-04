@@ -17,7 +17,7 @@
             this.fileProvider = settings.Dev.FileProvider;
         }
 
-        public string Extension => settings.Dev.HtmlViewExtension;
+        public string Extension => settings.Dev.LiquidViewExtension;
 
         public Task<string> RenderAsync<TModel>(string viewName, TModel model)
         {

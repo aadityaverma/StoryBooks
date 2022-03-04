@@ -25,13 +25,7 @@
         /// </summary>
         public string RazorViewExtension { get; private set; }
             = ".cshtml";
-
-        /// <summary>
-        /// Relative location of email templates files
-        /// </summary>
-        public string HtmlViewExtension { get; private set; }
-            = ".html";
-
+        
         /// <summary>
         /// Relative location of email templates files
         /// </summary>
@@ -49,5 +43,10 @@
         /// </summary>
         public IFileProvider FileProvider { get; private set; } 
             = new CombinedResourcesFileProvider(AppDomain.CurrentDomain.BaseDirectory);
+
+        public void SetFileProvider(IFileProvider fileProvider)
+        {
+            this.FileProvider = fileProvider;
+        }
     }
 }

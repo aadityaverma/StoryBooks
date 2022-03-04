@@ -16,7 +16,7 @@
             var apiVersion = configuration.GetValue<string>("ApplicationSettings:Version");
 
             services
-                .AddEmail(configuration)
+                .AddEmailWithRazor(configuration)
                 .AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc(apiVersion, new OpenApiInfo
