@@ -1,8 +1,23 @@
-﻿## Email helper library
+﻿## Email service library
 
 ### Description
-This library contains common Email sender class that is used accross the whole application
-for sending emails. Internaly it uses SendGrid.
+This library contains Email service that is configured for easy email messages sending.
+Internaly it uses SendGrid and few template engines. Email services is made realy easy
+for configuration and usege through the code. Here is example of method sending user 
+registration email: 
+```
+public async Task SendUserRegisteredEmail(User user)
+{
+    var emailModel = new SendEmailModel<UserRegistrationEmailModel>(
+        to: user.UserName,
+        subject: Email.UserRegistrationSubject,
+        model: this.mapper.Map<UserRegistrationEmailModel>(user));
+
+    await this.emailService.SendAsync(emailModel);
+}
+```
+Thats it! If you structure your code properly, the email service will find your template 
+file, build your email message content with the give data and send it to the given user. 
 
 ### Configuration
 **Add this variables into the secrets.json:**
