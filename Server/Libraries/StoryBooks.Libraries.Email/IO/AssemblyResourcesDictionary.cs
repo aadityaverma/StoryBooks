@@ -1,5 +1,6 @@
 ﻿namespace StoryBooks.Libraries.Email.IO
 {
+    using System.Diagnostics;
     using System.Reflection;
 
     internal class AssemblyResourcesDictionary
@@ -29,7 +30,8 @@
             {
                 if (this.Contains(name))
                 {
-                    throw new ResourceDuplicationException();
+                    Debug.Assert(this.Contains(name), $"Duplicate Resource Name {name}");
+                    continue;
                 }
 
                 this.resources.Add(name, new(name, assembly));
@@ -43,7 +45,8 @@
 
         public IEnumerable<AssemblyResource> Find(string fileName)
         {
-            return this.resources.Where(r => r.Key.Contains(fileName)).Select(r => r.Value);
+            string filter = fileName.Replace('/', '.');
+            return this.resources.Where(r => r.Key.Contains(filter)).Select(r => r.Value);
         }
 
         private void LoadEmbededResources()

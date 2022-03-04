@@ -1,8 +1,9 @@
 ﻿@model StoryBooks.Features.Identity.Resources.EmailTemplates.UserRegistration.UserRegistrationEmailModel
 
 @{
-    //Layout = "_EmailLayout.cshtml";
+    if (Model == null) throw new System.ArgumentNullException();
 }
-Hello @Model?.Name,
+
+Hello @Model.Name,
 
 You have joined Story books!

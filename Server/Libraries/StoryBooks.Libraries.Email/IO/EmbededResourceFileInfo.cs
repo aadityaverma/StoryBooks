@@ -18,6 +18,7 @@
         {
             this.viewPath = viewPath;
             this.resource = resource;
+            this.LastModified = DateTime.UtcNow;
         }
 
         public bool Exists
@@ -35,7 +36,7 @@
 
         public bool IsDirectory => false;
 
-        public DateTimeOffset LastModified => throw new NotImplementedException();
+        public DateTimeOffset LastModified { get; }
 
         public long Length
         {

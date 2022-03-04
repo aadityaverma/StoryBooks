@@ -14,14 +14,14 @@
 
     public class IdentityEmailService : IIdentityEmailService
     {
-        private readonly IEmailSender emailSender;
+        private readonly IEmailService emailService;
         private readonly IMapper mapper;
 
         public IdentityEmailService(
-            IEmailSender emailSender,
+            IEmailService emailSender,
             IMapper mapper)
         {
-            this.emailSender = emailSender;
+            this.emailService = emailSender;
             this.mapper = mapper;
         }
 
@@ -32,7 +32,7 @@
                 subject: Email.UserRegistrationSubject,
                 model: this.mapper.Map<UserRegistrationEmailModel>(user));
 
-            await this.emailSender.SendEmailAsync(emailModel);
+            await this.emailService.SendAsync(emailModel);
         }
     }
 }

@@ -9,8 +9,6 @@
     {
         internal static WebApplicationBuilder WebConfiguration(this WebApplicationBuilder builder)
         {
-            var resources = typeof(IdentityConfigurationExtensions).Assembly.GetManifestResourceNames();
-
             builder.Services.AddWebConfiguration(builder.Configuration)
                             .AddIdentityFeature(builder.Configuration);
 

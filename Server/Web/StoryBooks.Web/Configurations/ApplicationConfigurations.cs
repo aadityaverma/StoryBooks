@@ -25,6 +25,7 @@
 
             string apiVersion = opts.Value.Version;
             string routePrefix = $"/api/{apiVersion}";
+            string rootPath = env.ContentRootPath;
             app.UseValidationExceptionHandler()
                 .UsePathBase(routePrefix)
                 .UseHttpsRedirection()

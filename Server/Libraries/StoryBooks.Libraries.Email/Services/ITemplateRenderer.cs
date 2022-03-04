@@ -1,7 +1,12 @@
 ﻿namespace StoryBooks.Libraries.Email.Services
 {
-    public interface IEmailRenderer
+    public interface ITemplateRenderer
     {
+        /// <summary>
+        /// Get Template file extension name: ".ext"
+        /// </summary>
+        string Extension { get; }
+
         /// <summary>
         /// Render email template
         /// </summary>
