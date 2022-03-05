@@ -25,7 +25,7 @@
             var item = fileProvider.GetFileInfo(templateKey);
             if (!item.Exists)
             {
-                throw new EmailTemplateNotFoundException(templateKey);
+                throw new TemplateNotFoundException(templateKey);
             }
 
             using var s = item.CreateReadStream();

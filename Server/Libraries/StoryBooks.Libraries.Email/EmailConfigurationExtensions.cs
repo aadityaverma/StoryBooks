@@ -1,5 +1,7 @@
 ﻿namespace StoryBooks.Libraries.Email
 {
+    using Fluid;
+
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -13,19 +15,12 @@
         public static IServiceCollection AddEmailWithFluid(
             this IServiceCollection services,
             IConfiguration configuration)
-            => services.AddEmail(configuration, EmailServiceType.WithRazor);
+            => services.AddEmail(configuration, EmailServiceType.WithFluid);
 
         public static IServiceCollection AddEmailWithRazor(
             this IServiceCollection services,
             IConfiguration configuration)
-        {
-            services.AddEmailSettings(configuration)
-                    .AddSendGrid()
-                    .AddRazorTemplates()
-                    .AddTransient<IEmailService, EmailService>();
-
-            return services;
-        }
+            => services.AddEmail(configuration, EmailServiceType.WithRazor);
 
         private static IServiceCollection AddEmail(
             this IServiceCollection services,
@@ -34,6 +29,7 @@
         {
             services.AddEmailSettings(configuration)
                     .AddSendGrid()
+                    .AddMemoryCache()
                     .AddTransient<IEmailService, EmailService>();
 
             switch (type)
@@ -63,6 +59,7 @@
             => services.AddSingleton<ITemplateRenderer, RazorTemlateRenderer>();
 
         private static IServiceCollection AddFluidTemplates(this IServiceCollection services)
-            => services.AddSingleton<ITemplateRenderer, FluidTemplateRenderer>();
+            => services.AddSingleton<FluidParser>()
+                       .AddTransient<ITemplateRenderer, FluidTemplateRenderer>();
     }
 }

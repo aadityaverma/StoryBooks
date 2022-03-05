@@ -33,7 +33,7 @@
 
                 if (firstValue is null)
                 {
-                    if (secondValue != null)
+                    if (secondValue is not null)
                     {
                         return false;
                     }
@@ -56,7 +56,7 @@
 
             return fields
                 .Select(field => field.GetValue(this))
-                .Where(value => value != null)
+                .Where(value => value is not null)
                 .Aggregate(startValue, (current, value) => current * multiplier + value!.GetHashCode());
         }
 
@@ -66,7 +66,7 @@
 
             var fields = new List<FieldInfo>();
 
-            while (type != typeof(object) && type != null)
+            while (type != typeof(object) && type is not null)
             {
                 fields.AddRange(type.GetFields(this.privateBindingFlags));
 

@@ -25,7 +25,7 @@
                 .validators
                 .Select(v => v.Validate(context))
                 .SelectMany(result => result.Errors)
-                .Where(f => f != null)
+                .Where(f => f is not null)
                 .ToList();
 
             if (failures.Count != 0)

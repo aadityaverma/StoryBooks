@@ -6,7 +6,7 @@
             this Assembly assembly, 
             Func<string, bool> predicate)
         {
-            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
 
             return
                 assembly.GetEmbededResourceNames()
@@ -23,7 +23,7 @@
         public static string ReadEmbededResource(this Assembly assembly, string name)
         {
             using var resourceStream = assembly.GetManifestResourceStream(name);
-            if (resourceStream == null) { 
+            if (resourceStream is null) { 
                 return string.Empty; 
             }
 

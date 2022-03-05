@@ -32,7 +32,7 @@
         public IFileInfo GetFileInfo(string subpath)
         {
             var resource = this.resourceDictionary.Find(subpath).FirstOrDefault();
-            if (resource != null)
+            if (resource is not null)
             {
                 var fileInfo = new EmbededResourceFileInfo(subpath, resource);
                 if (fileInfo.Exists)
@@ -51,7 +51,7 @@
 
         private static Assembly[] ScanAssemblies(string? assemblyPreffix)
         {
-            if (assemblyPreffix == null)
+            if (assemblyPreffix is null)
             {
                 assemblyPreffix = TryGetDefaultPreffix(assemblyPreffix);
             }
@@ -60,7 +60,7 @@
 
             if (!string.IsNullOrEmpty(assemblyPreffix))
             {
-                assemblies = assemblies.Where(a => a.FullName != null && a.FullName.StartsWith(assemblyPreffix)).ToArray();
+                assemblies = assemblies.Where(a => a.FullName is not null && a.FullName.StartsWith(assemblyPreffix)).ToArray();
             }
 
             return assemblies;
@@ -69,7 +69,7 @@
         private static string? TryGetDefaultPreffix(string? assemblyPreffix)
         {
             string? executingAssemblyName = Assembly.GetEntryAssembly()?.FullName;
-            if (executingAssemblyName != null)
+            if (executingAssemblyName is not null)
             {
                 assemblyPreffix = executingAssemblyName.Split('.').FirstOrDefault();
             }

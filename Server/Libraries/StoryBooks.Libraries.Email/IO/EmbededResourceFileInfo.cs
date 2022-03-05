@@ -66,7 +66,7 @@
             using var stream = CreateReadStream();
             this.metaDataInitialized = true;
 
-            if (stream == null)
+            if (stream is null)
             {
                 return;
             }

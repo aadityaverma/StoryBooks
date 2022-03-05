@@ -1,14 +1,17 @@
-﻿## Identity Feature
+﻿# Identity Feature
 
-### Description
+## Description
 This feature contains all user account actions:
-1.Register
-2.Login
-3.Change password
-4.Change user details
-5.Confirm email
+* Register
+* Login
+* Change passwords
+* Reset password
+* Update user details
+* Confirm user email
+* Enable two factor authentication
 
-### Configuration
+<br>
+## Setup
 **1. Add this values into the secrets.json:**
 ```
 {
@@ -42,4 +45,11 @@ This feature contains all user account actions:
 services.AddIdentityFeature(configuration);
 ```
 
-**5. Make sure to include Email service library in your web configurations. This Feature depends on it.
+**5. Make sure to include Email service library in your web configurations. This Feature depends on it.**
+
+<br>
+## Development In Progress
+* Fluid email templates
+* Confirm user email
+* Reset password
+* Enable two factor authentication

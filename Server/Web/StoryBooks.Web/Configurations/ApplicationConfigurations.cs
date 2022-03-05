@@ -18,7 +18,7 @@
             var serviceProvider = serviceScope.ServiceProvider;
 
             var opts = serviceProvider.GetService<IOptions<ApplicationSettings>>();
-            if (opts == null)
+            if (opts is null)
             {
                 throw new ApplicationException(WebConstants.ApplicationSettingsNotConfigured);
             }

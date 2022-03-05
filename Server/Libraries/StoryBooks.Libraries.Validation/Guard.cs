@@ -9,7 +9,7 @@ namespace StoryBooks.Libraries.Validation
             where TException : ValidationException, new()
             where TValue : class
         {
-            if (value != null)
+            if (value is not null)
             {
                 return;
             }

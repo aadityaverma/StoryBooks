@@ -37,7 +37,7 @@
 
         public User SetPhoneNumber(string? phoneNumber)
         {
-            if (phoneNumber == null)
+            if (phoneNumber is null)
             {
                 this.PhoneNumber = null;
                 return this;

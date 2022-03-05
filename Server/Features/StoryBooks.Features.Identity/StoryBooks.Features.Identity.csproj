@@ -5,9 +5,16 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\EmailTemplates\UserRegistration\UserRegistrationEmail.html" />
+	</ItemGroup>
 	
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\EmailTemplates\UserRegistration\UserRegistrationEmail.cshtml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Resources\EmailTemplates\UserRegistration\UserRegistrationEmail.html">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
 	</ItemGroup>

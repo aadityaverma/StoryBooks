@@ -22,8 +22,7 @@
             this.templateRenderer = templateRenderer;
         }
 
-        public async Task SendAsync<TData>(string to, string subject, string body) 
-            where TData : class
+        public async Task SendAsync(string to, string subject, string body)
         {
             await this.emailSender.SendEmailAsync(to, subject, body);
         }

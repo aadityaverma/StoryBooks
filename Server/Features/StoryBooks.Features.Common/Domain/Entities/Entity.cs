@@ -23,7 +23,7 @@ namespace StoryBooks.Features.Common.Domain.Entities
 
         public bool IsTransient()
         {
-            if (this.Id == null)
+            if (this.Id is null)
             {
                 return true;
             }
@@ -41,7 +41,7 @@ namespace StoryBooks.Features.Common.Domain.Entities
                 return false;
             }
 
-            if (other.Id == null || this.Id == null)
+            if (other.Id is null || this.Id is null)
             {
                 return false;
             }

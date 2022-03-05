@@ -21,15 +21,21 @@
     public class EmailDevSettings
     {
         /// <summary>
-        /// Relative location of email templates files
+        /// Razor views extension
         /// </summary>
         public string RazorViewExtension { get; private set; }
             = ".cshtml";
         
         /// <summary>
-        /// Relative location of email templates files
+        /// Liquid views extensions
         /// </summary>
-        public string LiquidViewExtension { get; private set; }
+        public string FluidViewExtension { get; private set; }
+            = ".html";
+
+        /// <summary>
+        /// HTML file extension
+        /// </summary>
+        public string HtmlViewExtension { get; private set; }
             = ".html";
 
         /// <summary>

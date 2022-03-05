@@ -49,7 +49,7 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"></exception>
         public static bool IsIn<T>(this T source, params T[] list)
         {
-            if (source == null) { 
+            if (source is null) { 
                 throw new ArgumentNullException("Cannot check for null value!"); 
             }
 

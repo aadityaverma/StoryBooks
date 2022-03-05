@@ -33,7 +33,7 @@
             using var scope = this.serviceScopeFactory.CreateScope();
             var data = scope.ServiceProvider.GetService<DbContext>();
 
-            if (data != null && !data.Database.CanConnect())
+            if (data is not null && !data.Database.CanConnect())
             {
                 data.Database.Migrate();
             }
@@ -54,7 +54,7 @@
             using var scope = this.serviceScopeFactory.CreateScope();
 
             var data = scope.ServiceProvider.GetService<DbContext>();
-            if (data == null) return;
+            if (data is null) return;
 
             var messages = data
                 .Set<Message>()
