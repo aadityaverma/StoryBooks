@@ -6,8 +6,8 @@
     using Microsoft.Extensions.DependencyInjection;
 
     using StoryBooks.Libraries.Email.Models;
-    using StoryBooks.Libraries.Email.Renderers;
-    using StoryBooks.Libraries.Email.Renderers.Razror;
+    using StoryBooks.Libraries.Email.Renderers.FluidEngine;
+    using StoryBooks.Libraries.Email.Renderers.RazrorEngine;
     using StoryBooks.Libraries.Email.Services;
 
     public static class EmailConfigurationExtensions
@@ -28,8 +28,9 @@
             EmailServiceType type)
         {
             services.AddEmailSettings(configuration)
-                    .AddSendGrid()
+                    .AddEmailLayout(configuration)
                     .AddMemoryCache()
+                    .AddSendGrid()
                     .AddTransient<IEmailService, EmailService>();
 
             switch (type)
@@ -52,14 +53,28 @@
                     configuration.GetSection(nameof(EmailSettings)),
                     config => config.BindNonPublicProperties = true);
 
+        private static IServiceCollection AddEmailLayout(
+            this IServiceCollection services,
+            IConfiguration configuration)
+            => services
+                .Configure<LayoutModel>(cfg =>
+                {
+                    cfg.SetClientUrl(configuration.GetValue<string>("ApplicationSettings:Urls:ClientUrl"));
+                });
+
         private static IServiceCollection AddSendGrid(this IServiceCollection services)
             => services.AddTransient<IEmailSender, SendGridEmailSender>();
+
+        private static IServiceCollection AddMockSender(this IServiceCollection services)
+            => services.AddTransient<IEmailSender, MockEmailSender>();
 
         private static IServiceCollection AddRazorTemplates(this IServiceCollection services)
             => services.AddSingleton<ITemplateRenderer, RazorTemlateRenderer>();
 
         private static IServiceCollection AddFluidTemplates(this IServiceCollection services)
-            => services.AddSingleton<FluidParser>()
-                       .AddTransient<ITemplateRenderer, FluidTemplateRenderer>();
+        {
+            return services.AddSingleton<FluidParser>()
+                           .AddTransient<ITemplateRenderer, FluidTemplateRenderer>();
+        }
     }
 }

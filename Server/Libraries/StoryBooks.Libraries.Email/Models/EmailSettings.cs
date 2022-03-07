@@ -33,16 +33,16 @@
             = ".html";
 
         /// <summary>
-        /// HTML file extension
-        /// </summary>
-        public string HtmlViewExtension { get; private set; }
-            = ".html";
-
-        /// <summary>
         /// Naming convenction for template model class name
         /// </summary>
         public string ModelNameSuffix { get; private set; }
             = "Model";
+
+        /// <summary>
+        /// Email layout view name
+        /// </summary>
+        public string EmailLayoutViewName { get; private set; }
+            = "_Layout";
 
         /// <summary>
         /// Define file provider that is used form the template renderers

@@ -49,8 +49,9 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException"></exception>
         public static bool IsIn<T>(this T source, params T[] list)
         {
-            if (source is null) { 
-                throw new ArgumentNullException("Cannot check for null value!"); 
+            if (source is null) 
+            {
+                throw new ArgumentException("Cannot search for null value!");
             }
 
             return list.Contains(source);

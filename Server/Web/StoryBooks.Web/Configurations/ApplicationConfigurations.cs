@@ -36,6 +36,7 @@
                     .AllowAnyMethod())
                 .UseAuthentication()
                 .UseAuthorization()
+                .UseStaticFiles()
                 .UseEndpoints(endpoints => endpoints
                     .MapControllers())
                 .Initialize(serviceProvider);

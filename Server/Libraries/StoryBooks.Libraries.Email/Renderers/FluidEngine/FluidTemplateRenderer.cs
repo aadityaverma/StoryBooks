@@ -1,4 +1,4 @@
-﻿namespace StoryBooks.Libraries.Email.Renderers
+﻿namespace StoryBooks.Libraries.Email.Renderers.FluidEngine
 {
     using Fluid;
 
@@ -16,13 +16,17 @@
         private readonly IFileProvider fileProvider;
         private readonly IMemoryCache cache;
         private readonly FluidParser parser;
+        private readonly LayoutModel layoutModel;
 
         public FluidTemplateRenderer(
             IOptions<EmailSettings> opts,
+            IOptions<LayoutModel> layoutOpts,
             IMemoryCache cache,
             FluidParser parser)
         {
             this.settings = opts.Value;
+            this.layoutModel = layoutOpts.Value;
+
             this.fileProvider = settings.Dev.FileProvider;
             this.cache = cache;
             this.parser = parser;
@@ -32,13 +36,32 @@
         
         public async Task<string> RenderAsync<TModel>(string viewName, TModel model)
         {
-            var cachedTemplate = this.cache.Get(viewName) as IFluidTemplate;
-            if (cachedTemplate is null)
+            string resourceName = $"{viewName}{Extension}";
+
+            IFluidTemplate bodyTemplate = GetCachedTemplate(resourceName);
+            string bodyContent = await RenderTemplate(model, bodyTemplate);
+
+            IFluidTemplate layoutTemplate = GetLayoutTemplate();
+            this.layoutModel.SetContent(bodyContent);
+            string emailContent = await RenderTemplate(layoutModel, layoutTemplate);
+
+            return emailContent ?? string.Empty;
+        }
+
+        private IFluidTemplate GetLayoutTemplate()
+        {
+            string resourceName = $"{this.settings.Dev.EmailLayoutViewName}{Extension}";
+            return GetCachedTemplate(resourceName);
+        }
+
+        private IFluidTemplate GetCachedTemplate(string temlateResourceName)
+        {
+            if (this.cache.Get(temlateResourceName) is not IFluidTemplate cachedTemplate)
             {
-                var templateFile = this.fileProvider.GetFileInfo(viewName);
+                var templateFile = this.fileProvider.GetFileInfo(temlateResourceName);
                 if (!templateFile.Exists)
                 {
-                    throw new TemplateNotFoundException($"Template {viewName} is not found!");
+                    throw new TemplateNotFoundException($"File {temlateResourceName} is not found!");
                 }
 
                 using var s = templateFile.CreateReadStream();
@@ -50,9 +73,14 @@
                     throw new TemplateParseException(error);
                 }
 
-                this.cache.Set(viewName, cachedTemplate);
+                this.cache.Set(temlateResourceName, cachedTemplate);
             }
 
+            return cachedTemplate;
+        }
+
+        private static async Task<string> RenderTemplate<TModel>(TModel model, IFluidTemplate cachedTemplate)
+        {
             var context = new TemplateContext(model);
             var content = await cachedTemplate.RenderAsync(context);
             if (content is null)
@@ -60,7 +88,7 @@
                 throw new TemplateRenderException("Content is null!");
             }
 
-            return content ?? string.Empty;
+            return content;
         }
     }
 }

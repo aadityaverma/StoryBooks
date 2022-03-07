@@ -27,21 +27,19 @@
             await this.emailSender.SendEmailAsync(to, subject, body);
         }
 
-        public async Task SendAsync<TData>(SendEmailModel<TData> emailModel)
+        public Task SendAsync<TData>(SendEmailModel<TData> emailModel)
             where TData : class
         {
             string modelName = typeof(TData).Name;
             string viewName = modelName.Replace(this.settings.Dev.ModelNameSuffix, string.Empty);
-            string resourceName = $"{viewName}{templateRenderer.Extension}";
 
-            var body = await this.templateRenderer.RenderAsync(resourceName, emailModel.Model);
-            await this.emailSender.SendEmailAsync(emailModel.To, emailModel.Subject, body);
+            return SendAsync(viewName, emailModel);
         }
 
-        public async Task SendAsync<TData>(string templateName, SendEmailModel<TData> emailModel)
+        public async Task SendAsync<TData>(string viewName, SendEmailModel<TData> emailModel)
             where TData : class
         {
-            var body = await this.templateRenderer.RenderAsync(templateName, emailModel);
+            var body = await this.templateRenderer.RenderAsync(viewName, emailModel.Model);
             await this.emailSender.SendEmailAsync(emailModel.To, emailModel.Subject, body);
         }
     }

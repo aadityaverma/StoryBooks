@@ -1,4 +1,4 @@
-﻿namespace StoryBooks.Libraries.Email.Renderers.Razror
+﻿namespace StoryBooks.Libraries.Email.Renderers.RazrorEngine
 {
     using Microsoft.Extensions.Options;
 
