@@ -2,13 +2,13 @@
 {
     public partial class ApplicationSettings
     {
-        public string Version { get; protected set; } = default!;
+        public string Version { get; private set; } = default!;
 
-        public string ApiName { get; protected set; } = default!;
+        public string ApiName { get; private set; } = default!;
 
-        public ApplicationRoles Roles { get; protected set; } = default!;
+        public ApplicationRoles Roles { get; private set; } = default!;
 
-        public ApplicationURLs URLs { get; protected set; } = default!;
+        public ApplicationURLs URLs { get; private set; } = default!;
     }
 
     public class ApplicationRoles
