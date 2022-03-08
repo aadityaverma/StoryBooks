@@ -6,8 +6,8 @@
 Path prefix:  /api/v1
 |Functionality			|Path											|Return Codes	 |
 |-----------------------|-----------------------------------------------|----------------|
-|Become an Author		|POST /author									|200 OK			 |
-|						|												|400 Bad Request |
+|Become an Author		|POST /author									|200 OK,		 |
+																		 400 Bad Request
 
 ### Books
 Path prefix:  /api/v1/author/{id}
