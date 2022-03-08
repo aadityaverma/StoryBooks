@@ -10,10 +10,9 @@ This feature contains all user account actions:
 * Confirm user email
 * Enable two factor authentication
 
-<br>
 ## Setup
 **1. Add this values into the secrets.json:**
-```
+```C#
 {
 	...
 	"Authentication:Secret": "{Secret key}",
@@ -23,7 +22,7 @@ This feature contains all user account actions:
 ```
 
 **2. Add this section into appsettings.json:**
-```
+```JSON
 {
 	...
 	"IdentitySettings": {
@@ -41,13 +40,12 @@ This feature contains all user account actions:
 
 
 **4. Add this line in application builder services:**
-```
+```C#
 services.AddIdentityFeature(configuration);
 ```
 
 **5. Make sure to include Email service library in your web configurations. This Feature depends on it.**
 
-<br>
 ## Development In Progress
 * Fluid email templates
 * Confirm user email
