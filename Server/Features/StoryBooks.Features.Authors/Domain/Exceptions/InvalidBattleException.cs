@@ -1,6 +1,6 @@
 ﻿namespace StoryBooks.Features.Authors.Domain.Exceptions;
 
-using StoryBooks.Features.Common.Domain.Exceptions;
+using StoryBooks.Features.Domain.Exceptions;
 
 internal class InvalidBattleException : BaseDomainException
 {

@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using StoryBooks.Features.Common.Presentation.Controllers;
+using StoryBooks.Features.Presentation.Controllers;
 using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
 
 [Authorize]

@@ -1,7 +1,7 @@
 ﻿namespace StoryBooks.Features.Authors.Domain.Factories;
 
 using StoryBooks.Features.Authors.Domain.Entities;
-using StoryBooks.Features.Common.Domain.Interfaces;
+using StoryBooks.Features.Domain.Interfaces;
 
 internal interface IAuthorFactory : IFactory<Author>
 {

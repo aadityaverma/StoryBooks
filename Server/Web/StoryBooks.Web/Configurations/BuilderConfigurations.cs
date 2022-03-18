@@ -23,7 +23,7 @@ public static class BuilderConfigurations
                 {
                     Title = apiName,
                     Version = apiVersion,
-                    Description = $"Prepend '/api/{apiVersion}/' for each swagger generated endpoint. This is the global route prefix that is not taken into account by swagger in .net 6."
+                    Description = $"Prepend '/api/{apiVersion}/B' for each swagger generated endpoint. This is the global route prefix that is not taken into account by swagger in .net 6."
                 });
             })
             .AddEndpointsApiExplorer()

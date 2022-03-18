@@ -1,8 +1,8 @@
 ﻿namespace StoryBooks.Features.Authors.Domain.Entities;
 
 using StoryBooks.Features.Authors.Domain.Exceptions;
-using StoryBooks.Features.Common.Domain.Entities;
-using StoryBooks.Features.Common.Domain.Interfaces;
+using StoryBooks.Features.Domain.Entities;
+using StoryBooks.Features.Domain.Interfaces;
 using StoryBooks.Libraries.Validation;
 
 using System.Diagnostics.CodeAnalysis;

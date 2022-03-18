@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-using StoryBooks.Features.Common.Application;
-using StoryBooks.Features.Common.Application.Commands;
+using StoryBooks.Features.Application;
+using StoryBooks.Features.Application.Commands;
 using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
 using StoryBooks.Features.Identity.Application.Commands.LoginUser;
 using StoryBooks.Features.Identity.Application.Commands.RegisterUser;

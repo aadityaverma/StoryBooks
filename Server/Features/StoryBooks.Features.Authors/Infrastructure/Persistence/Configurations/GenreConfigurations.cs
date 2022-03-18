@@ -22,10 +22,13 @@ internal class GenreConfigurations : IEntityTypeConfiguration<Genre>
             .IsRequired()
             .HasMaxLength(MaxGenreNameLength);
 
-        builder
+        var manyToMany = builder
             .HasMany(g => g.Books)
-            .WithMany(b => b.Genres)
-            .LeftNavigation
+            .WithMany(b => b.Genres);
+
+        manyToMany.UsingEntity(f => f.ToTable($"{TablesPrefix}_{nameof(Book)}{nameof(Genre)}"));
+
+        manyToMany.LeftNavigation
             .SetField("books");
     }
 }

@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using StoryBooks.Features.Authors.Domain.Entities;
-using StoryBooks.Features.Common.Infrastructure.Persistence;
+using StoryBooks.Features.Infrastructure.Persistence;
 
 public class AuthorsDbContext : FeatureDbContext, IAuthorDbContext
 {

@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-using StoryBooks.Features.Common.Application.Exceptions;
-using StoryBooks.Features.Common.Domain.Exceptions;
+using StoryBooks.Features.Application.Exceptions;
+using StoryBooks.Features.Domain.Exceptions;
 using StoryBooks.Libraries.Validation;
 
 public class ValidationExceptionHandlerMiddleware

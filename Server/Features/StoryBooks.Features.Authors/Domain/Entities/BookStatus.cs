@@ -1,6 +1,6 @@
 ﻿namespace StoryBooks.Features.Authors.Domain.Entities;
 
-using StoryBooks.Features.Common.Domain.Entities;
+using StoryBooks.Features.Domain.Entities;
 
 using System.Diagnostics.CodeAnalysis;
 

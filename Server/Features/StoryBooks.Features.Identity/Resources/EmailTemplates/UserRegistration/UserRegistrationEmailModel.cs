@@ -2,7 +2,7 @@
 
 using AutoMapper;
 
-using StoryBooks.Features.Common.Application.Mapping;
+using StoryBooks.Features.Application.Mapping;
 using StoryBooks.Features.Identity.Domain.Entities;
 
 public class UserRegistrationEmailModel : IMapFrom<User>

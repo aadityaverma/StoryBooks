@@ -22,10 +22,14 @@ internal class BattleConfigurations : IEntityTypeConfiguration<Battle>
             .IsRequired()
             .HasMaxLength(MaxBattleNameLength);
 
-        builder
+        var manyToMany = builder
             .HasMany(b => b.IncludedStats)
-            .WithMany(s => s.Battles)
-            .LeftNavigation
+            .WithMany(s => s.Battles);
+
+        manyToMany
+            .UsingEntity(f => f.ToTable($"{TablesPrefix}_{nameof(Battle)}{nameof(Stat)}"));
+
+        manyToMany.LeftNavigation
             .SetField("includedStats");
     }
 }

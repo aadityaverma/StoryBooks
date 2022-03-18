@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-using StoryBooks.Features.Common.Application;
-using StoryBooks.Features.Common.Infrastructure.Persistence;
+using StoryBooks.Features.Application;
+using StoryBooks.Features.Infrastructure.Persistence;
 using StoryBooks.Web.Middlewares;
 
 public static class ApplicationConfigurations

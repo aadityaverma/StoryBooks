@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StoryBooks.Features.Common\StoryBooks.Features.Common.csproj" />
+    <ProjectReference Include="..\StoryBooks.Features\StoryBooks.Features.csproj" />
   </ItemGroup>
 
 </Project>

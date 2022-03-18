@@ -27,7 +27,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Libraries\StoryBooks.Libraries.Email\StoryBooks.Libraries.Email.csproj" />
-		<ProjectReference Include="..\StoryBooks.Features.Common\StoryBooks.Features.Common.csproj" />
+		<ProjectReference Include="..\StoryBooks.Features\StoryBooks.Features.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

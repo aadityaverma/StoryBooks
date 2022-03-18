@@ -34,7 +34,7 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IncludedStatsId");
 
-                    b.ToTable("BattleStat");
+                    b.ToTable("Authors_BattleStat", (string)null);
                 });
 
             modelBuilder.Entity("BookGenre", b =>
@@ -49,7 +49,7 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GenresId");
 
-                    b.ToTable("BookGenre");
+                    b.ToTable("Authors_BookGenre", (string)null);
                 });
 
             modelBuilder.Entity("BookTag", b =>
@@ -64,7 +64,7 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("BookTag");
+                    b.ToTable("Authors_BookTag", (string)null);
                 });
 
             modelBuilder.Entity("StoryBooks.Features.Authors.Domain.Entities.Author", b =>

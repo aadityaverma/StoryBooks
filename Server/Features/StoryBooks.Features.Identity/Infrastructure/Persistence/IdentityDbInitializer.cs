@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-using StoryBooks.Features.Common.Application;
-using StoryBooks.Features.Common.Infrastructure.Persistence;
+using StoryBooks.Features.Application;
+using StoryBooks.Features.Infrastructure.Persistence;
 
 using System.Threading.Tasks;
 

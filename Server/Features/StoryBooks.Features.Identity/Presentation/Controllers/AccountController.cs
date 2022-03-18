@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using StoryBooks.Features.Common.Application.Commands;
-using StoryBooks.Features.Common.Presentation.Controllers;
+using StoryBooks.Features.Application.Commands;
+using StoryBooks.Features.Presentation.Controllers;
 using StoryBooks.Features.Identity.Application.Commands.LoginUser;
 using StoryBooks.Features.Identity.Application.Commands.RegisterUser;
 using StoryBooks.Features.Identity.Application.Commands.UpdateDetails;

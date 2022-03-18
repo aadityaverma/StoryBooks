@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using StoryBooks.Features.Authors.Domain.Entities;
-using StoryBooks.Features.Common.Infrastructure.Persistence.Configurations;
+using StoryBooks.Features.Infrastructure.Persistence.Configurations;
 
 using static StoryBooks.Features.Authors.Infrastructure.InfrastructureConstants;
 

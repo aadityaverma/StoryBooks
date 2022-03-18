@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using StoryBooks.Features.Authors.Infrastructure.Persistence;
-using StoryBooks.Features.Common;
-using StoryBooks.Features.Common.Infrastructure.Exceptions;
+using StoryBooks.Features;
+using StoryBooks.Features.Infrastructure.Exceptions;
 
 public static class AuthorsConfigurationExtensions
 {

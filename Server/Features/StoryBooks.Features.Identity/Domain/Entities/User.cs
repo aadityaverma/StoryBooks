@@ -2,8 +2,8 @@
 
 using Microsoft.AspNetCore.Identity;
 
-using StoryBooks.Features.Common.Domain.Entities;
-using StoryBooks.Features.Common.Domain.Interfaces;
+using StoryBooks.Features.Domain.Entities;
+using StoryBooks.Features.Domain.Interfaces;
 using StoryBooks.Features.Identity.Domain.Exceptions;
 using StoryBooks.Libraries.Validation;
 

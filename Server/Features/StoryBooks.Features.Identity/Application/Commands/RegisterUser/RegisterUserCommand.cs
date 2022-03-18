@@ -2,8 +2,8 @@
 
 using MediatR;
 
-using StoryBooks.Features.Common.Application;
-using StoryBooks.Features.Common.Application.Commands;
+using StoryBooks.Features.Application;
+using StoryBooks.Features.Application.Commands;
 using StoryBooks.Features.Identity.Application.Services;
 
 using System.Threading;

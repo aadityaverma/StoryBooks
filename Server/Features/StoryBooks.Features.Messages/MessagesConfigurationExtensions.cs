@@ -11,7 +11,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    using StoryBooks.Features.Common;
+    using StoryBooks.Features;
     using StoryBooks.Features.Messages.Persistence;
     using StoryBooks.Features.Messages.Services;
 

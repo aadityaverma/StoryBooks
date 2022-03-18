@@ -22,11 +22,16 @@
                 .IsRequired()
                 .HasMaxLength(MaxGenreNameLength);
 
-            builder
+            var manyToMany = builder
                 .HasMany(g => g.Books)
-                .WithMany(b => b.Tags)
+                .WithMany(b => b.Tags);
+
+            manyToMany
                 .LeftNavigation
                 .SetField("books");
+
+            manyToMany
+                .UsingEntity(f => f.ToTable($"{TablesPrefix}_{nameof(Book)}{nameof(Tag)}"));
         }
     }
 }

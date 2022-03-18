@@ -1,7 +1,7 @@
 ﻿namespace StoryBooks.Features.Authors.Domain.Repositories;
 
 using StoryBooks.Features.Authors.Domain.Entities;
-using StoryBooks.Features.Common.Domain.Interfaces;
+using StoryBooks.Features.Domain.Interfaces;
 
 internal interface IAuthorRepository : IDomainRepository<Author>
 {

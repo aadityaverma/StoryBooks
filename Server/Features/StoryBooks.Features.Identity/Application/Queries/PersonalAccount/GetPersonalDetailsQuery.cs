@@ -6,7 +6,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Identity;
 
-using StoryBooks.Features.Common.Application.Interfaces;
+using StoryBooks.Features.Application.Interfaces;
 using StoryBooks.Features.Identity.Domain.Entities;
 using StoryBooks.Features.Identity.Domain.Exceptions;
 using StoryBooks.Libraries.Validation;

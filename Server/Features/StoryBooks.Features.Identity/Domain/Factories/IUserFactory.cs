@@ -1,6 +1,6 @@
 ﻿namespace StoryBooks.Features.Identity.Domain.Factories;
 
-using StoryBooks.Features.Common.Domain.Interfaces;
+using StoryBooks.Features.Domain.Interfaces;
 using StoryBooks.Features.Identity.Domain.Entities;
 
 public interface IUserFactory : IFactory<User>

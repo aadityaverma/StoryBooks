@@ -1,7 +1,7 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Services;
 
-using StoryBooks.Features.Common.Application;
-using StoryBooks.Features.Common.Application.Commands;
+using StoryBooks.Features.Application;
+using StoryBooks.Features.Application.Commands;
 using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
 using StoryBooks.Features.Identity.Application.Commands.LoginUser;
 using StoryBooks.Features.Identity.Application.Commands.RegisterUser;
