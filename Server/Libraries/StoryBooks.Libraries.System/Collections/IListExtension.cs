@@ -1,32 +1,31 @@
-namespace System.Linq
-{
-    using System.Collections.Generic;
+namespace System.Linq;
 
-    public static class IListExtensions
+using System.Collections.Generic;
+
+public static class IListExtensions
+{
+    public static void AddRange<T>(this IList<T> collection, IEnumerable<T> items)
     {
-        public static void AddRange<T>(this IList<T> collection, IEnumerable<T> items)
+        if (items.IsNotEmpty())
         {
-            if (items.IsNotEmpty())
+            foreach (var item in items)
             {
-                foreach (var item in items)
-                {
-                    collection.Add(item);
-                }
+                collection.Add(item);
             }
         }
+    }
 
-        /// Convert list of object into another type
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="items">Items to be converted</param>
-        /// <returns></returns>
-        public static IList<T> To<T>(this IList<IConvertible> items)
-        { 
-            var result = new List<T>();
+    /// Convert list of object into another type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="items">Items to be converted</param>
+    /// <returns></returns>
+    public static IList<T> To<T>(this IList<IConvertible> items)
+    {
+        var result = new List<T>();
 
-            items.ForEach(item => result.Add(item.To<T>()));
+        items.ForEach(item => result.Add(item.To<T>()));
 
-            return result;
-        }
+        return result;
     }
 }

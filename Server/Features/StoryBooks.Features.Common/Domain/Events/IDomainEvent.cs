@@ -1,9 +1,10 @@
-namespace StoryBooks.Features.Common.Domain.Events
-{
-    using System;
+namespace StoryBooks.Features.Common.Domain.Events;
 
-    public interface IDomainEvent
-    {
-        DateTime OccurredOn { get; }
-    }
+using MediatR;
+
+using System;
+
+public interface IDomainEvent : INotification
+{
+    DateTime OccurredOn { get; }
 }

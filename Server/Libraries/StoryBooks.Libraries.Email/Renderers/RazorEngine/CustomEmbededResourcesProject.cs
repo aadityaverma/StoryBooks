@@ -1,38 +1,37 @@
-﻿namespace StoryBooks.Libraries.Email.Renderers.RazrorEngine
-{
-    using Microsoft.Extensions.FileProviders;
+﻿namespace StoryBooks.Libraries.Email.Renderers.RazrorEngine;
 
-    using RazorLight.Razor;
+//using Microsoft.Extensions.FileProviders;
 
-    using StoryBooks.Libraries.Email.Exceptions;
+//using RazorLight.Razor;
 
-    public class CustomEmbededResourcesProject : RazorLightProject
-    {
-        private readonly IFileProvider fileProvider;
+//using StoryBooks.Libraries.Email.Exceptions;
 
-        public CustomEmbededResourcesProject(IFileProvider fileProvider)
-        {
-            this.fileProvider = fileProvider;
-        }
+//public class CustomEmbededResourcesProject : RazorLightProject
+//{
+//    private readonly IFileProvider fileProvider;
 
-        public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
-        {
-            return Task.FromResult(Enumerable.Empty<RazorLightProjectItem>());
-        }
+//    public CustomEmbededResourcesProject(IFileProvider fileProvider)
+//    {
+//        this.fileProvider = fileProvider;
+//    }
 
-        public override async Task<RazorLightProjectItem> GetItemAsync(string templateKey)
-        {
-            var item = fileProvider.GetFileInfo(templateKey);
-            if (!item.Exists)
-            {
-                throw new TemplateNotFoundException(templateKey);
-            }
+//    public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
+//    {
+//        return Task.FromResult(Enumerable.Empty<RazorLightProjectItem>());
+//    }
 
-            using var s = item.CreateReadStream();
-            using var sr = new StreamReader(item.CreateReadStream());
+//    public override async Task<RazorLightProjectItem> GetItemAsync(string templateKey)
+//    {
+//        var item = fileProvider.GetFileInfo(templateKey);
+//        if (!item.Exists)
+//        {
+//            throw new TemplateNotFoundException(templateKey);
+//        }
 
-            string content  = await sr.ReadToEndAsync();
-            return new TextSourceRazorProjectItem(templateKey, content);
-        }
-    }
-}
+//        using var s = item.CreateReadStream();
+//        using var sr = new StreamReader(item.CreateReadStream());
+
+//        string content  = await sr.ReadToEndAsync();
+//        return new TextSourceRazorProjectItem(templateKey, content);
+//    }
+//}

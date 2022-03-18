@@ -1,150 +1,149 @@
-namespace StoryBooks.Libraries.Validation
+namespace StoryBooks.Libraries.Validation;
+
+using System;
+using System.Text.RegularExpressions;
+
+public static class Guard
 {
-    using System;
-    using System.Text.RegularExpressions;
-
-    public static class Guard
+    public static void ForNull<TValue, TException>(TValue value, string? message = null, string name = "Value")
+        where TException : ValidationException, new()
+        where TValue : class
     {
-        public static void ForNull<TValue, TException>(TValue value, string? message = null, string name = "Value")
-            where TException : ValidationException, new()
-            where TValue : class
+        if (value is not null)
         {
-            if (value is not null)
-            {
-                return;
-            }
-
-            string msg = message ?? $"{name} cannot be null.";
-            ThrowException<TException>(msg);
+            return;
         }
 
-        public static void ForEmptyString<TException>(string value, string? message = null, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                return;
-            }
+        string msg = message ?? $"{name} cannot be null.";
+        ThrowException<TException>(msg);
+    }
 
-            string msg = message ?? $"{name} cannot be null ot empty.";
-            ThrowException<TException>(msg);
+    public static void ForEmptyString<TException>(string value, string? message = null, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return;
         }
 
-        public static void ForMinStringLength<TException>(string value, int minLength, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            ForEmptyString<TException>(value, name: name);
-            if (minLength <= value.Length)
-            {
-                return;
-            }
+        string msg = message ?? $"{name} cannot be null ot empty.";
+        ThrowException<TException>(msg);
+    }
 
-            string msg = $"{name} must contain at least {minLength} symbols.";
-            ThrowException<TException>(msg);
+    public static void ForMinStringLength<TException>(string value, int minLength, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        ForEmptyString<TException>(value, name: name);
+        if (minLength <= value.Length)
+        {
+            return;
         }
 
-        public static void ForMaxStringLength<TException>(string value, int maxLength, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            ForEmptyString<TException>(value, name: name);
-            if (maxLength >= value.Length)
-            {
-                return;
-            }
+        string msg = $"{name} must contain at least {minLength} symbols.";
+        ThrowException<TException>(msg);
+    }
 
-            ThrowException<TException>($"{name} must contain less than {maxLength + 1} symbols.");
+    public static void ForMaxStringLength<TException>(string value, int maxLength, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        ForEmptyString<TException>(value, name: name);
+        if (maxLength >= value.Length)
+        {
+            return;
         }
 
-        public static void ForStringLength<TException>(string value, int minLength, int maxLength, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            ForEmptyString<TException>(value, name: name);
-            if (minLength <= value.Length && value.Length <= maxLength)
-            {
-                return;
-            }
+        ThrowException<TException>($"{name} must contain less than {maxLength + 1} symbols.");
+    }
 
-            ThrowException<TException>($"{name} must have between {minLength} and {maxLength} symbols.");
+    public static void ForStringLength<TException>(string value, int minLength, int maxLength, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        ForEmptyString<TException>(value, name: name);
+        if (minLength <= value.Length && value.Length <= maxLength)
+        {
+            return;
         }
 
-        public static void ForOutOfRange<TException>(int number, int min, int max, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            if (min <= number && number <= max)
-            {
-                return;
-            }
+        ThrowException<TException>($"{name} must have between {minLength} and {maxLength} symbols.");
+    }
 
-            ThrowException<TException>($"{name} must be between {min} and {max}.");
+    public static void ForOutOfRange<TException>(int number, int min, int max, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        if (min <= number && number <= max)
+        {
+            return;
         }
 
-        public static void ForMinRange<TException>(decimal number, decimal min, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            if (min <= number)
-            {
-                return;
-            }
+        ThrowException<TException>($"{name} must be between {min} and {max}.");
+    }
 
-            ThrowException<TException>($"{name} must be {min} or greater.");
+    public static void ForMinRange<TException>(decimal number, decimal min, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        if (min <= number)
+        {
+            return;
         }
 
-        public static void ForMaxRange<TException>(decimal number, decimal max, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            if (number <= max)
-            {
-                return;
-            }
+        ThrowException<TException>($"{name} must be {min} or greater.");
+    }
 
-            ThrowException<TException>($"{name} must be {max} or smaller.");
+    public static void ForMaxRange<TException>(decimal number, decimal max, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        if (number <= max)
+        {
+            return;
         }
 
-        public static void ForOutOfRange<TException>(decimal number, decimal min, decimal max, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            if (min <= number && number <= max)
-            {
-                return;
-            }
+        ThrowException<TException>($"{name} must be {max} or smaller.");
+    }
 
-            ThrowException<TException>($"{name} must be between {min} and {max}.");
+    public static void ForOutOfRange<TException>(decimal number, decimal min, decimal max, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        if (min <= number && number <= max)
+        {
+            return;
         }
 
-        public static void ForValidUrl<TException>(string url, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            if (url.Length <= 2048 && 
-                Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                return;
-            }
+        ThrowException<TException>($"{name} must be between {min} and {max}.");
+    }
 
-            ThrowException<TException>($"Value for '{name}' must be a valid URL.");
+    public static void ForValidUrl<TException>(string url, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        if (url.Length <= 2048 &&
+            Uri.IsWellFormedUriString(url, UriKind.Absolute))
+        {
+            return;
         }
 
-        public static void ForValidFormat<TException>(string value, Regex expression, string? message, string name = "Value")
-            where TException : ValidationException, new()
-        {
-            ForEmptyString<TException>(value, message, name);
-            if (expression.IsMatch(value))
-            {
-                return;
-            }
+        ThrowException<TException>($"Value for '{name}' must be a valid URL.");
+    }
 
-            string msg = message ?? $"Value for '{name}' has incorrect format.";
-            ThrowException<TException>(msg);
+    public static void ForValidFormat<TException>(string value, Regex expression, string? message, string name = "Value")
+        where TException : ValidationException, new()
+    {
+        ForEmptyString<TException>(value, message, name);
+        if (expression.IsMatch(value))
+        {
+            return;
         }
 
-        private static void ThrowException<TException>(string message)
-            where TException : ValidationException, new()
-        {
-            var exception = new TException
-            {
-                Error = message
-            };
+        string msg = message ?? $"Value for '{name}' has incorrect format.";
+        ThrowException<TException>(msg);
+    }
 
-            throw exception;
-        }
+    private static void ThrowException<TException>(string message)
+        where TException : ValidationException, new()
+    {
+        var exception = new TException
+        {
+            Error = message
+        };
+
+        throw exception;
     }
 }

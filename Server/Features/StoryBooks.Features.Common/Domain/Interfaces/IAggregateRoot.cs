@@ -1,7 +1,6 @@
-namespace StoryBooks.Features.Common.Domain.Interfaces
-{
-    public interface IAggregateRoot
-    {
+namespace StoryBooks.Features.Common.Domain.Interfaces;
 
-    }
+public interface IAggregateRoot
+{
+
 }

@@ -1,94 +1,93 @@
-﻿namespace StoryBooks.Web.Middlewares
+﻿namespace StoryBooks.Web.Middlewares;
+
+using System;
+using System.Net;
+using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
+using StoryBooks.Features.Common.Application.Exceptions;
+using StoryBooks.Features.Common.Domain.Exceptions;
+using StoryBooks.Libraries.Validation;
+
+public class ValidationExceptionHandlerMiddleware
 {
-    using System;
-    using System.Net;
-    using System.Threading.Tasks;
+    private readonly RequestDelegate next;
 
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Http;
+    public ValidationExceptionHandlerMiddleware(RequestDelegate next)
+        => this.next = next;
 
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
-
-    using StoryBooks.Features.Common.Application.Exceptions;
-    using StoryBooks.Features.Common.Domain.Exceptions;
-    using StoryBooks.Libraries.Validation;
-
-    public class ValidationExceptionHandlerMiddleware
+    public async Task Invoke(HttpContext context)
     {
-        private readonly RequestDelegate next;
-
-        public ValidationExceptionHandlerMiddleware(RequestDelegate next)
-            => this.next = next;
-
-        public async Task Invoke(HttpContext context)
+        try
         {
-            try
-            {
-                await this.next(context);
-            }
-            catch (Exception ex)
-            {
-                await HandleExceptionAsync(context, ex);
-            }
+            await this.next(context);
         }
-
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        catch (Exception ex)
         {
-            var code = HttpStatusCode.InternalServerError;
-
-            var result = string.Empty;
-
-            switch (exception)
-            {
-                case ModelValidationException modelValidationException:
-                    code = HttpStatusCode.BadRequest;
-                    result = SerializeObject(new
-                    {
-                        ValidationDetails = true,
-                        modelValidationException.Errors
-                    });
-                    break;
-                case NullReferenceException _:
-                    code = HttpStatusCode.BadRequest;
-                    result = SerializeObject(new[] { WebConstants.InvalidRequest });
-                    break;
-                case EntityNotFoundException _:
-                    code = HttpStatusCode.NotFound;
-                    break;
-            }
-
-            context.Response.ContentType = WebConstants.ResponseType;
-            context.Response.StatusCode = (int)code;
-
-            if (string.IsNullOrEmpty(result))
-            {
-                var error = exception.Message;
-
-                if (exception is ValidationException baseDomainException)
-                {
-                    error = baseDomainException.Error;
-                }
-
-                result = SerializeObject(new[] { error });
-            }
-
-            return context.Response.WriteAsync(result);
+            await HandleExceptionAsync(context, ex);
         }
-
-        private static string SerializeObject(object obj)
-            => JsonConvert.SerializeObject(obj, new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy(true, true)
-                }
-            });
     }
 
-    public static class ValidationExceptionHandlerMiddlewareExtensions
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        public static IApplicationBuilder UseValidationExceptionHandler(this IApplicationBuilder builder)
-            => builder.UseMiddleware<ValidationExceptionHandlerMiddleware>();
+        var code = HttpStatusCode.InternalServerError;
+
+        var result = string.Empty;
+
+        switch (exception)
+        {
+            case ModelValidationException modelValidationException:
+                code = HttpStatusCode.BadRequest;
+                result = SerializeObject(new
+                {
+                    ValidationDetails = true,
+                    modelValidationException.Errors
+                });
+                break;
+            case NullReferenceException _:
+                code = HttpStatusCode.BadRequest;
+                result = SerializeObject(new[] { WebConstants.InvalidRequest });
+                break;
+            case EntityNotFoundException _:
+                code = HttpStatusCode.NotFound;
+                break;
+        }
+
+        context.Response.ContentType = WebConstants.ResponseType;
+        context.Response.StatusCode = (int)code;
+
+        if (string.IsNullOrEmpty(result))
+        {
+            var error = exception.Message;
+
+            if (exception is ValidationException baseDomainException)
+            {
+                error = baseDomainException.Error;
+            }
+
+            result = SerializeObject(new[] { error });
+        }
+
+        return context.Response.WriteAsync(result);
     }
+
+    private static string SerializeObject(object obj)
+        => JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy(true, true)
+            }
+        });
+}
+
+public static class ValidationExceptionHandlerMiddlewareExtensions
+{
+    public static IApplicationBuilder UseValidationExceptionHandler(this IApplicationBuilder builder)
+        => builder.UseMiddleware<ValidationExceptionHandlerMiddleware>();
 }

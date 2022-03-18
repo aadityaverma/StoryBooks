@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\" />
+    <Folder Include="Infrastructure\Services\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Presentation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StoryBooks.Features.Common\StoryBooks.Features.Common.csproj" />
+  </ItemGroup>
+
 </Project>

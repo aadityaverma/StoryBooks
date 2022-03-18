@@ -1,13 +1,12 @@
-namespace StoryBooks.Features.Common.Domain.Interfaces
+namespace StoryBooks.Features.Common.Domain.Interfaces;
+
+public interface IBaseUser
 {
-    public interface IBaseUser
-    {
-        string Id { get; }
+    string Id { get; }
 
-        string FirstName { get; }
+    string FirstName { get; }
 
-        string LastName { get; }
+    string LastName { get; }
 
-        string Email { get; }
-    }
+    string Email { get; }
 }

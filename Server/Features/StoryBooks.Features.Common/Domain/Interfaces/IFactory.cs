@@ -1,18 +1,17 @@
-﻿namespace StoryBooks.Features.Common.Domain.Interfaces
+﻿namespace StoryBooks.Features.Common.Domain.Interfaces;
+
+public interface IFactory<out TEntity>
+    where TEntity : IAggregateRoot
 {
-    public interface IFactory<out TEntity>
-        where TEntity : IAggregateRoot
-    {
-        TEntity Build();
+    TEntity Build();
 
-        void Reset();
-    }
+    void Reset();
+}
 
-    public interface IFactoryWithBuilder<out TEntity>
-        where TEntity : IAggregateRoot
-    {
-        TEntity Build(string builderId);
+public interface IFactoryWithBuilder<out TEntity>
+    where TEntity : IAggregateRoot
+{
+    TEntity Build(string builderId);
 
-        void Reset();
-    }
+    void Reset();
 }

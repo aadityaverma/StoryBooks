@@ -1,80 +1,79 @@
-﻿namespace StoryBooks.Libraries.Email
+﻿namespace StoryBooks.Libraries.Email;
+
+using Fluid;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using StoryBooks.Libraries.Email.Models;
+using StoryBooks.Libraries.Email.Renderers.FluidEngine;
+//using StoryBooks.Libraries.Email.Renderers.RazrorEngine;
+using StoryBooks.Libraries.Email.Services;
+
+public static class EmailConfigurationExtensions
 {
-    using Fluid;
+    public static IServiceCollection AddEmailWithFluid(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services.AddEmail(configuration, EmailServiceType.WithFluid);
 
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
+    public static IServiceCollection AddEmailWithRazor(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services.AddEmail(configuration, EmailServiceType.WithRazor);
 
-    using StoryBooks.Libraries.Email.Models;
-    using StoryBooks.Libraries.Email.Renderers.FluidEngine;
-    using StoryBooks.Libraries.Email.Renderers.RazrorEngine;
-    using StoryBooks.Libraries.Email.Services;
-
-    public static class EmailConfigurationExtensions
+    private static IServiceCollection AddEmail(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        EmailServiceType type)
     {
-        public static IServiceCollection AddEmailWithFluid(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            => services.AddEmail(configuration, EmailServiceType.WithFluid);
+        services.AddEmailSettings(configuration)
+                .AddEmailLayout(configuration)
+                .AddMemoryCache()
+                .AddSendGrid()
+                .AddTransient<IEmailService, EmailService>();
 
-        public static IServiceCollection AddEmailWithRazor(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            => services.AddEmail(configuration, EmailServiceType.WithRazor);
-
-        private static IServiceCollection AddEmail(
-            this IServiceCollection services,
-            IConfiguration configuration,
-            EmailServiceType type)
+        switch (type)
         {
-            services.AddEmailSettings(configuration)
-                    .AddEmailLayout(configuration)
-                    .AddMemoryCache()
-                    .AddSendGrid()
-                    .AddTransient<IEmailService, EmailService>();
+            case EmailServiceType.WithRazor:
+                services.AddRazorTemplates(); break;
+            case EmailServiceType.WithFluid:
+                services.AddFluidTemplates(); break;
+            default: services.AddRazorTemplates(); break;
+        }
 
-            switch (type)
+        return services;
+    }
+
+    private static IServiceCollection AddEmailSettings(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services
+            .Configure<EmailSettings>(
+                configuration.GetSection(nameof(EmailSettings)),
+                config => config.BindNonPublicProperties = true);
+
+    private static IServiceCollection AddEmailLayout(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services
+            .Configure<LayoutModel>(cfg =>
             {
-                case EmailServiceType.WithRazor:
-                    services.AddRazorTemplates(); break;
-                case EmailServiceType.WithFluid:
-                    services.AddFluidTemplates(); break;
-                default: services.AddRazorTemplates(); break;
-            }
+                cfg.SetClientUrl(configuration.GetValue<string>("ApplicationSettings:Urls:ClientUrl"));
+            });
 
-            return services;
-        }
+    private static IServiceCollection AddSendGrid(this IServiceCollection services)
+        => services.AddTransient<IEmailSender, SendGridEmailSender>();
 
-        private static IServiceCollection AddEmailSettings(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            => services
-                .Configure<EmailSettings>(
-                    configuration.GetSection(nameof(EmailSettings)),
-                    config => config.BindNonPublicProperties = true);
+    private static IServiceCollection AddMockSender(this IServiceCollection services)
+        => services.AddTransient<IEmailSender, MockEmailSender>();
 
-        private static IServiceCollection AddEmailLayout(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            => services
-                .Configure<LayoutModel>(cfg =>
-                {
-                    cfg.SetClientUrl(configuration.GetValue<string>("ApplicationSettings:Urls:ClientUrl"));
-                });
+    private static IServiceCollection AddRazorTemplates(this IServiceCollection services)
+        => services;//.AddSingleton<ITemplateRenderer, RazorTemlateRenderer>();
 
-        private static IServiceCollection AddSendGrid(this IServiceCollection services)
-            => services.AddTransient<IEmailSender, SendGridEmailSender>();
-
-        private static IServiceCollection AddMockSender(this IServiceCollection services)
-            => services.AddTransient<IEmailSender, MockEmailSender>();
-
-        private static IServiceCollection AddRazorTemplates(this IServiceCollection services)
-            => services.AddSingleton<ITemplateRenderer, RazorTemlateRenderer>();
-
-        private static IServiceCollection AddFluidTemplates(this IServiceCollection services)
-        {
-            return services.AddSingleton<FluidParser>()
-                           .AddTransient<ITemplateRenderer, FluidTemplateRenderer>();
-        }
+    private static IServiceCollection AddFluidTemplates(this IServiceCollection services)
+    {
+        return services.AddSingleton<FluidParser>()
+                       .AddTransient<ITemplateRenderer, FluidTemplateRenderer>();
     }
 }

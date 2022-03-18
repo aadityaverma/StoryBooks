@@ -1,15 +1,14 @@
-﻿namespace System.Linq
-{
-    using System.Collections.Generic;
+﻿namespace System.Linq;
 
-    public static class ICollectionExtensions
+using System.Collections.Generic;
+
+public static class ICollectionExtensions
+{
+    public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
     {
-        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
+        foreach (var item in items)
         {
-            foreach (var item in items)
-            {
-                collection.Add(item);
-            }
+            collection.Add(item);
         }
     }
 }

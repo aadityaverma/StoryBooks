@@ -1,8 +1,7 @@
-﻿namespace StoryBooks.Libraries.Email.Models
+﻿namespace StoryBooks.Libraries.Email.Models;
+
+public enum TemplateRendererType
 {
-    public enum TemplateRendererType
-    {
-        Razor = 1,
-        Fluid = 2
-    }
+    //Razor = 1,
+    Fluid = 2
 }

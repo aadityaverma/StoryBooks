@@ -1,11 +1,10 @@
-﻿namespace System
+﻿namespace System;
+
+public interface IDateTime
 {
-    public interface IDateTime
-    {
-        DateOnly Date();
+    DateOnly Date();
 
-        DateTime Now();
+    DateTime Now();
 
-        TimeOnly Time();
-    }
+    TimeOnly Time();
 }

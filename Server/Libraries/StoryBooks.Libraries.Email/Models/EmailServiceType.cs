@@ -1,8 +1,7 @@
-﻿namespace StoryBooks.Libraries.Email.Models
+﻿namespace StoryBooks.Libraries.Email.Models;
+
+public enum EmailServiceType
 {
-    public enum EmailServiceType
-    {
-        WithRazor = 1,
-        WithFluid = 2
-    }
+    WithRazor = 1,
+    WithFluid = 2
 }

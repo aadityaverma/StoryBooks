@@ -1,13 +1,12 @@
-﻿namespace StoryBooks.Libraries.Email.Exceptions
+﻿namespace StoryBooks.Libraries.Email.Exceptions;
+
+using StoryBooks.Libraries.Validation;
+
+public class EmailSendingException : ValidationException
 {
-    using StoryBooks.Libraries.Validation;
+    public EmailSendingException()
+    { }
 
-    public class EmailSendingException : ValidationException
-    {
-        public EmailSendingException()
-        { }
-
-        public EmailSendingException(string error) : base(error)
-        { }
-    }
+    public EmailSendingException(string error) : base(error)
+    { }
 }

@@ -1,19 +1,18 @@
-﻿namespace StoryBooks.Features.Identity.Application.Services
+﻿namespace StoryBooks.Features.Identity.Application.Services;
+
+using StoryBooks.Features.Common.Application;
+using StoryBooks.Features.Common.Application.Commands;
+using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
+using StoryBooks.Features.Identity.Application.Commands.LoginUser;
+using StoryBooks.Features.Identity.Application.Commands.RegisterUser;
+
+using System.Threading.Tasks;
+
+public interface IIdentityService
 {
-    using StoryBooks.Features.Common.Application;
-    using StoryBooks.Features.Common.Application.Commands;
-    using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
-    using StoryBooks.Features.Identity.Application.Commands.LoginUser;
-    using StoryBooks.Features.Identity.Application.Commands.RegisterUser;
+    Task<Result<IdModel<string>>> Register(RegisterUserInputModel userInput);
 
-    using System.Threading.Tasks;
+    Task<Result<LoginUserSuccessModel>> Login(LoginUserInputModel userInput);
 
-    public interface IIdentityService
-    {
-        Task<Result<IdModel<string>>> Register(RegisterUserInputModel userInput);
-
-        Task<Result<LoginUserSuccessModel>> Login(LoginUserInputModel userInput);
-
-        Task<Result> ChangePassword(ChangePasswordInputModel changePasswordInput);
-    }
+    Task<Result> ChangePassword(ChangePasswordInputModel changePasswordInput);
 }

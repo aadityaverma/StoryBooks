@@ -1,17 +1,16 @@
-﻿namespace StoryBooks.Features.Common.Application.Interfaces
+﻿namespace StoryBooks.Features.Common.Application.Interfaces;
+
+public interface ICurrentUser
 {
-    public interface ICurrentUser
-    {
-        string UserId { get; }
+    string UserId { get; }
 
-        string Email { get; }
+    string Email { get; }
 
-        string FirstName { get; }
+    string FirstName { get; }
 
-        string LastName { get; }
+    string LastName { get; }
 
-        string FullName { get; }
+    string FullName { get; }
 
-        IList<string> Roles { get; }
-    }
+    IList<string> Roles { get; }
 }

@@ -1,13 +1,12 @@
-﻿namespace StoryBooks.Libraries.Email.Exceptions
+﻿namespace StoryBooks.Libraries.Email.Exceptions;
+
+using System.ComponentModel.DataAnnotations;
+
+public class TemplateRenderException : ValidationException
 {
-    using System.ComponentModel.DataAnnotations;
+    public TemplateRenderException()
+    { }
 
-    public class TemplateRenderException : ValidationException
-    {
-        public TemplateRenderException()
-        { }
-
-        public TemplateRenderException(string error) : base(error)
-        { }
-    }
+    public TemplateRenderException(string error) : base(error)
+    { }
 }

@@ -1,19 +1,18 @@
-namespace StoryBooks.Features.Common.Domain.Interfaces
+namespace StoryBooks.Features.Common.Domain.Interfaces;
+
+using System;
+
+public interface IAuditableEntity
 {
-    using System;
+    string CreatedBy { get; }
 
-    public interface IAuditableEntity
-    {
-        string CreatedBy { get; }
+    DateTime CreatedOn { get; }
 
-        DateTime CreatedOn { get; }
+    string? ModifiedBy { get; }
 
-        string? ModifiedBy { get; }
+    DateTime? ModifiedOn { get; }
 
-        DateTime? ModifiedOn { get; }
+    IAuditableEntity SetCreated(string createdBy, DateTime createdDate);
 
-        IAuditableEntity SetCreated(string createdBy, DateTime createdDate);
-
-        IAuditableEntity SetModified(string modifiedBy, DateTime modifiedDate);
-    }
+    IAuditableEntity SetModified(string modifiedBy, DateTime modifiedDate);
 }

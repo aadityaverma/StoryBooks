@@ -1,10 +1,9 @@
-﻿namespace StoryBooks.Libraries.Email.Services
+﻿namespace StoryBooks.Libraries.Email.Services;
+
+public class MockEmailSender : IEmailSender
 {
-    public class MockEmailSender : IEmailSender
+    public Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
-        {
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

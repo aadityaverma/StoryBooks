@@ -1,22 +1,21 @@
-﻿namespace StoryBooks.Features.Common.Application.Commands
+﻿namespace StoryBooks.Features.Common.Application.Commands;
+
+using MediatR;
+
+using StoryBooks.Features.Common.Application.Interfaces;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+public abstract class UserCommandHandler<TRequest, TResult> : IRequestHandler<TRequest, TResult>
+    where TRequest : IRequest<TResult>
 {
-    using MediatR;
+    protected readonly ICurrentUser currentUser;
 
-    using StoryBooks.Features.Common.Application.Interfaces;
-
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public abstract class UserCommandHandler<TRequest, TResult> : IRequestHandler<TRequest, TResult>
-        where TRequest : IRequest<TResult>
+    public UserCommandHandler(ICurrentUser currentUser)
     {
-        protected readonly ICurrentUser currentUser;
-
-        public UserCommandHandler(ICurrentUser currentUser)
-        {
-            this.currentUser = currentUser;
-        }
-
-        public abstract Task<TResult> Handle(TRequest request, CancellationToken cancellationToken);
+        this.currentUser = currentUser;
     }
+
+    public abstract Task<TResult> Handle(TRequest request, CancellationToken cancellationToken);
 }

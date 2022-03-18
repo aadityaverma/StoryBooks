@@ -1,78 +1,77 @@
-﻿namespace StoryBooks.Libraries.Email.IO
+﻿namespace StoryBooks.Libraries.Email.IO;
+
+using Microsoft.Extensions.FileProviders;
+
+using System;
+using System.IO;
+
+public class EmbededResourceFileInfo : IFileInfo
 {
-    using Microsoft.Extensions.FileProviders;
+    private long length = 0;
+    private bool exists = false;
+    private bool metaDataInitialized = false;
 
-    using System;
-    using System.IO;
+    private readonly string viewPath;
+    private readonly AssemblyResource resource;
 
-    public class EmbededResourceFileInfo : IFileInfo
+    public EmbededResourceFileInfo(string viewPath, AssemblyResource resource)
     {
-        private long length = 0;
-        private bool exists = false;
-        private bool metaDataInitialized = false;
+        this.viewPath = viewPath;
+        this.resource = resource;
+        this.LastModified = DateTime.UtcNow;
+    }
 
-        private readonly string viewPath;
-        private readonly AssemblyResource resource;
-
-        public EmbededResourceFileInfo(string viewPath, AssemblyResource resource)
+    public bool Exists
+    {
+        get
         {
-            this.viewPath = viewPath;
-            this.resource = resource;
-            this.LastModified = DateTime.UtcNow;
-        }
-
-        public bool Exists
-        {
-            get
+            if (!metaDataInitialized)
             {
-                if (!metaDataInitialized)
-                {
-                    InitializeMetaData();
-                }
-
-                return exists;
-            }
-        }
-
-        public bool IsDirectory => false;
-
-        public DateTimeOffset LastModified { get; }
-
-        public long Length
-        {
-            get
-            {
-                if (!metaDataInitialized)
-                {
-                    InitializeMetaData();
-                }
-
-                return length;
-            }
-        }
-
-        public string Name => Path.GetFileName(viewPath);
-
-        public string PhysicalPath => string.Empty;
-
-        public Stream CreateReadStream()
-        {
-            return resource.Assembly.GetManifestResourceStream(resource.Name) 
-                ?? throw new FileNotFoundException();
-        }
-
-        private void InitializeMetaData()
-        {
-            using var stream = CreateReadStream();
-            this.metaDataInitialized = true;
-
-            if (stream is null)
-            {
-                return;
+                InitializeMetaData();
             }
 
-            this.length = stream.Length;
-            this.exists = stream.Length > 0;
+            return exists;
         }
+    }
+
+    public bool IsDirectory => false;
+
+    public DateTimeOffset LastModified { get; }
+
+    public long Length
+    {
+        get
+        {
+            if (!metaDataInitialized)
+            {
+                InitializeMetaData();
+            }
+
+            return length;
+        }
+    }
+
+    public string Name => Path.GetFileName(viewPath);
+
+    public string PhysicalPath => string.Empty;
+
+    public Stream CreateReadStream()
+    {
+        return resource.Assembly.GetManifestResourceStream(resource.Name)
+            ?? throw new FileNotFoundException();
+    }
+
+    private void InitializeMetaData()
+    {
+        using var stream = CreateReadStream();
+        this.metaDataInitialized = true;
+
+        if (stream is null)
+        {
+            return;
+        }
+
+        this.length = stream.Length;
+        this.exists = stream.Length > 0;
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace StoryBooks.Libraries.Email.Models
+﻿namespace StoryBooks.Libraries.Email.Models;
+
+public enum SenderServiceType
 {
-    public enum SenderServiceType
-    {
-        SendGrid = 1
-    }
+    SendGrid = 1
 }

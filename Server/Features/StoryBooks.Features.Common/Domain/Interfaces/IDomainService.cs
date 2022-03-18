@@ -1,6 +1,5 @@
-﻿namespace StoryBooks.Features.Common.Domain.Interfaces
+﻿namespace StoryBooks.Features.Common.Domain.Interfaces;
+
+public interface IDomainService
 {
-    public interface IDomainService
-    {
-    }
 }

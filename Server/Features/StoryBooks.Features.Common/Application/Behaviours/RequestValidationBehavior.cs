@@ -1,39 +1,40 @@
-﻿namespace StoryBooks.Features.Common.Application.Behaviours
+﻿namespace StoryBooks.Features.Common.Application.Behaviours;
+
+using Exceptions;
+
+using FluentValidation;
+
+using MediatR;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
 {
-    using Exceptions;
-    using FluentValidation;
-    using MediatR;
+    private readonly IEnumerable<IValidator<TRequest>> validators;
 
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
+    public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+        => this.validators = validators;
 
-    public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        private readonly IEnumerable<IValidator<TRequest>> validators;
+        var context = new ValidationContext<TRequest>(request);
 
-        public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators) 
-            => this.validators = validators;
+        var failures = this
+            .validators
+            .Select(v => v.Validate(context))
+            .SelectMany(result => result.Errors)
+            .Where(f => f is not null)
+            .ToList();
 
-        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        if (failures.Count != 0)
         {
-            var context = new ValidationContext<TRequest>(request);
-            
-            var failures = this
-                .validators
-                .Select(v => v.Validate(context))
-                .SelectMany(result => result.Errors)
-                .Where(f => f is not null)
-                .ToList();
-
-            if (failures.Count != 0)
-            {
-                throw new ModelValidationException(failures);
-            }
-
-            return next();
+            throw new ModelValidationException(failures);
         }
+
+        return next();
     }
 }

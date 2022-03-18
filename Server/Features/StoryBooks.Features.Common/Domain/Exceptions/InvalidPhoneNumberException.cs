@@ -1,11 +1,10 @@
-﻿namespace StoryBooks.Features.Common.Domain.Exceptions
-{
-    public class InvalidPhoneNumberException : BaseDomainException
-    {
-        public InvalidPhoneNumberException()
-        {
-        }
+﻿namespace StoryBooks.Features.Common.Domain.Exceptions;
 
-        public InvalidPhoneNumberException(string error) => this.Error = error;
+public class InvalidPhoneNumberException : BaseDomainException
+{
+    public InvalidPhoneNumberException()
+    {
     }
+
+    public InvalidPhoneNumberException(string error) => this.Error = error;
 }

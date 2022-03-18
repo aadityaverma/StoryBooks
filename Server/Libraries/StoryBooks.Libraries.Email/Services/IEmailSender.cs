@@ -1,7 +1,6 @@
-﻿namespace StoryBooks.Libraries.Email.Services
+﻿namespace StoryBooks.Libraries.Email.Services;
+
+public interface IEmailSender
 {
-    public interface IEmailSender
-    {
-        Task SendEmailAsync(string email, string subject, string htmlMessage);
-    }
+    Task SendEmailAsync(string email, string subject, string htmlMessage);
 }

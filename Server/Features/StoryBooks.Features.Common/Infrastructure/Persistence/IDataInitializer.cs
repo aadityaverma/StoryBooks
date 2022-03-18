@@ -1,12 +1,11 @@
-﻿namespace StoryBooks.Features.Common.Infrastructure.Persistence
+﻿namespace StoryBooks.Features.Common.Infrastructure.Persistence;
+
+using System;
+using System.Threading.Tasks;
+
+public interface IDataInitializer
 {
-    using System;
-    using System.Threading.Tasks;
+    Task Initialize();
 
-    public interface IDataInitializer
-    {
-        Task Initialize();
-
-        Task SeedData();
-    }
+    Task SeedData();
 }

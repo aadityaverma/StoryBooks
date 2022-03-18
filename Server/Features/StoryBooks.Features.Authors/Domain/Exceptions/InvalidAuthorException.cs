@@ -1,0 +1,10 @@
+﻿namespace StoryBooks.Features.Authors.Domain.Exceptions;
+
+using StoryBooks.Features.Common.Domain.Exceptions;
+
+internal class InvalidAuthorException : BaseDomainException
+{
+    public InvalidAuthorException() { }
+
+    public InvalidAuthorException(string error) => this.Error = error;
+}

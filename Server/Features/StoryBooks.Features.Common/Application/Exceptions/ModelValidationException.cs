@@ -1,31 +1,31 @@
-﻿namespace StoryBooks.Features.Common.Application.Exceptions
+﻿namespace StoryBooks.Features.Common.Application.Exceptions;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using FluentValidation.Results;
+
+public class ModelValidationException : Exception
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using FluentValidation.Results;
+    public ModelValidationException()
+        : base("One or more validation failures have occurred.")
+        => this.Errors = new Dictionary<string, string[]>();
 
-    public class ModelValidationException : Exception
+    public ModelValidationException(List<ValidationFailure> failures)
+        : this()
     {
-        public ModelValidationException()
-            : base("One or more validation failures have occurred.") 
-            => this.Errors = new Dictionary<string, string[]>();
+        var failureGroups = failures
+            .GroupBy(e => e.PropertyName, e => e.ErrorMessage);
 
-        public ModelValidationException(List<ValidationFailure> failures)
-            : this()
+        foreach (var failureGroup in failureGroups)
         {
-            var failureGroups = failures
-                .GroupBy(e => e.PropertyName, e => e.ErrorMessage);
+            var propertyName = failureGroup.Key;
+            var propertyFailures = failureGroup.ToArray();
 
-            foreach (var failureGroup in failureGroups)
-            {
-                var propertyName = failureGroup.Key;
-                var propertyFailures = failureGroup.ToArray();
-
-                this.Errors.Add(propertyName, propertyFailures);
-            }
+            this.Errors.Add(propertyName, propertyFailures);
         }
-
-        public IDictionary<string, string[]> Errors { get; }
     }
+
+    public IDictionary<string, string[]> Errors { get; }
 }

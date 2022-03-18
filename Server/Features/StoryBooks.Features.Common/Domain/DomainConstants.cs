@@ -1,6 +1,6 @@
-﻿namespace StoryBooks.Features.Common.Domain
+﻿namespace StoryBooks.Features.Common.Domain;
+
+public static class DomainConstants
 {
-    public static class DomainConstants
-    {
-    }
+    public const int MaxImageNameLength = 250;
 }

@@ -1,73 +1,72 @@
-﻿namespace StoryBooks.Libraries.Email.IO
+﻿namespace StoryBooks.Libraries.Email.IO;
+
+using System.Diagnostics;
+using System.Reflection;
+
+internal class AssemblyResourcesDictionary
 {
-    using System.Diagnostics;
-    using System.Reflection;
+    private readonly HashSet<Assembly> assemblies;
+    private readonly Dictionary<string, AssemblyResource> resources;
 
-    internal class AssemblyResourcesDictionary
+    public AssemblyResourcesDictionary(params Assembly[] assemblies)
     {
-        private readonly HashSet<Assembly> assemblies;
-        private readonly Dictionary<string, AssemblyResource> resources;
+        this.assemblies = new HashSet<Assembly>(assemblies);
+        this.resources = new Dictionary<string, AssemblyResource>();
 
-        public AssemblyResourcesDictionary(params Assembly[] assemblies)
+        LoadEmbededResources();
+    }
+
+    public AssemblyResource this[string index]
+    {
+        get => resources[index];
+    }
+
+    public int Count => resources.Count;
+
+    public void Add(Assembly assembly)
+    {
+        var resourcesNames = assembly.GetEmbededResourceNames();
+        foreach (var name in resourcesNames)
         {
-            this.assemblies = new HashSet<Assembly>(assemblies);
-            this.resources = new Dictionary<string, AssemblyResource>();
-
-            LoadEmbededResources();
-        }
-
-        public AssemblyResource this[string index]
-        {
-            get => resources[index];
-        }
-
-        public int Count => resources.Count;
-
-        public void Add(Assembly assembly)
-        {
-            var resourcesNames = assembly.GetEmbededResourceNames();
-            foreach (var name in resourcesNames)
+            if (this.Contains(name))
             {
-                if (this.Contains(name))
-                {
-                    Debug.Assert(this.Contains(name), $"Duplicate Resource Name {name}");
-                    continue;
-                }
-
-                this.resources.Add(name, new(name, assembly));
+                Debug.Assert(this.Contains(name), $"Duplicate Resource Name {name}");
+                continue;
             }
-        }
 
-        public bool Contains(string resourceName)
-        {
-            return this.resources.ContainsKey(resourceName);
-        }
-
-        public IEnumerable<AssemblyResource> Find(string fileName)
-        {
-            string filter = fileName.Replace('/', '.');
-            return this.resources.Where(r => r.Key.Contains(filter)).Select(r => r.Value);
-        }
-
-        private void LoadEmbededResources()
-        {
-            foreach (var assembly in this.assemblies)
-            {
-                Add(assembly);
-            }
+            this.resources.Add(name, new(name, assembly));
         }
     }
 
-    public record AssemblyResource
+    public bool Contains(string resourceName)
     {
-        public AssemblyResource(string name, Assembly assembly)
-        {
-            Name = name;
-            Assembly = assembly;
-        }
-
-        public string Name { get; }
-
-        public Assembly Assembly { get; }
+        return this.resources.ContainsKey(resourceName);
     }
+
+    public IEnumerable<AssemblyResource> Find(string fileName)
+    {
+        string filter = fileName.Replace('/', '.');
+        return this.resources.Where(r => r.Key.Contains(filter)).Select(r => r.Value);
+    }
+
+    private void LoadEmbededResources()
+    {
+        foreach (var assembly in this.assemblies)
+        {
+            Add(assembly);
+        }
+    }
+}
+
+public record AssemblyResource
+{
+    public AssemblyResource(string name, Assembly assembly)
+    {
+        Name = name;
+        Assembly = assembly;
+    }
+
+    public string Name { get; }
+
+    public Assembly Assembly { get; }
 }

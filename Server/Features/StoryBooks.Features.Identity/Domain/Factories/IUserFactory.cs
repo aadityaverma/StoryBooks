@@ -1,14 +1,13 @@
-﻿namespace StoryBooks.Features.Identity.Domain.Factories
+﻿namespace StoryBooks.Features.Identity.Domain.Factories;
+
+using StoryBooks.Features.Common.Domain.Interfaces;
+using StoryBooks.Features.Identity.Domain.Entities;
+
+public interface IUserFactory : IFactory<User>
 {
-    using StoryBooks.Features.Common.Domain.Interfaces;
-    using StoryBooks.Features.Identity.Domain.Entities;
+    IUserFactory AddFirstName(string name);
 
-    public interface IUserFactory : IFactory<User>
-    {
-        IUserFactory AddFirstName(string name);
+    IUserFactory AddLastName(string name);
 
-        IUserFactory AddLastName(string name);
-
-        IUserFactory AddEmail(string email);
-    }
+    IUserFactory AddEmail(string email);
 }

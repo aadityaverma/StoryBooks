@@ -1,32 +1,31 @@
-﻿namespace StoryBooks.Libraries.Email.Renderers.RazrorEngine
-{
-    using Microsoft.Extensions.Options;
+﻿namespace StoryBooks.Libraries.Email.Renderers.RazrorEngine;
 
-    using RazorLight;
+//using Microsoft.Extensions.Options;
 
-    using StoryBooks.Libraries.Email.Models;
-    using StoryBooks.Libraries.Email.Services;
+//using RazorLight;
 
-    public class RazorTemlateRenderer : ITemplateRenderer
-    {
-        private readonly EmailSettings settings;
-        private readonly RazorLightEngine razorEngine;
+//using StoryBooks.Libraries.Email.Models;
+//using StoryBooks.Libraries.Email.Services;
 
-        public RazorTemlateRenderer(IOptions<EmailSettings> opts)
-        {
-            this.settings = opts.Value;
-            this.razorEngine = new RazorLightEngineBuilder()
-                .UseProject(new CustomEmbededResourcesProject(settings.Dev.FileProvider))
-                .UseMemoryCachingProvider()
-                .Build();
-        }
+//public class RazorTemlateRenderer : ITemplateRenderer
+//{
+//    private readonly EmailSettings settings;
+//    private readonly RazorLightEngine razorEngine;
 
-        public string Extension => settings.Dev.RazorViewExtension;
+//    public RazorTemlateRenderer(IOptions<EmailSettings> opts)
+//    {
+//        this.settings = opts.Value;
+//        this.razorEngine = new RazorLightEngineBuilder()
+//            .UseProject(new CustomEmbededResourcesProject(settings.Dev.FileProvider))
+//            .UseMemoryCachingProvider()
+//            .Build();
+//    }
 
-        public Task<string> RenderAsync<TModel>(string templateName, TModel model)
-        {
-            dynamic? viewBag = (model as IViewBag)?.ViewBag;
-            return razorEngine.CompileRenderAsync(templateName, model, viewBag);
-        }
-    }
-}
+//    public string Extension => settings.Dev.RazorViewExtension;
+
+//    public Task<string> RenderAsync<TModel>(string templateName, TModel model)
+//    {
+//        dynamic? viewBag = (model as IViewBag)?.ViewBag;
+//        return razorEngine.CompileRenderAsync(templateName, model, viewBag);
+//    }
+//}

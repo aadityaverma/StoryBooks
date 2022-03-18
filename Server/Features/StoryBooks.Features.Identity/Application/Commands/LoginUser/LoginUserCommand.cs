@@ -1,26 +1,25 @@
-﻿namespace StoryBooks.Features.Identity.Application.Commands.LoginUser
+﻿namespace StoryBooks.Features.Identity.Application.Commands.LoginUser;
+
+using MediatR;
+
+using StoryBooks.Features.Common.Application;
+using StoryBooks.Features.Identity.Application.Services;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+public class LoginUserCommand : LoginUserInputModel, IRequest<Result<LoginUserSuccessModel>>
 {
-    using MediatR;
-
-    using StoryBooks.Features.Common.Application;
-    using StoryBooks.Features.Identity.Application.Services;
-
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public class LoginUserCommand : LoginUserInputModel, IRequest<Result<LoginUserSuccessModel>>
+    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<LoginUserSuccessModel>>
     {
-        public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<LoginUserSuccessModel>>
+        private readonly IIdentityService identityService;
+
+        public LoginUserCommandHandler(IIdentityService identityService)
         {
-            private readonly IIdentityService identityService;
-
-            public LoginUserCommandHandler(IIdentityService identityService)
-            {
-                this.identityService = identityService;
-            }
-
-            public async Task<Result<LoginUserSuccessModel>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
-                => await this.identityService.Login(request);
+            this.identityService = identityService;
         }
+
+        public async Task<Result<LoginUserSuccessModel>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+            => await this.identityService.Login(request);
     }
 }

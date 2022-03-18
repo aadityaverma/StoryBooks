@@ -1,8 +1,7 @@
-namespace StoryBooks.Features.Common.Domain.Exceptions
-{
-    using StoryBooks.Libraries.Validation;
+namespace StoryBooks.Features.Common.Domain.Exceptions;
 
-    public abstract class BaseDomainException : ValidationException
-    {
-    }
+using StoryBooks.Libraries.Validation;
+
+public abstract class BaseDomainException : ValidationException
+{
 }

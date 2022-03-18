@@ -1,22 +1,21 @@
-﻿namespace StoryBooks.Libraries.Validation
+﻿namespace StoryBooks.Libraries.Validation;
+
+public class ValidationException : Exception
 {
-    public class ValidationException : Exception
+    public ValidationException()
     {
-        public ValidationException()
-        {
-        }
+    }
 
-        public ValidationException(string error)
-        {
-            this.error = error;
-        }
+    public ValidationException(string error)
+    {
+        this.error = error;
+    }
 
-        private string? error;
+    private string? error;
 
-        public string Error
-        {
-            get => this.error ?? base.Message;
-            set => this.error = value;
-        }
+    public string Error
+    {
+        get => this.error ?? base.Message;
+        set => this.error = value;
     }
 }

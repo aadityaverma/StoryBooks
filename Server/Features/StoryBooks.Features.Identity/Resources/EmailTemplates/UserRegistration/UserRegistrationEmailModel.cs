@@ -1,29 +1,28 @@
-﻿namespace StoryBooks.Features.Identity.Resources.EmailTemplates.UserRegistration
+﻿namespace StoryBooks.Features.Identity.Resources.EmailTemplates.UserRegistration;
+
+using AutoMapper;
+
+using StoryBooks.Features.Common.Application.Mapping;
+using StoryBooks.Features.Identity.Domain.Entities;
+
+public class UserRegistrationEmailModel : IMapFrom<User>
 {
-    using AutoMapper;
+    public string Id { get; private set; } = default!;
 
-    using StoryBooks.Features.Common.Application.Mapping;
-    using StoryBooks.Features.Identity.Domain.Entities;
-    
-    public class UserRegistrationEmailModel : IMapFrom<User>
+    public string Name { get; private set; } = default!;
+
+    public string Email { get; private set; } = default!;
+
+    public string ConfirmUrl { get; internal set; } = default!;
+
+    public string ServerUrl { get; internal set; } = default!;
+
+    public virtual void Mapping(Profile mapper)
     {
-        public string Id { get; private set; } = default!;
+        mapper.CreateMap<User, UserRegistrationEmailModel>()
+                 .ForMember(u => u.Email, cfg => cfg.MapFrom(u => u.UserName));
 
-        public string Name { get; private set; } = default!;
-
-        public string Email { get; private set; } = default!;
-
-        public string ConfirmUrl { get; internal set; } = default!;
-
-        public string ServerUrl { get; internal set; } = default!;
-
-        public virtual void Mapping(Profile mapper)
-        {
-            mapper.CreateMap<User, UserRegistrationEmailModel>()
-                     .ForMember(u => u.Email, cfg => cfg.MapFrom(u => u.UserName));
-
-            mapper.CreateMap<User, UserRegistrationEmailModel>()
-                .ForMember(u => u.Name, cfg => cfg.MapFrom(u => u.FirstName + " " + u.LastName));
-        }
+        mapper.CreateMap<User, UserRegistrationEmailModel>()
+            .ForMember(u => u.Name, cfg => cfg.MapFrom(u => u.FirstName + " " + u.LastName));
     }
 }
