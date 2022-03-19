@@ -65,7 +65,7 @@ public class IdentityService : IIdentityService
         var user = await this.userManager.FindByNameAsync(userInput.Email);
         if (user is null)
         {
-            return Result<LoginUserSuccessModel>.Fail(Messages.InvalidLoginError);
+            return Result<LoginUserSuccessModel>.NotFound(Messages.InvalidLoginError);
         }
 
         var passwordValid = await this.userManager.CheckPasswordAsync(user, userInput.Password);

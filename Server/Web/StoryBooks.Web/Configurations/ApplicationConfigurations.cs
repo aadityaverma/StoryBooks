@@ -8,15 +8,43 @@ using Microsoft.Extensions.Options;
 
 using StoryBooks.Features.Application;
 using StoryBooks.Features.Infrastructure.Persistence;
+using StoryBooks.Features.Presentation.Endpoints;
 using StoryBooks.Web.Middlewares;
 
 public static class ApplicationConfigurations
 {
-    public static IApplicationBuilder ConfigureWebApp(this IApplicationBuilder app, IWebHostEnvironment env)
+    public static IApplicationBuilder ConfigureWebApp(this WebApplication app)
     {
-        using var serviceScope = app.ApplicationServices.CreateScope();
+        using var serviceScope = app.Services.CreateScope();
         var serviceProvider = serviceScope.ServiceProvider;
 
+        app.UseValidationExceptionHandler()
+            .UseHttpsRedirection()
+            .UseCors(options => options
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod())
+            .UseAuthentication()
+            .UseAuthorization()
+            .UseStaticFiles();
+
+        app.AddMinimalApiEndpoints(serviceProvider)
+           .InitializeData(serviceProvider);
+            
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseDeveloperExceptionPage();
+        }
+
+        return app;
+    }
+
+    private static IApplicationBuilder AddMinimalApiEndpoints(
+        this WebApplication app,
+        IServiceProvider serviceProvider)
+    {
         var opts = serviceProvider.GetService<IOptions<ApplicationSettings>>();
         if (opts is null)
         {
@@ -25,40 +53,22 @@ public static class ApplicationConfigurations
 
         string apiVersion = opts.Value.Version;
         string routePrefix = $"/api/{apiVersion}";
-        string rootPath = env.ContentRootPath;
-        app.UseValidationExceptionHandler()
-            .UsePathBase(routePrefix)
-            .UseHttpsRedirection()
-            .UseRouting()
-            .UseCors(options => options
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod())
-            .UseAuthentication()
-            .UseAuthorization()
-            .UseStaticFiles()
-            .UseEndpoints(endpoints => endpoints
-                .MapControllers())
-            .Initialize(serviceProvider);
 
-        if (env.IsDevelopment())
+        var endpointRegisters = serviceProvider.GetServices<IEndpointRegister>();
+
+        foreach (var register in endpointRegisters)
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint($"./{apiVersion}/swagger.json", $"Api {apiVersion}");
-            }
-            );
-            app.UseDeveloperExceptionPage();
+            register.AddEndpoints(app, routePrefix);
         }
 
         return app;
     }
 
-    private static IApplicationBuilder Initialize(this IApplicationBuilder app, IServiceProvider serviceProvider)
+    private static IApplicationBuilder InitializeData(
+        this IApplicationBuilder app,
+        IServiceProvider serviceProvider)
     {
         var services = serviceProvider.GetServices<IDataInitializer>();
-
         foreach (var initializer in services)
         {
             initializer.Initialize().GetAwaiter().GetResult();

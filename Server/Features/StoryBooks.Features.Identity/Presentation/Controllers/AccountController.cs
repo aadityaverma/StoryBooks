@@ -12,7 +12,8 @@ using StoryBooks.Features.Identity.Application.Queries.PersonalAccount;
 
 using System.Threading.Tasks;
 
-public class AccountController : ApiController
+[Obsolete("Use minimal API endpoints!")]
+public class AccountsController : ApiController
 {
     [Authorize]
     [HttpGet]

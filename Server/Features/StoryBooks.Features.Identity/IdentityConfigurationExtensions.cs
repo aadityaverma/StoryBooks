@@ -17,7 +17,8 @@ public static class IdentityConfigurationExtensions
         IConfiguration configuration)
             => services
                 .AddIdentitySettings(configuration)
-                .ConfigureFeature<IdentityUserDbContext>(configuration, typeof(IdentityConfigurationExtensions).Assembly)
+                .ConfigureFeature<IdentityUserDbContext>(
+                        configuration, typeof(IdentityConfigurationExtensions).Assembly)
                 .AddIdentityLayer<IdentityUserDbContext>(configuration);
 
     private static IServiceCollection AddIdentityLayer<TContext>(
@@ -30,16 +31,20 @@ public static class IdentityConfigurationExtensions
         services
             .AddIdentity<User, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = settings.GetValue<int>(nameof(IdentitySettings.MinPasswordLength));
-                options.Password.RequireDigit = settings.GetValue<bool>(nameof(IdentitySettings.RequireDigit));
-                options.Password.RequireLowercase = settings.GetValue<bool>(nameof(IdentitySettings.RequireLowercase));
-                options.Password.RequireNonAlphanumeric = settings.GetValue<bool>(nameof(IdentitySettings.RequireNonAlphanumeric));
-                options.Password.RequireUppercase = settings.GetValue<bool>(nameof(IdentitySettings.RequireUppercase));
+                options.Password.RequiredLength = 
+                    settings.GetValue<int>(nameof(IdentitySettings.MinPasswordLength));
+                options.Password.RequireDigit = 
+                    settings.GetValue<bool>(nameof(IdentitySettings.RequireDigit));
+                options.Password.RequireLowercase = 
+                    settings.GetValue<bool>(nameof(IdentitySettings.RequireLowercase));
+                options.Password.RequireNonAlphanumeric = 
+                    settings.GetValue<bool>(nameof(IdentitySettings.RequireNonAlphanumeric));
+                options.Password.RequireUppercase = 
+                    settings.GetValue<bool>(nameof(IdentitySettings.RequireUppercase));
             })
             .AddEntityFrameworkStores<TContext>();
 
-        services.AddAuthentication(configuration)
-                .AddTransient<IIdentityService, IdentityService>()
+        services.AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IIdentityEmailService, IdentityEmailService>()
                 .AddTransient<ITokenGeneratorService, JwtTokenGeneratorService>()
                 .AddTransient<IIdentityEmailService, IdentityEmailService>();

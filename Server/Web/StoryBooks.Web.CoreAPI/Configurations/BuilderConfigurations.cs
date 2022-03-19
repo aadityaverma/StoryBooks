@@ -6,9 +6,10 @@ using StoryBooks.Web.Configurations;
 
 internal static class BuilderConfigurations
 {
-    internal static WebApplicationBuilder WebConfiguration(this WebApplicationBuilder builder)
+    internal static WebApplicationBuilder WebConfiguration(
+        this WebApplicationBuilder builder)
     {
-        builder.Services.AddWebConfiguration(builder.Configuration)
+        builder.Services.AddWebConfiguration(builder.Configuration, builder.Environment)
                         .AddIdentityFeature(builder.Configuration)
                         .AddAuthorsFeature(builder.Configuration);
 

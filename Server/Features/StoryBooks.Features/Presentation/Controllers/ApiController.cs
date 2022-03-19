@@ -13,6 +13,7 @@ using StoryBooks.Features.Presentation.Extensions;
 
 [ApiController]
 [Route("[controller]")]
+[Obsolete("Use minimal API endpoints!")]
 public abstract class ApiController : ControllerBase
 {
     public const string PathSeparator = "/";

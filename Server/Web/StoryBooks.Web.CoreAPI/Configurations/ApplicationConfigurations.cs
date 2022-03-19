@@ -6,7 +6,7 @@ internal static class ApplicationConfigurations
 {
     public static WebApplication ConfigureApp(this WebApplication app)
     {
-        app.ConfigureWebApp(app.Environment);
+        app.ConfigureWebApp();
         return app;
     }
 }

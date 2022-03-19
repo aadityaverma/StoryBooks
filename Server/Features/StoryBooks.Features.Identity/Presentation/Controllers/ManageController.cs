@@ -8,6 +8,7 @@ using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
 
 [Authorize]
 [Route("Account/[controller]")]
+[Obsolete("Use minimal API endpoints!")]
 public class ManageController : ApiController
 {
     [HttpPut(nameof(Password))]

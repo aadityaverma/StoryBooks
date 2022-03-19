@@ -13,17 +13,17 @@ internal static class InfrastructureConfigurationExtensions
 {
     internal static IServiceCollection AddInfrastructureLayer(
         this IServiceCollection services,
-        Assembly assembly)
-        => services.AddRepositories(assembly);
+        Assembly featureAssembly)
+        => services.AddRepositories(featureAssembly);
 
     internal static IServiceCollection AddInfrastructureLayer<TContext>(
         this IServiceCollection services,
         IConfiguration configuration,
-        Assembly assembly)
+        Assembly featureAssembly)
         where TContext : DbContext
         => services.AddDatabase<TContext>(configuration)
-                   .AddRepositories(assembly)
-                   .AddDbInitializers(assembly);
+                   .AddRepositories(featureAssembly)
+                   .AddDbInitializers(featureAssembly);
 
     private static string GetDefaultConnectionString(this IConfiguration configuration)
         => configuration.GetConnectionString("DefaultConnection");
@@ -42,10 +42,10 @@ internal static class InfrastructureConfigurationExtensions
 
     private static IServiceCollection AddRepositories(
         this IServiceCollection services,
-        Assembly assembly)
+        Assembly featureAssembly)
         => services
             .Scan(scan => scan
-                .FromAssemblies(assembly)
+                .FromAssemblies(featureAssembly)
                 .AddClasses(classes => classes
                     .AssignableTo(typeof(IDomainRepository<>)))
                 .AsMatchingInterface()
@@ -53,15 +53,10 @@ internal static class InfrastructureConfigurationExtensions
 
     private static IServiceCollection AddDbInitializers(
         this IServiceCollection services,
-        Assembly assembly)
+        Assembly featureAssembly)
     {
-        var initializers = assembly
-            .GetTypes()
-            .Where(t => typeof(IDataInitializer).IsAssignableFrom(t))
-            .ToArray();
-
         return services.Scan(scan => scan
-            .FromAssemblies(assembly)
+            .FromAssemblies(featureAssembly)
             .AddClasses(classes => classes
                 .AssignableTo(typeof(IDataInitializer)))
             .AsImplementedInterfaces()

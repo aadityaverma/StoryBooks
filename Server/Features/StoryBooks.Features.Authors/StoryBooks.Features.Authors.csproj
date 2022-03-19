@@ -10,7 +10,6 @@
     <Folder Include="Application\" />
     <Folder Include="Infrastructure\Services\" />
     <Folder Include="Resources\" />
-    <Folder Include="Presentation\" />
   </ItemGroup>
 
   <ItemGroup>

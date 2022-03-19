@@ -30,8 +30,4 @@
 		<ProjectReference Include="..\StoryBooks.Features\StoryBooks.Features.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Presentation\Helpers\" />
-	</ItemGroup>
-
 </Project>

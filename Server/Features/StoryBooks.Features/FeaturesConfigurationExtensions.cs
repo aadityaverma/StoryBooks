@@ -1,10 +1,8 @@
 ﻿namespace StoryBooks.Features;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 using StoryBooks.Features.Application;
 using StoryBooks.Features.Domain;
@@ -12,7 +10,6 @@ using StoryBooks.Features.Infrastructure;
 using StoryBooks.Features.Presentation;
 
 using System.Reflection;
-using System.Text;
 
 public static class FeaturesConfigurationExtensions
 {
@@ -24,7 +21,7 @@ public static class FeaturesConfigurationExtensions
                 .AddDomainLayer(featureAssembly)
                 .AddApplicationLayer(configuration, featureAssembly)
                 .AddInfrastructureLayer(featureAssembly)
-                .AddPresentationLayer();
+                .AddPresentationLayer(featureAssembly);
 
     public static IServiceCollection ConfigureFeature<TContext>(
             this IServiceCollection services,
@@ -35,39 +32,5 @@ public static class FeaturesConfigurationExtensions
                 .AddDomainLayer(featureAssembly)
                 .AddApplicationLayer(configuration, featureAssembly)
                 .AddInfrastructureLayer<TContext>(configuration, featureAssembly)
-                .AddPresentationLayer();
-
-    public static IServiceCollection AddAuthentication(
-            this IServiceCollection services,
-            IConfiguration configuration)
-    {
-        var secret = configuration.GetValue<string>("Authentication:Secret");
-        var key = Encoding.ASCII.GetBytes(secret);
-
-        services
-            .AddAuthentication(authentication =>
-            {
-                authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            //.AddFacebook(facebookOptions =>
-            //{
-            //    facebookOptions.AppId = configuration.GetValue<string>("Authentication:Facebook:AppId");
-            //    facebookOptions.AppSecret = configuration.GetValue<string>("Authentication:Facebook:AppSecret");
-            //})
-            .AddJwtBearer(bearer =>
-            {
-                bearer.RequireHttpsMetadata = false;
-                bearer.SaveToken = true;
-                bearer.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-
-        return services;
-    }
+                .AddPresentationLayer(featureAssembly);
 }

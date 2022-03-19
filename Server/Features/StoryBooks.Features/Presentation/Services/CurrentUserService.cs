@@ -12,10 +12,9 @@ public class CurrentUserService : ICurrentUser
 {
     private readonly List<string> roles;
 
-    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+    public CurrentUserService(IHttpContextAccessor context)
     {
-        var user = httpContextAccessor.HttpContext?.User;
-
+        var user = context.HttpContext?.User;
         if (user is null)
         {
             throw new InvalidOperationException("This request does not have an authenticated user.");
