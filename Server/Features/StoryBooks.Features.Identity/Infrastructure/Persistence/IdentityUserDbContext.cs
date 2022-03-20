@@ -1,11 +1,12 @@
 ﻿namespace StoryBooks.Features.Identity.Infrastructure.Persistence;
 
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 using StoryBooks.Features.Identity.Domain.Entities;
 
-public class IdentityUserDbContext : IdentityDbContext<User>
+public class IdentityUserDbContext : IdentityDbContext<User>, IDataProtectionKeyContext
 {
     public IdentityUserDbContext(DbContextOptions<IdentityUserDbContext> options) : base(options)
     {
@@ -15,6 +16,8 @@ public class IdentityUserDbContext : IdentityDbContext<User>
     : base(options)
     {
     }
+
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

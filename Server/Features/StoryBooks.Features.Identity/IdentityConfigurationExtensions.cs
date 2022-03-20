@@ -1,6 +1,8 @@
 ﻿namespace StoryBooks.Features.Identity;
 
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,23 +33,27 @@ public static class IdentityConfigurationExtensions
         services
             .AddIdentity<User, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 
+                options.Password.RequiredLength =
                     settings.GetValue<int>(nameof(IdentitySettings.MinPasswordLength));
-                options.Password.RequireDigit = 
+                options.Password.RequireDigit =
                     settings.GetValue<bool>(nameof(IdentitySettings.RequireDigit));
-                options.Password.RequireLowercase = 
+                options.Password.RequireLowercase =
                     settings.GetValue<bool>(nameof(IdentitySettings.RequireLowercase));
-                options.Password.RequireNonAlphanumeric = 
+                options.Password.RequireNonAlphanumeric =
                     settings.GetValue<bool>(nameof(IdentitySettings.RequireNonAlphanumeric));
-                options.Password.RequireUppercase = 
+                options.Password.RequireUppercase =
                     settings.GetValue<bool>(nameof(IdentitySettings.RequireUppercase));
             })
-            .AddEntityFrameworkStores<TContext>();
+            .AddEntityFrameworkStores<TContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddDataProtection()
+            .PersistKeysToDbContext<TContext>();
 
         services.AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IIdentityEmailService, IdentityEmailService>()
-                .AddTransient<ITokenGeneratorService, JwtTokenGeneratorService>()
-                .AddTransient<IIdentityEmailService, IdentityEmailService>();
+                .AddSingleton<IIdentityUrlProvider, IdentityUrlProvider>()
+                .AddSingleton<IAuthTokenGeneratorService, JwtTokenGeneratorService>();
 
         return services;
     }

@@ -4,7 +4,7 @@ using StoryBooks.Features.Identity.Domain.Entities;
 
 using System.Collections.Generic;
 
-public interface ITokenGeneratorService
+public interface IAuthTokenGeneratorService
 {
     string GenerateToken(User user, IEnumerable<string> roles);
 }

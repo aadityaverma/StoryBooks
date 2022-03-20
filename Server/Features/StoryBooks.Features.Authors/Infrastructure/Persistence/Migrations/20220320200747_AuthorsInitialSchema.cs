@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class AuthorsInitialSchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Authors",
+                name: "Authors_Author",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -21,11 +21,11 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Author", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Battles",
+                name: "Authors_Battle",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -35,11 +35,11 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Battles", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Battle", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookCovers",
+                name: "Authors_BookCover",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -48,11 +48,11 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookCovers", x => x.Id);
+                    table.PrimaryKey("PK_Authors_BookCover", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "Authors_Genre",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -61,11 +61,11 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Genre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "Authors_Tag",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -74,11 +74,11 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Tag", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Authors_Book",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -86,28 +86,27 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                     CoverId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Status_Value = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    FirstChapterId = table.Column<string>(type: "nvarchar(38)", maxLength: 38, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Book", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
+                        name: "FK_Authors_Book_Authors_Author_AuthorId",
                         column: x => x.AuthorId,
-                        principalTable: "Authors",
+                        principalTable: "Authors_Author",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Books_BookCovers_CoverId",
+                        name: "FK_Authors_Book_Authors_BookCover_CoverId",
                         column: x => x.CoverId,
-                        principalTable: "BookCovers",
+                        principalTable: "Authors_BookCover",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookGenre",
+                name: "Authors_BookGenre",
                 columns: table => new
                 {
                     BooksId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -115,23 +114,23 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookGenre", x => new { x.BooksId, x.GenresId });
+                    table.PrimaryKey("PK_Authors_BookGenre", x => new { x.BooksId, x.GenresId });
                     table.ForeignKey(
-                        name: "FK_BookGenre_Books_BooksId",
+                        name: "FK_Authors_BookGenre_Authors_Book_BooksId",
                         column: x => x.BooksId,
-                        principalTable: "Books",
+                        principalTable: "Authors_Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookGenre_Genres_GenresId",
+                        name: "FK_Authors_BookGenre_Authors_Genre_GenresId",
                         column: x => x.GenresId,
-                        principalTable: "Genres",
+                        principalTable: "Authors_Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookTag",
+                name: "Authors_BookTag",
                 columns: table => new
                 {
                     BooksId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -139,23 +138,23 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookTag", x => new { x.BooksId, x.TagsId });
+                    table.PrimaryKey("PK_Authors_BookTag", x => new { x.BooksId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_BookTag_Books_BooksId",
+                        name: "FK_Authors_BookTag_Authors_Book_BooksId",
                         column: x => x.BooksId,
-                        principalTable: "Books",
+                        principalTable: "Authors_Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookTag_Tags_TagsId",
+                        name: "FK_Authors_BookTag_Authors_Tag_TagsId",
                         column: x => x.TagsId,
-                        principalTable: "Tags",
+                        principalTable: "Authors_Tag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Stats",
+                name: "Authors_Stat",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -169,17 +168,17 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stats", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Stat", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Stats_Books_BookId",
+                        name: "FK_Authors_Stat_Authors_Book_BookId",
                         column: x => x.BookId,
-                        principalTable: "Books",
+                        principalTable: "Authors_Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BattleStat",
+                name: "Authors_BattleStat",
                 columns: table => new
                 {
                     BattlesId = table.Column<int>(type: "int", nullable: false),
@@ -187,29 +186,30 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BattleStat", x => new { x.BattlesId, x.IncludedStatsId });
+                    table.PrimaryKey("PK_Authors_BattleStat", x => new { x.BattlesId, x.IncludedStatsId });
                     table.ForeignKey(
-                        name: "FK_BattleStat_Battles_BattlesId",
+                        name: "FK_Authors_BattleStat_Authors_Battle_BattlesId",
                         column: x => x.BattlesId,
-                        principalTable: "Battles",
+                        principalTable: "Authors_Battle",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BattleStat_Stats_IncludedStatsId",
+                        name: "FK_Authors_BattleStat_Authors_Stat_IncludedStatsId",
                         column: x => x.IncludedStatsId,
-                        principalTable: "Stats",
+                        principalTable: "Authors_Stat",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chapters",
+                name: "Authors_Chapter",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsFirstChapter = table.Column<bool>(type: "bit", nullable: false),
                     IsCheckpoint = table.Column<bool>(type: "bit", nullable: false),
                     IsDiceChoice = table.Column<bool>(type: "bit", nullable: false),
                     BookId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -218,22 +218,22 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chapters", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Chapter", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Chapters_Battles_BattleId",
+                        name: "FK_Authors_Chapter_Authors_Battle_BattleId",
                         column: x => x.BattleId,
-                        principalTable: "Battles",
+                        principalTable: "Authors_Battle",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Chapters_Books_BookId",
+                        name: "FK_Authors_Chapter_Authors_Book_BookId",
                         column: x => x.BookId,
-                        principalTable: "Books",
+                        principalTable: "Authors_Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Choices",
+                name: "Authors_Choice",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -243,17 +243,17 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Choices", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Choice", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Choices_Chapters_NextChapterId",
+                        name: "FK_Authors_Choice_Authors_Chapter_NextChapterId",
                         column: x => x.NextChapterId,
-                        principalTable: "Chapters",
+                        principalTable: "Authors_Chapter",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Effects",
+                name: "Authors_Effect",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -263,17 +263,17 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Effects", x => x.Id);
+                    table.PrimaryKey("PK_Authors_Effect", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Effects_Chapters_ChapterId",
+                        name: "FK_Authors_Effect_Authors_Chapter_ChapterId",
                         column: x => x.ChapterId,
-                        principalTable: "Chapters",
+                        principalTable: "Authors_Chapter",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "StatChanges",
+                name: "Authors_StatModifier",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -284,148 +284,156 @@ namespace StoryBooks.Features.Authors.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StatChanges", x => x.Id);
+                    table.PrimaryKey("PK_Authors_StatModifier", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StatChanges_Effects_EffectId",
+                        name: "FK_Authors_StatModifier_Authors_Effect_EffectId",
                         column: x => x.EffectId,
-                        principalTable: "Effects",
+                        principalTable: "Authors_Effect",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_StatChanges_Stats_StatId",
+                        name: "FK_Authors_StatModifier_Authors_Stat_StatId",
                         column: x => x.StatId,
-                        principalTable: "Stats",
+                        principalTable: "Authors_Stat",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BattleStat_IncludedStatsId",
-                table: "BattleStat",
+                name: "IX_Authors_BattleStat_IncludedStatsId",
+                table: "Authors_BattleStat",
                 column: "IncludedStatsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookGenre_GenresId",
-                table: "BookGenre",
-                column: "GenresId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
+                name: "IX_Authors_Book_AuthorId",
+                table: "Authors_Book",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_CoverId",
-                table: "Books",
+                name: "IX_Authors_Book_CoverId",
+                table: "Authors_Book",
                 column: "CoverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookTag_TagsId",
-                table: "BookTag",
+                name: "IX_Authors_BookGenre_GenresId",
+                table: "Authors_BookGenre",
+                column: "GenresId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Authors_BookTag_TagsId",
+                table: "Authors_BookTag",
                 column: "TagsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chapters_BattleId",
-                table: "Chapters",
+                name: "IX_Authors_Chapter_BattleId",
+                table: "Authors_Chapter",
                 column: "BattleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chapters_BookId",
-                table: "Chapters",
+                name: "IX_Authors_Chapter_BookId",
+                table: "Authors_Chapter",
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chapters_ChoiceId",
-                table: "Chapters",
+                name: "IX_Authors_Chapter_ChoiceId",
+                table: "Authors_Chapter",
                 column: "ChoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Choices_NextChapterId",
-                table: "Choices",
+                name: "IX_Authors_Choice_NextChapterId",
+                table: "Authors_Choice",
                 column: "NextChapterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Effects_ChapterId",
-                table: "Effects",
+                name: "IX_Authors_Effect_ChapterId",
+                table: "Authors_Effect",
                 column: "ChapterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StatChanges_EffectId",
-                table: "StatChanges",
+                name: "IX_Authors_Stat_BookId",
+                table: "Authors_Stat",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Authors_StatModifier_EffectId",
+                table: "Authors_StatModifier",
                 column: "EffectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StatChanges_StatId",
-                table: "StatChanges",
+                name: "IX_Authors_StatModifier_StatId",
+                table: "Authors_StatModifier",
                 column: "StatId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Stats_BookId",
-                table: "Stats",
-                column: "BookId");
-
             migrationBuilder.AddForeignKey(
-                name: "FK_Chapters_Choices_ChoiceId",
-                table: "Chapters",
+                name: "FK_Authors_Chapter_Authors_Choice_ChoiceId",
+                table: "Authors_Chapter",
                 column: "ChoiceId",
-                principalTable: "Choices",
+                principalTable: "Authors_Choice",
                 principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Chapters_Battles_BattleId",
-                table: "Chapters");
+                name: "FK_Authors_Chapter_Authors_Battle_BattleId",
+                table: "Authors_Chapter");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Chapters_Books_BookId",
-                table: "Chapters");
+                name: "FK_Authors_Book_Authors_Author_AuthorId",
+                table: "Authors_Book");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Chapters_Choices_ChoiceId",
-                table: "Chapters");
+                name: "FK_Authors_Book_Authors_BookCover_CoverId",
+                table: "Authors_Book");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Authors_Chapter_Authors_Book_BookId",
+                table: "Authors_Chapter");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Authors_Chapter_Authors_Choice_ChoiceId",
+                table: "Authors_Chapter");
 
             migrationBuilder.DropTable(
-                name: "BattleStat");
+                name: "Authors_BattleStat");
 
             migrationBuilder.DropTable(
-                name: "BookGenre");
+                name: "Authors_BookGenre");
 
             migrationBuilder.DropTable(
-                name: "BookTag");
+                name: "Authors_BookTag");
 
             migrationBuilder.DropTable(
-                name: "StatChanges");
+                name: "Authors_StatModifier");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Authors_Genre");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "Authors_Tag");
 
             migrationBuilder.DropTable(
-                name: "Effects");
+                name: "Authors_Effect");
 
             migrationBuilder.DropTable(
-                name: "Stats");
+                name: "Authors_Stat");
 
             migrationBuilder.DropTable(
-                name: "Battles");
+                name: "Authors_Battle");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Authors_Author");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "Authors_BookCover");
 
             migrationBuilder.DropTable(
-                name: "BookCovers");
+                name: "Authors_Book");
 
             migrationBuilder.DropTable(
-                name: "Choices");
+                name: "Authors_Choice");
 
             migrationBuilder.DropTable(
-                name: "Chapters");
+                name: "Authors_Chapter");
         }
     }
 }

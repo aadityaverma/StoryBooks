@@ -3,6 +3,7 @@
 using StoryBooks.Features.Application;
 using StoryBooks.Features.Application.Commands;
 using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
+using StoryBooks.Features.Identity.Application.Commands.ConfirmEmail;
 using StoryBooks.Features.Identity.Application.Commands.LoginUser;
 using StoryBooks.Features.Identity.Application.Commands.RegisterUser;
 
@@ -15,4 +16,5 @@ public interface IIdentityService
     Task<Result<LoginUserSuccessModel>> Login(LoginUserInputModel userInput);
 
     Task<Result> ChangePassword(ChangePasswordInputModel changePasswordInput);
+    Task<Result> ConfirmEmail(ConfirmEmailCommand request);
 }

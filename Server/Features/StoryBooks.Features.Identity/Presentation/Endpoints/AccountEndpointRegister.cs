@@ -52,23 +52,34 @@ public class AccountEndpointRegister : EndpointRegister
            .WithTags(tag);
     }
 
-    internal static async Task<IResult> Details(IMediator mediator)
+    internal static async Task<IResult> Details(
+        IMediator mediator, 
+        CancellationToken cancellationToken)
     {
-        return await mediator.Send(new GetPersonalDetailsQuery()).ToIResult();
+        return await mediator.Send(new GetPersonalDetailsQuery(), cancellationToken).ToIResult();
     }
 
-    internal static async Task<IResult> Register(IMediator mediator, RegisterUserCommand command)
+    internal static async Task<IResult> Register(
+        IMediator mediator, 
+        RegisterUserCommand command,
+        CancellationToken cancellationToken)
     {
-        return await mediator.Send(command).ToIResult();
+        return await mediator.Send(command, cancellationToken).ToIResult();
     }
 
-    internal static async Task<IResult> Update(IMediator mediator, UpdateUserDetailsCommand command)
+    internal static async Task<IResult> Update(
+        IMediator mediator, 
+        UpdateUserDetailsCommand command,
+        CancellationToken cancellationToken)
     {
-        return await mediator.Send(command).ToIResult();
+        return await mediator.Send(command, cancellationToken).ToIResult();
     }
 
-    internal static async Task<IResult> Login(IMediator mediator, LoginUserCommand command)
+    internal static async Task<IResult> Login(
+        IMediator mediator, 
+        LoginUserCommand command,
+        CancellationToken cancellationToken)
     {
-        return await mediator.Send(command).ToIResult();
+        return await mediator.Send(command, cancellationToken).ToIResult();
     }
 }

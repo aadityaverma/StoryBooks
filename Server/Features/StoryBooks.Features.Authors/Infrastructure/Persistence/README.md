@@ -1,6 +1,6 @@
 ﻿## Add migration
 ```
-Add-Migration '{FeatureName}{MigrationName}' -OutputDir "Infrastructure/Persistence/Migrations" -context AuthorsDbContext
+Add-Migration 'Authors{MigrationName}' -OutputDir "Infrastructure/Persistence/Migrations" -context AuthorsDbContext
 ```
 
 ## Update database

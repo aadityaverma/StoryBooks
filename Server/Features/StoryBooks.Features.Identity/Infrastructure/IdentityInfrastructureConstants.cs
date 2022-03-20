@@ -9,8 +9,11 @@ public static class IdentityInfrastructureConstants
         public const string LoggedSuccessfully = "Logged successfully.";
 
         public const string PasswordChanged = "User password is changed";
-
         public const string PasswordChangeError = "User password was not changed!";
+
+
+        public const string EmailConfirmed = "Your email is confirmed";
+        public const string EmailConfirmError = "Error confirmung your email!";
 
         public const string UserNotFoundError = "User is not found!";
 

@@ -25,7 +25,7 @@ public class SendGridEmailSender : IEmailSender
 
         this.senderAddress = new EmailAddress(settings.SenderAddress, settings.SenderName);
     }
-    public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+    public async Task<bool> SendEmailAsync(string email, string subject, string htmlMessage)
     {
         ValidateEmail(email, subject);
 
@@ -43,6 +43,8 @@ public class SendGridEmailSender : IEmailSender
             var responseBody = await response.Body.ReadAsStringAsync();
             throw new EmailSendingException(responseBody);
         }
+
+        return response.IsSuccessStatusCode;
     }
 
     private static void ValidateEmail(string email, string subject)

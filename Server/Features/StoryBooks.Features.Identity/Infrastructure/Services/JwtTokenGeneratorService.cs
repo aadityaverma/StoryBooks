@@ -12,7 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-public class JwtTokenGeneratorService : ITokenGeneratorService
+public class JwtTokenGeneratorService : IAuthTokenGeneratorService
 {
     private readonly IConfiguration configuration;
 

@@ -2,8 +2,8 @@
 
 public class MockEmailSender : IEmailSender
 {
-    public Task SendEmailAsync(string email, string subject, string htmlMessage)
+    public Task<bool> SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        return Task.CompletedTask;
+        return Task.FromResult(true);
     }
 }
