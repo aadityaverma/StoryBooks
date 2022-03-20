@@ -6,14 +6,20 @@ of API Gateway and monolith app. We do not need unnecessary complexity and we sh
 be as much as possible cost effective.
 
 ## Implemented Features
-- Identity
+- DDD structure
+- CQRS with Mediator 
+- Minimal API
+- Email service
+- Identity feature
 
 ## Features Under Development
-- Message Bus
+- Authors feature
+- Catalog feature
+- Client app
 
 ## Future Development
-- Authors/Books
-- Catalog
+- Docker support
+- Message Bus with Rabbit MQ
 - Basket
 - Orders
 - Payment

@@ -47,7 +47,4 @@ services.AddIdentityFeature(configuration);
 **5. Make sure to include Email service library in your web configurations. This Feature depends on it.**
 
 ## Development In Progress
-* Fluid email templates
-* Confirm user email
-* Reset password
 * Enable two factor authentication

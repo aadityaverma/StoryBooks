@@ -18,9 +18,9 @@ public async Task SendUserRegisteredEmail(User user)
 ```
 Thats it! If you structure your code properly, the email service will find your template 
 file, build your email message content with the give data and send it to the given use. 
-<br>
+
 ## Setup
-**Add this variables into the secrets.json:**<br>
+### Add this variables into the secrets.json:
 ```
 {
 	...
@@ -28,8 +28,8 @@ file, build your email message content with the give data and send it to the giv
 	...
 }
 ```
-<br>
-**Add this section to appsettings.json**<br>
+
+### Add this section to appsettings.json
 ```
 {
 	...
@@ -40,16 +40,16 @@ file, build your email message content with the give data and send it to the giv
 	...
 }
 ```
-<br>
-**Registering email service in your startup configuration:**
+
+### Registering email service in your startup configuration:
 You have two options depending on wich template engine you 
 deside to user. Currently supported engines are Razor and Fluid.
 ```
-services.AddEmailWithRazor(configuration);  
+services.AddEmailWithRazor(configuration);  // Disabled at the moment
 services.AddEmailWithFluid(configuration);
 ```
-<br>
-**Additional configurations**
+
+### Additional configurations
 You can provide your own file provider that will be used from
 the template renderers. For example:
 ```
@@ -60,7 +60,7 @@ services.Configure<EmailSettings>(c =>
 });
 ...
 ```
-<br>
+
 ## Templates naming conventions and locations
 By default email templates shoud be placed in:
 /Resources/EmailTemplates
@@ -71,7 +71,7 @@ file and template model files. Structure:
 |->{TemplateName}Email.html  => For Fluid templates
 |->{TemplateName}Email.cshtml => For Razor templates
 |->{TemplateName}EmailModel.cs
-<br>
+
 ## Email service with Razor templates
 Razor templates are using RazorLight project: https://github.com/toddams/RazorLight
 This is because of the sealing of IFileProvider setting since .net 3.
@@ -79,7 +79,7 @@ It is available with RazorRuntimeCompilation package but it adds a lot of weight
 Downside of this approach for templetization of emails is that Razor library takes a lot of 
 resources. In the latest .net 6 version runtime compilation addsadditional 20mb to the 
 application and 100mb usage of application memory just to compile small cshtml file. 
-<br>
+
 ## Email service with Fluid templates
 I think that this is the better approach to email tempating. Fluid is wrapper library
 over Liquid template engine for better work with .net core. It is very light and fas 
