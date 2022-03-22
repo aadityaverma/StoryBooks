@@ -16,7 +16,7 @@ const ShopTab: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonCard>
-          <IonCardTitle>Дани е ГЕЙ!</IonCardTitle>
+          <IonCardTitle>Card</IonCardTitle>
         </IonCard>
       </IonContent>
     </IonPage>
