@@ -4,11 +4,11 @@ This project contains all shared logic and configurations accross all applicatio
 
 ## This includes configurations for
 
-### DDD, 
-### CQRS, 
-### Fluent validation, 
-### Mapping, 
-### Endpoints, 
+### DDD
+### CQRS
+### Fluent validation
+### Mappings
+### Endpoints
 ### Application settings
 
 ## Usage

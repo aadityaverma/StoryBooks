@@ -5,6 +5,7 @@
         public const string ResponseType = "application/json";
 
         public const string InvalidRequest = "Invalid request!";
-        public const string ApplicationSettingsNotConfigured = "Application settings are not configured!";
+        public const string ApplicationSettingsNotConfigured = 
+            "Application settings are not configured!";
     }
 }

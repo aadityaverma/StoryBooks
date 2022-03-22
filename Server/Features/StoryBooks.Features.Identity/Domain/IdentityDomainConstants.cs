@@ -12,8 +12,10 @@ internal static class IdentityDomainConstants
 
     public static class ErrorMessages
     {
-        public const string InvalidUserFields = "Email, first and last name are required fields.";
+        public const string InvalidUserFields = 
+            "Email, first and last name are required fields.";
 
-        public const string ConfirmPasswordNotMatching = "'Confirm Password' must be equal to the 'Password' field.";
+        public const string ConfirmPasswordNotMatching = 
+            "'Confirm Password' must be equal to the 'Password' field.";
     }
 }

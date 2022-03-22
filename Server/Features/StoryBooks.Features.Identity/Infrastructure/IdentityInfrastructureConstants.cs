@@ -13,7 +13,7 @@ public static class IdentityInfrastructureConstants
 
 
         public const string EmailConfirmed = "Your email is confirmed";
-        public const string EmailConfirmError = "Error confirmung your email!";
+        public const string EmailConfirmError = "Error confirming your email!";
 
         public const string UserNotFoundError = "User is not found!";
 

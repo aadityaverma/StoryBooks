@@ -1,0 +1,7 @@
+{
+  "name": "StoryBooks",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

@@ -50,7 +50,7 @@ public class SendGridEmailSender : IEmailSender
     private static void ValidateEmail(string email, string subject)
     {
         Guard.ForEmptyString<InvalidEmailException>(
-            email, message: ErrorMessages.RecieverEmailRequired);
+            email, message: ErrorMessages.ReceiverEmailRequired);
 
         Guard.ForEmptyString<InvalidEmailException>(
             subject, message: ErrorMessages.SubjectRequired);
