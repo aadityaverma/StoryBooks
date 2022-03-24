@@ -1,5 +1,31 @@
 ﻿# Authors Feature
 
+## Setup
+### 1. Add this values into the secrets.json:
+```JSON
+{
+	"Authentication:Secret": "{Common secret key}",
+	"ConnectionStrings:Authors": "{SQL server connection string}"
+}
+```
+
+### 2. Add this section into appsettings.json:
+```JSON
+{
+	"AuthorsSettings": {
+		
+	}
+}
+```
+
+### 3. Add reference to the StoryBooks.Features.Authors to the selected Web Service
+
+
+### 4. Add this line in application builder services:
+```C#
+services.AddAuthorsFeature(configuration);
+```
+
 ## API
 
 ### Authors

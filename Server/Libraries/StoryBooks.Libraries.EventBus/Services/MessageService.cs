@@ -1,8 +1,8 @@
-﻿namespace StoryBooks.Features.Messages.Services
+﻿namespace StoryBooks.Libraries.EventBus.Services
 {
     using Microsoft.EntityFrameworkCore;
 
-    using StoryBooks.Features.Messages.Persistence;
+    using StoryBooks.Libraries.EventBus.Persistence;
 
     using System;
     using System.Threading.Tasks;

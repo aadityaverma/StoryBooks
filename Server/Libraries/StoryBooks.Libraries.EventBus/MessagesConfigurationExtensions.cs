@@ -1,4 +1,4 @@
-﻿namespace StoryBooks.Features.Messages
+﻿namespace StoryBooks.Libraries.EventBus
 {
     using GreenPipes;
 
@@ -7,15 +7,12 @@
 
     using MassTransit;
 
-    using Microsoft.Data.SqlClient;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    using StoryBooks.Features;
-    using StoryBooks.Features.Messages.Persistence;
-    using StoryBooks.Features.Messages.Services;
+    using StoryBooks.Libraries.EventBus.Services;
 
-    using System.Linq;
+    using System.Data.SqlClient;
 
     public static class MessagesConfigurationExtensions
     {
@@ -24,7 +21,7 @@
             IConfiguration configuration,
             params Type[] consumers)
                 => services
-                    .ConfigureFeature<MessageDbContext>(configuration, typeof(MessagesConfigurationExtensions).Assembly)
+                    //Add MQ Database context
                     .AddMessaging(configuration, true, consumers);
                 
         private static MessageQueueSettings GetMessageQueueSettings(IConfiguration configuration)
@@ -55,7 +52,10 @@
             services
                 .AddMassTransit(mt =>
                 {
-                    consumers.ForEach(consumer => mt.AddConsumer(consumer));
+                    foreach (var consumer in consumers)
+                    {
+                        mt.AddConsumer(consumer);
+                    }
 
                     mt.AddBus(context => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
@@ -65,13 +65,16 @@
                             host.Password(messageQueueSettings.Password);
                         });
 
-                        consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
+                        foreach (var consumer in consumers)
                         {
-                            endpoint.PrefetchCount = 6;
-                            endpoint.UseMessageRetry(retry => retry.Interval(5, 200));
+                            rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
+                            {
+                                endpoint.PrefetchCount = 6;
+                                endpoint.UseMessageRetry(retry => retry.Interval(5, 200));
 
-                            endpoint.ConfigureConsumer(context, consumer);
-                        }));
+                                endpoint.ConfigureConsumer(context, consumer);
+                            });
+                        }
                     }));
                 })
                 .AddMassTransitHostedService();

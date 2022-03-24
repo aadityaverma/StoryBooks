@@ -15,7 +15,7 @@ public static class AuthorsConfigurationExtensions
             => services
                 .AddAuthorsSettings(configuration)
                 .ConfigureFeature<AuthorsDbContext>(
-                    configuration, typeof(AuthorsConfigurationExtensions).Assembly)
+                    configuration, typeof(AuthorsConfigurationExtensions).Assembly, AuthorsSetttings.FeatureName)
                 .AddAuthorsLayer();
 
     private static IServiceCollection AddAuthorsSettings(
@@ -28,7 +28,9 @@ public static class AuthorsConfigurationExtensions
 
     public static IServiceCollection AddAuthorsLayer(
         this IServiceCollection services)
-            => services.AddScoped<IAuthorDbContext>(
-                p => p.GetService<AuthorsDbContext>() ??
-                    throw new ConfigurationException(nameof(AuthorsDbContext)));
+            => services
+                .AddScoped<IAuthorDbContext>(
+                    p => p.GetService<AuthorsDbContext>() ??
+                        throw new ConfigurationException(nameof(AuthorsDbContext)))
+                ;
 }

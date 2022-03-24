@@ -1,4 +1,4 @@
-﻿namespace StoryBooks.Features.Messages
+﻿namespace StoryBooks.Libraries.EventBus
 {
     public class MessageQueueSettings
     {

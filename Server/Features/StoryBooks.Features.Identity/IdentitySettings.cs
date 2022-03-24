@@ -2,6 +2,8 @@
 
 public class IdentitySettings
 {
+    public const string FeatureName = "Identity";
+
     public int MinPasswordLength { get; private set; }
 
     public bool RequireDigit { get; private set; }

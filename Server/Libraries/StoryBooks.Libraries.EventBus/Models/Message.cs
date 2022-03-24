@@ -1,4 +1,4 @@
-﻿namespace StoryBooks.Features.Messages.Models
+﻿namespace StoryBooks.Libraries.EventBus.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations.Schema;

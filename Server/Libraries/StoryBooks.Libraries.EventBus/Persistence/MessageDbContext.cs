@@ -1,4 +1,4 @@
-﻿namespace StoryBooks.Features.Messages.Persistence
+﻿namespace StoryBooks.Libraries.EventBus.Persistence
 {
     using Microsoft.EntityFrameworkCore;
 

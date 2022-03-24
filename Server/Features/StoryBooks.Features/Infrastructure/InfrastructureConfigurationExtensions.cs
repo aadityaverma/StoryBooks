@@ -11,6 +11,8 @@ using System.Reflection;
 
 internal static class InfrastructureConfigurationExtensions
 {
+    private const string DefaultConnectionName = "DefaultConnection";
+
     internal static IServiceCollection AddInfrastructureLayer(
         this IServiceCollection services,
         Assembly featureAssembly)
@@ -19,26 +21,30 @@ internal static class InfrastructureConfigurationExtensions
     internal static IServiceCollection AddInfrastructureLayer<TContext>(
         this IServiceCollection services,
         IConfiguration configuration,
-        Assembly featureAssembly)
+        Assembly featureAssembly,
+        string? connectionString)
         where TContext : DbContext
-        => services.AddDatabase<TContext>(configuration)
+        => services.AddDatabase<TContext>(configuration, connectionString)
                    .AddRepositories(featureAssembly)
                    .AddDbInitializers(featureAssembly);
 
-    private static string GetDefaultConnectionString(this IConfiguration configuration)
-        => configuration.GetConnectionString("DefaultConnection");
-
     private static IServiceCollection AddDatabase<TContext>(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        string? connectionString)
         where TContext : DbContext
-        => services
+    {
+        var connection = configuration.GetConnectionString(connectionString);
+        return services
             .AddDbContext<TContext>(options => options
-                .UseSqlServer(
-                    configuration.GetDefaultConnectionString(),
+                .UseSqlServer(connection ?? GetDefaultConnectionString(configuration),
                     sqlServer => sqlServer
                         .MigrationsAssembly(typeof(TContext)
                             .Assembly.FullName)));
+    }
+
+    private static string GetDefaultConnectionString(this IConfiguration configuration)
+        => configuration.GetConnectionString(DefaultConnectionName);
 
     private static IServiceCollection AddRepositories(
         this IServiceCollection services,

@@ -3,7 +3,7 @@
 This is the main Web service. Here we can see configured all application features.
 In the future we can have many Micro-Web services but for now this will have a role
 of API Gateway and monolith app. We do not need unnecessary complexity and we should 
-be as much as possible cost effective.
+be as much cost and time effective as possible .
 
 ## Implemented Features
 - DDD structure
@@ -15,11 +15,11 @@ be as much as possible cost effective.
 ## Features Under Development
 - Authors feature
 - Catalog feature
-- Client app
+- Client application
+- Event Bus with Rabbit MQ
 
 ## Future Development
 - Docker support
-- Message Bus with Rabbit MQ
 - Basket
 - Orders
 - Payment

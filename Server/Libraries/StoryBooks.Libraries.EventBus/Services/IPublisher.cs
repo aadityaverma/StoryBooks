@@ -1,4 +1,4 @@
-﻿namespace StoryBooks.Features.Messages.Services
+﻿namespace StoryBooks.Libraries.EventBus.Services
 {
     using System;
     using System.Threading.Tasks;

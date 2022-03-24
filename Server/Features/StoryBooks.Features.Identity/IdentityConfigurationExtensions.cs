@@ -20,7 +20,7 @@ public static class IdentityConfigurationExtensions
             => services
                 .AddIdentitySettings(configuration)
                 .ConfigureFeature<IdentityUserDbContext>(
-                        configuration, typeof(IdentityConfigurationExtensions).Assembly)
+                        configuration, typeof(IdentityConfigurationExtensions).Assembly, IdentitySettings.FeatureName)
                 .AddIdentityLayer<IdentityUserDbContext>(configuration);
 
     private static IServiceCollection AddIdentityLayer<TContext>(

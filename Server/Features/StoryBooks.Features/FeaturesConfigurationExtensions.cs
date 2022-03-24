@@ -26,11 +26,12 @@ public static class FeaturesConfigurationExtensions
     public static IServiceCollection ConfigureFeature<TContext>(
             this IServiceCollection services,
             IConfiguration configuration,
-            Assembly featureAssembly)
+            Assembly featureAssembly,
+            string? connectionString)
         where TContext : DbContext
             => services
                 .AddDomainLayer(featureAssembly)
                 .AddApplicationLayer(configuration, featureAssembly)
-                .AddInfrastructureLayer<TContext>(configuration, featureAssembly)
+                .AddInfrastructureLayer<TContext>(configuration, featureAssembly, connectionString)
                 .AddPresentationLayer(featureAssembly);
 }
