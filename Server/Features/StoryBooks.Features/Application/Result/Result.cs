@@ -1,4 +1,6 @@
-﻿namespace StoryBooks.Features.Application;
+﻿using System.Linq;
+
+namespace StoryBooks.Features.Application;
 
 public class Result : BaseResult
 {
@@ -56,5 +58,11 @@ public class Result : BaseResult
     public static Result Fail(string message, IEnumerable<ResultError> errors)
     {
         return new Result(ResultCode.BadRequest, message, errors);
+    }
+
+    public static Result Fail(string message, IDictionary<string, IEnumerable<string>> errors)
+    {
+        var errorList = errors.Select(p => (ResultError)p);
+        return new Result(ResultCode.BadRequest, message, errorList);
     }
 }

@@ -18,7 +18,8 @@ public static class ApplicationConfigurations
         using var serviceScope = app.Services.CreateScope();
         var serviceProvider = serviceScope.ServiceProvider;
 
-        app.UseValidationExceptionHandler()
+        app
+            .UseValidationExceptionHandler()
             .UseHttpsRedirection()
             .UseCors(options => options
                 .AllowAnyOrigin()
@@ -28,14 +29,14 @@ public static class ApplicationConfigurations
             .UseAuthorization()
             .UseStaticFiles();
 
-        app.AddMinimalApiEndpoints(serviceProvider)
-           .InitializeData(serviceProvider);
+        app
+            .AddMinimalApiEndpoints(serviceProvider)
+            .InitializeData(serviceProvider);
             
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.UseDeveloperExceptionPage();
         }
 
         return app;

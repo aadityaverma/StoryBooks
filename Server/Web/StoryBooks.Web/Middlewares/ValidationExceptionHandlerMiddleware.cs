@@ -1,18 +1,17 @@
 ﻿namespace StoryBooks.Web.Middlewares;
 
-using System;
-using System.Net;
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
+using StoryBooks.Features.Application;
 using StoryBooks.Features.Application.Exceptions;
 using StoryBooks.Features.Domain.Exceptions;
-using StoryBooks.Libraries.Validation;
+
+using System;
+using System.Threading.Tasks;
 
 public class ValidationExceptionHandlerMiddleware
 {
@@ -35,45 +34,20 @@ public class ValidationExceptionHandlerMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var code = HttpStatusCode.InternalServerError;
-
-        var result = string.Empty;
-
-        switch (exception)
+        var result = exception switch
         {
-            case ModelValidationException modelValidationException:
-                code = HttpStatusCode.BadRequest;
-                result = SerializeObject(new
-                {
-                    ValidationDetails = true,
-                    modelValidationException.Errors
-                });
-                break;
-            case NullReferenceException _:
-                code = HttpStatusCode.BadRequest;
-                result = SerializeObject(new[] { WebConstants.InvalidRequest });
-                break;
-            case EntityNotFoundException _:
-                code = HttpStatusCode.NotFound;
-                break;
-        }
+            ModelValidationException validationException => 
+                Result.Fail(exception.Message, validationException.Errors),
+            EntityNotFoundException notFoundException => 
+                Result.NotFound(notFoundException.Message),
+            _ => Result.Fail(WebConstants.InvalidRequest, exception.Message),
+        };
 
         context.Response.ContentType = WebConstants.ResponseType;
-        context.Response.StatusCode = (int)code;
+        context.Response.StatusCode = result.Code.Value;
 
-        if (string.IsNullOrEmpty(result))
-        {
-            var error = exception.Message;
-
-            if (exception is ValidationException baseDomainException)
-            {
-                error = baseDomainException.Error;
-            }
-
-            result = SerializeObject(new[] { error });
-        }
-
-        return context.Response.WriteAsync(result);
+        string response = SerializeObject(result.Errors);
+        return context.Response.WriteAsync(response);
     }
 
     private static string SerializeObject(object obj)

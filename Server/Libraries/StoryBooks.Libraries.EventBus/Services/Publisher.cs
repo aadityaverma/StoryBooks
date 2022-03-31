@@ -1,30 +1,29 @@
-﻿namespace StoryBooks.Libraries.EventBus.Services
+﻿namespace StoryBooks.Libraries.EventBus.Services;
+
+using MassTransit;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class Publisher : IPublisher
 {
-    using MassTransit;
+    private const int TimeoutMilliseconds = 2000;
 
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
+    private readonly IBus bus;
 
-    public class Publisher : IPublisher
+    public Publisher(IBus bus) => this.bus = bus;
+
+    public Task Publish<TMessage>(TMessage message)
+        => this.bus.Publish(message  ?? default!, GetCancellationToken());
+
+    public Task Publish<TMessage>(TMessage message, Type messageType)
+        => this.bus.Publish(message ?? default!, messageType, GetCancellationToken());
+
+    private static CancellationToken GetCancellationToken()
     {
-        private const int TimeoutMilliseconds = 2000;
-
-        private readonly IBus bus;
-
-        public Publisher(IBus bus) => this.bus = bus;
-
-        public Task Publish<TMessage>(TMessage message)
-            => this.bus.Publish(message, GetCancellationToken());
-
-        public Task Publish<TMessage>(TMessage message, Type messageType)
-            => this.bus.Publish(message, messageType, GetCancellationToken());
-
-        private static CancellationToken GetCancellationToken()
-        {
-            var timeout = TimeSpan.FromMilliseconds(TimeoutMilliseconds);
-            var cancellationTokenSource = new CancellationTokenSource(timeout);
-            return cancellationTokenSource.Token;
-        }
+        var timeout = TimeSpan.FromMilliseconds(TimeoutMilliseconds);
+        var cancellationTokenSource = new CancellationTokenSource(timeout);
+        return cancellationTokenSource.Token;
     }
 }

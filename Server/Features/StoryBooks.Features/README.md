@@ -1,6 +1,6 @@
 ﻿# Common feature logic
 
-This project contains all shared logic and configurations accross all application features.
+This project contains all shared logic and configurations across all application features.
 
 ## This includes configurations for
 

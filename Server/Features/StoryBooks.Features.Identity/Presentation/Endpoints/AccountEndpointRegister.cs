@@ -21,7 +21,7 @@ public class AccountEndpointRegister : EndpointRegister
     {
         string prefix = endpointPrefix ?? string.Empty;
         string endpoint = $"{prefix}/account";
-        string tag = GetTag<AccountEndpointRegister>();
+        string tag = base.GetTag<AccountEndpointRegister>();
 
         app.MapGet(endpoint, Details)
            .Produces(StatusCodes.Status200OK, typeof(PersonalDetailsModel))
@@ -53,33 +53,25 @@ public class AccountEndpointRegister : EndpointRegister
     }
 
     internal static async Task<IResult> Details(
-        IMediator mediator, 
-        CancellationToken cancellationToken)
-    {
-        return await mediator.Send(new GetPersonalDetailsQuery(), cancellationToken).ToIResult();
-    }
+        IMediator mediator,
+        CancellationToken cancellationToken) 
+            => await mediator.Send(new GetPersonalDetailsQuery(), cancellationToken).ToIResult();
 
     internal static async Task<IResult> Register(
-        IMediator mediator, 
+        IMediator mediator,
         RegisterUserCommand command,
-        CancellationToken cancellationToken)
-    {
-        return await mediator.Send(command, cancellationToken).ToIResult();
-    }
+        CancellationToken cancellationToken) 
+            => await mediator.Send(command, cancellationToken).ToIResult();
 
     internal static async Task<IResult> Update(
-        IMediator mediator, 
+        IMediator mediator,
         UpdateUserDetailsCommand command,
-        CancellationToken cancellationToken)
-    {
-        return await mediator.Send(command, cancellationToken).ToIResult();
-    }
+        CancellationToken cancellationToken) 
+            => await mediator.Send(command, cancellationToken).ToIResult();
 
     internal static async Task<IResult> Login(
-        IMediator mediator, 
+        IMediator mediator,
         LoginUserCommand command,
-        CancellationToken cancellationToken)
-    {
-        return await mediator.Send(command, cancellationToken).ToIResult();
-    }
+        CancellationToken cancellationToken) 
+            => await mediator.Send(command, cancellationToken).ToIResult();
 }

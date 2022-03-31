@@ -40,6 +40,7 @@ public class IdentityService : IIdentityService
         this.emailService = emailService;
         this.tokenGenerator = tokenGenerator;
     }
+
     public async Task<Result<IdModel<string>>> Register(RegisterUserInputModel userInput)
     {
         var user = this.userFactory

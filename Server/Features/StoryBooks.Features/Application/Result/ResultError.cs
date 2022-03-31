@@ -23,4 +23,10 @@ public class ResultError
     public string Key { get; set; }
 
     public IList<string> Errors { get; set; }
+
+    public static implicit operator ResultError(KeyValuePair<string, IEnumerable<string>> pair)
+        => new (pair.Key, pair.Value.ToList());
+
+    public static implicit operator ResultError(string generalError)
+        => new (string.Empty, generalError);
 }

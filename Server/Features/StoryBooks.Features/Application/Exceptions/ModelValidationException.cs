@@ -10,7 +10,7 @@ public class ModelValidationException : Exception
 {
     public ModelValidationException()
         : base("One or more validation failures have occurred.")
-        => this.Errors = new Dictionary<string, string[]>();
+        => this.Errors = new Dictionary<string, IEnumerable<string>>();
 
     public ModelValidationException(List<ValidationFailure> failures)
         : this()
@@ -27,5 +27,5 @@ public class ModelValidationException : Exception
         }
     }
 
-    public IDictionary<string, string[]> Errors { get; }
+    public IDictionary<string, IEnumerable<string>> Errors { get; }
 }

@@ -1,4 +1,13 @@
-import { IonCard, IonCardTitle, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { 
+  IonCard, 
+  IonCardTitle, 
+  IonContent, 
+  IonHeader, 
+  IonPage, 
+  IonTitle,
+   IonToolbar 
+} from '@ionic/react';
+
 import './ShopTab.css';
 
 const ShopTab: React.FC = () => {
