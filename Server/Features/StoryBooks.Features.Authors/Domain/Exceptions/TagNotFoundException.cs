@@ -2,7 +2,7 @@
 
 using StoryBooks.Features.Domain.Exceptions;
 
-internal class TagNotFoundException : BaseDomainException
+internal class TagNotFoundException : EntityNotFoundException
 {
     public TagNotFoundException() { }
 

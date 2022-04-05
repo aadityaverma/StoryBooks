@@ -13,23 +13,21 @@ import { isAuthenticated } from '../../../utils/user/user-store';
 import LoginComponent from '../../../components/Login/LoginComponent';
 import RegisterComponent from '../../../components/Register/RegisterComponent';
 import UserDetailsComponent from '../../../components/UserDetails/UserDetailsComponent';
-import { UserDetailsModel, UserAuthModel } from '../../../utils/user/userModels';
+import { UserAuthModel } from '../../../utils/user/userModels';
 
 import './ProfileTab.css';
 
 const ProfileTab: React.FC = () => {
-  const [loggedUser, setLoggedUser] = useState<boolean>(false);
+  const [loggedUser, setLoggedUser] = useState<boolean>(true);
   const [loginVisible, setLoginVisible] = useState<boolean>(false);
-  const [registerVisible, setRegisterVisible] = useState<boolean>(false);
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
     isAuthenticated().then((authenticated) => {
       setLoggedUser(authenticated);
       setLoginVisible(!authenticated);
-      setRegisterVisible(false);
     });
-  }, []);
+  }, [loggedUser]);
 
   const handleLogin = (model: UserAuthModel) => {
     setLoggedUser(true);
@@ -40,9 +38,8 @@ const ProfileTab: React.FC = () => {
     });
   };
 
-  const handleRegistration = (model: UserDetailsModel) => {
+  const handleRegistration = (model: string) => {
     setLoginVisible(true);
-    setRegisterVisible(false);
 
     present({
       buttons: [{ text: 'close', handler: () => dismiss() }],
@@ -52,7 +49,6 @@ const ProfileTab: React.FC = () => {
 
   const handleLogOut = () => {
     setLoginVisible(true);
-    setRegisterVisible(false);
     setLoggedUser(false);
 
     present({
@@ -63,7 +59,6 @@ const ProfileTab: React.FC = () => {
 
   const handleSwitch = () => {
     setLoginVisible(!loginVisible);
-    setRegisterVisible(!registerVisible);
   }
 
   return (
@@ -84,7 +79,7 @@ const ProfileTab: React.FC = () => {
             {loginVisible && (
               <LoginComponent onLogin={handleLogin} onSwitch={handleSwitch} />
             )}
-            {registerVisible && (
+            {!loginVisible && (
               <RegisterComponent onRegister={handleRegistration} onSwitch={handleSwitch} />
             )}
           </React.Fragment>

@@ -89,7 +89,7 @@ public class Book : Entity<string>
             throw new ChapterNotFoundException();
         }
 
-        return RemoveChapter(chapter);
+        return this.RemoveChapter(chapter);
     }
 
     internal Book RemoveChapter(Chapter chapter)
@@ -171,7 +171,7 @@ public class Book : Entity<string>
             throw new TagNotFoundException();
         }
 
-        return RemoveTag(tag);
+        return this.RemoveTag(tag);
     }
 
     internal Book RemoveTag(Tag tag)
@@ -212,7 +212,7 @@ public class Book : Entity<string>
             throw new GenreNotFoundException();
         }
 
-        return RemoveGenre(genre);
+        return this.RemoveGenre(genre);
     }
 
     internal Book RemoveGenre(Genre genre)
@@ -263,12 +263,10 @@ public class Book : Entity<string>
             name: nameof(description));
     }
 
-    private static void ValidateTitle(string title)
-    {
-        Guard.ForStringLength<InvalidBookException>(
+    private static void ValidateTitle(string title) 
+        => Guard.ForStringLength<InvalidBookException>(
             value: title,
             minLength: MinBookTitleLength,
             maxLength: MaxBookTitleLength,
             name: nameof(title));
-    }
 }

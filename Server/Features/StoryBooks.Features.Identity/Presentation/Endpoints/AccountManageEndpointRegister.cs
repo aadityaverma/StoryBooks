@@ -18,9 +18,9 @@ internal class AccountManageEndpointRegister : EndpointRegister
     {
         string prefix = endpointPrefix ?? string.Empty;
         string endpoint = $"{prefix}/account/manage";
-        string tag = GetTag<AccountManageEndpointRegister>();
+        string tag = this.GetTag<AccountManageEndpointRegister>();
 
-        app.MapPut($"{endpoint}/password", Password)
+        app.MapPut($"{endpoint}/password", this.Password)
            .Produces(StatusCodes.Status200OK, typeof(string))
            .Produces(StatusCodes.Status400BadRequest, typeof(IEnumerable<ResultError>))
            .Produces(StatusCodes.Status404NotFound)
@@ -28,7 +28,7 @@ internal class AccountManageEndpointRegister : EndpointRegister
            .WithTags(tag)
            .RequireAuthorization();
 
-        app.MapGet($"{endpoint}/email/{{userId}}/{{token}}", Email)
+        app.MapGet($"{endpoint}/email/{{userId}}/{{token}}", this.Email)
            .Produces(StatusCodes.Status200OK, typeof(string))
            .Produces(StatusCodes.Status400BadRequest, typeof(IEnumerable<ResultError>))
            .Produces(StatusCodes.Status404NotFound)
@@ -40,20 +40,16 @@ internal class AccountManageEndpointRegister : EndpointRegister
         IMediator mediator,
         ChangePasswordCommand command,
         CancellationToken cancellationToken)
-    {
-        return await mediator.Send(command, cancellationToken).ToIResult();
-    }
+            => await mediator.Send(command, cancellationToken).ToIResult();
 
     internal async Task<IResult> Email(
         IMediator mediator,
         string userId,
         string token,
         CancellationToken cancellationToken)
-    {
-        return await mediator.Send(new ConfirmEmailCommand 
-        { 
-            UserId = userId, 
-            Token = token 
-        }, cancellationToken).ToIResult();
-    }
+            => await mediator.Send(new ConfirmEmailCommand
+            {
+                UserId = userId,
+                Token = token
+            }, cancellationToken).ToIResult();
 }

@@ -9,17 +9,17 @@ public class UpdateUserDetailsCommandValidator : AbstractValidator<UpdateUserDet
 {
     public UpdateUserDetailsCommandValidator()
     {
-        RuleFor(m => m.FirstName)
+        this.RuleFor(m => m.FirstName)
             .NotEmpty()
             .MinimumLength(Validation.MinNameLength)
             .MaximumLength(Validation.MaxNameLength);
 
-        RuleFor(m => m.LastName)
+        this.RuleFor(m => m.LastName)
             .NotEmpty()
             .MinimumLength(Validation.MinNameLength)
             .MaximumLength(Validation.MaxNameLength);
 
-        RuleFor(m => m.PhoneNumber)
+        this.RuleFor(m => m.PhoneNumber)
             .Matches(Phone.RegularExpression)
             .WithMessage(Phone.FormatErrorMessage)
             .MinimumLength(Phone.MinLength)

@@ -2,7 +2,7 @@
 
 using StoryBooks.Features.Domain.Exceptions;
 
-public class UserNotFoundException : BaseDomainException
+public class UserNotFoundException : EntityNotFoundException
 {
     public UserNotFoundException()
     { }

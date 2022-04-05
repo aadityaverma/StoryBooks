@@ -2,7 +2,7 @@
 
 using StoryBooks.Features.Domain.Exceptions;
 
-internal class BookNotFoundException : BaseDomainException
+internal class BookNotFoundException : EntityNotFoundException
 {
     public BookNotFoundException() { }
 

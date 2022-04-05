@@ -34,10 +34,12 @@ public class GetPersonalDetailsQuery : IRequest<PersonalDetailsModel>
 
         public async Task<PersonalDetailsModel> Handle(GetPersonalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var user = await userManager.FindByNameAsync(currentUser.Email);
+            var user = await this.userManager.FindByNameAsync(this.currentUser.Email);
             Guard.ForNull<User, UserNotFoundException>(user);
 
-            return this.mapper.Map<PersonalDetailsModel>(user);
+            var userResponse = this.mapper.Map<PersonalDetailsModel>(user) ?? default!;
+            userResponse.Roles = await this.userManager.GetRolesAsync(user);
+            return userResponse;
         }
     }
 }

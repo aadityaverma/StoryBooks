@@ -14,7 +14,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
     return (
         <IonCard>
             <IonCardHeader>
-                <IonCardTitle>Login</IonCardTitle>
+                <IonCardTitle></IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
 

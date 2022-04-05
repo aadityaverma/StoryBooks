@@ -2,7 +2,7 @@
 
 using StoryBooks.Features.Domain.Exceptions;
 
-internal class GenreNotFoundException : BaseDomainException
+internal class GenreNotFoundException : EntityNotFoundException
 {
     public GenreNotFoundException() { }
 

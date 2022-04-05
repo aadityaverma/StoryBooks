@@ -54,7 +54,7 @@ public class IdentityService : IIdentityService
         if (identityResult.Succeeded)
         {
             userCreated = true;
-            identityResult = await this.userManager.AddToRoleAsync(user, settings.Roles.User);
+            identityResult = await this.userManager.AddToRoleAsync(user, this.settings.Roles.User);
         }
 
         if (identityResult.Succeeded)
@@ -64,8 +64,8 @@ public class IdentityService : IIdentityService
 
         if (identityResult.Succeeded)
         {
-            var token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-            var urlToken = HttpUtility.UrlEncode(token);
+            string? token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+            string? urlToken = HttpUtility.UrlEncode(token);
             await this.emailService.SendUserRegisteredEmail(user, urlToken);
         }
         
@@ -91,7 +91,7 @@ public class IdentityService : IIdentityService
             return Result<LoginUserSuccessModel>.NotFound(Messages.InvalidLoginError);
         }
 
-        var passwordValid = await this.userManager.CheckPasswordAsync(user, userInput.Password);
+        bool passwordValid = await this.userManager.CheckPasswordAsync(user, userInput.Password);
         if (!passwordValid)
         {
             return Result<LoginUserSuccessModel>.Fail(Messages.InvalidLoginError);
@@ -102,7 +102,7 @@ public class IdentityService : IIdentityService
 
         return Result<LoginUserSuccessModel>.Success(
             Messages.LoggedSuccessfully,
-            new LoginUserSuccessModel(user.Id, token));
+            new LoginUserSuccessModel(user.Id, token.Value, token.Expires));
     }
 
     public async Task<Result> ChangePassword(ChangePasswordInputModel changePasswordInput)
@@ -134,7 +134,7 @@ public class IdentityService : IIdentityService
             return Result.NotFound(Messages.InvalidLoginError);
         }
 
-        var token = HttpUtility.UrlDecode(request.Token);
+        string? token = HttpUtility.UrlDecode(request.Token);
         var identityResult = await this.userManager.ConfirmEmailAsync(user, token);
         var errors = identityResult.Errors.Select(e => new ResultError(e.Code, e.Description));
 

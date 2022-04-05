@@ -6,5 +6,7 @@ using System.Collections.Generic;
 
 public interface IAuthTokenGeneratorService
 {
-    string GenerateToken(User user, IEnumerable<string> roles);
+    TokenModel GenerateToken(User user, IEnumerable<string> roles);
 }
+
+public record TokenModel(string Value, DateTime? Expires);

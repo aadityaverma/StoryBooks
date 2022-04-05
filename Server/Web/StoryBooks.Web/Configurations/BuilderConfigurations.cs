@@ -20,8 +20,8 @@ public static class BuilderConfigurations
         IConfiguration configuration,
         IWebHostEnvironment environment)
     {
-        var apiName = configuration.GetValue<string>("ApplicationSettings:ApiName");
-        var apiVersion = configuration.GetValue<string>("ApplicationSettings:Version");
+        string apiName = configuration.GetValue<string>("ApplicationSettings:ApiName");
+        string apiVersion = configuration.GetValue<string>("ApplicationSettings:Version");
 
         services
             .AddCors()
@@ -55,8 +55,8 @@ public static class BuilderConfigurations
             this IServiceCollection services,
             IConfiguration configuration)
     {
-        var secret = configuration.GetValue<string>("Authentication:Secret");
-        var key = Encoding.ASCII.GetBytes(secret);
+        string secret = configuration.GetValue<string>("Authentication:Secret");
+        byte[] key = Encoding.ASCII.GetBytes(secret);
 
         services
             .AddAuthentication(authentication =>

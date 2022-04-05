@@ -54,7 +54,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
             Email
           </IonLabel>
           <IonInput
-            auto-complete='false'
+            auto-complete='off'
             aria-required='true'
             name='email'
             required
@@ -68,7 +68,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
             Password
           </IonLabel>
           <IonInput
-            auto-complete='false'
+            auto-complete='off'
             aria-required='true'
             name='password'
             placeholder='Enter your email address'

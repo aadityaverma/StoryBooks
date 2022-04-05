@@ -19,11 +19,11 @@ public class JwtTokenGeneratorService : IAuthTokenGeneratorService
     public JwtTokenGeneratorService(IConfiguration configuration)
         => this.configuration = configuration;
 
-    public string GenerateToken(User user, IEnumerable<string> roles)
+    public TokenModel GenerateToken(User user, IEnumerable<string> roles)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var secret = this.configuration["Authentication:Secret"];
-        var key = Encoding.ASCII.GetBytes(secret);
+        string? secret = this.configuration["Authentication:Secret"];
+        byte[]? key = Encoding.ASCII.GetBytes(secret);
         var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -33,7 +33,7 @@ public class JwtTokenGeneratorService : IAuthTokenGeneratorService
                 new Claim(ClaimTypes.Surname, user.LastName)
             };
 
-        foreach (var role in roles)
+        foreach (string? role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
@@ -48,8 +48,8 @@ public class JwtTokenGeneratorService : IAuthTokenGeneratorService
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        var encryptedToken = tokenHandler.WriteToken(token);
+        string? encryptedToken = tokenHandler.WriteToken(token);
 
-        return encryptedToken;
+        return new TokenModel(encryptedToken, tokenDescriptor.Expires);
     }
 }

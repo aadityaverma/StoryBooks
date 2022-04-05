@@ -1,14 +1,14 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Commands.LoginUser;
 
-public class LoginUserSuccessModel
+using StoryBooks.Features.Identity.Application.Services;
+
+public record LoginUserSuccessModel : TokenModel
 {
-    public LoginUserSuccessModel(string userId, string token)
+    public LoginUserSuccessModel(string userId, string token, DateTime? expires)
+        : base(token, expires)
     {
         this.UserId = userId;
-        this.Token = token;
     }
 
     public string UserId { get; }
-
-    public string Token { get; }
 }

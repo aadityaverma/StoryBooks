@@ -34,8 +34,8 @@ public class IdentityEmailService : IIdentityEmailService
     {
         var bodyModel = this.mapper.Map<UserRegistrationEmailModel>(user);
 
-        bodyModel.ServerUrl = urlProvider.CoreApiUrl;
-        bodyModel.ConfirmUrl = urlProvider.ConfirmEmailLink(user.Id, token);
+        bodyModel.ServerUrl = this.urlProvider.CoreApiUrl;
+        bodyModel.ConfirmUrl = this.urlProvider.ConfirmEmailLink(user.Id, token);
 
         var emailModel = new SendEmailModel<UserRegistrationEmailModel>(
             to: user.UserName,

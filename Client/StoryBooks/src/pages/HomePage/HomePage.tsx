@@ -39,8 +39,6 @@ const HomePage: React.FC = () => {
                 <Route exact path="/profile">
                     <ProfileTab />
                 </Route>
-                <Route exact path="/credentials">
-                </Route>
                 <Route exact path="/book/edit/:id">
                 </Route>
                 <Route exact path="/book/play/:id">
