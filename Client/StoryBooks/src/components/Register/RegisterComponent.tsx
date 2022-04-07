@@ -7,13 +7,14 @@ import {
   IonIcon,
   IonInput,
   IonItem,
-  IonLabel
+  IonLabel,
+  IonProgressBar
 } from '@ionic/react';
 import { useRef, useState } from 'react';
 import { personAddSharp } from 'ionicons/icons';
 
 import { sendPost } from '../../utils/common/apiCalls';
-import { ValidationError, validateInput } from '../../utils/common/validation';
+import { ValidationError, validateIonInput } from '../../utils/common/validation';
 import { AccountEndpoint } from '../../utils/constants';
 import { RegisterUserModel } from './RegisterUserModel';
 
@@ -38,21 +39,15 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
   const [emailValidation, setEmailValidation] = useState<ValidationError>();
   const [passwordValidation, setPasswordValidation] = useState<ValidationError>();
   const [confirmPasswordValidation, setConfirmPasswordValidation] = useState<ValidationError>();
+  const [globalValidation, setGlobalValidation] = useState<ValidationError>();
 
+  const [loading, setLoading] = useState<boolean>(false);
+ 
   const registerUser = () => {
-    var model: RegisterUserModel = getRegisterModel();
-    
-    if (!validate(model)) {
+    if (!validateModel()) {
       return;
     }
 
-    sendPost(AccountEndpoint, model)
-      .then(
-        registerSuccess,
-        registerError);
-  };
-
-  const getRegisterModel = (): RegisterUserModel => {
     var model: RegisterUserModel = {
       firstName: firstNameRef.current!.value?.toLocaleString() ?? '',
       lastName: lastNameRef.current!.value?.toLocaleString() ?? '',
@@ -60,56 +55,32 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
       password: passwordRef.current!.value?.toLocaleString() ?? '',
       confirmPassword: confirmPasswordRef.current!.value?.toLocaleString() ?? ''
     };
+   
+    setLoading(true);
+    sendPost(AccountEndpoint, model)
+      .then(registerSuccess, registerError);
+  };
 
-    return model;
-  }
+  const registerSuccess = async (response: Response) => {
+    setLoading(false);
+    if (!response.ok) {
+      return registerError(response);
+    }
 
-  const registerSuccess = async (data: Response) => {
-    const userId: string = await data.json();
+    const userId: string = await response.json();
     if (!!props.onRegister) {
       props.onRegister(userId);
     }
   }
 
   const registerError = async (responseError: Response) => {
+    setLoading(false);
     const errors: ValidationError[] = await responseError.json();
-    if(!!errors && errors.length > 0) {
+    if (!!errors && errors.length > 0) {
       for (let i = 0; i < errors.length; i++) {
-        applyError(errors[i]);
+        applyValidation(errors[i]);
       }
     }
-  }
-
-  const applyError = (validation: ValidationError) => {
-    if(validation.key === firstNameRef.current?.name){
-      setFirstNameValidation(validation);
-    } else if (validation.key === lastNameRef.current?.name) {
-      setLastNameValidation(validation);
-    } else if (validation.key === emailRef.current?.name) {
-      setEmailValidation(validation);
-    } else if (validation.key === passwordRef.current?.name) {
-      setPasswordValidation(validation);
-    } else if (validation.key === confirmPasswordRef.current?.name) {
-      setConfirmPasswordValidation(validation);
-    }
-  }
-
-  const validate = (model: RegisterUserModel): boolean => {
-    setFirstNameValidation(validateInput(firstNameRef.current!));
-    setLastNameValidation(validateInput(lastNameRef.current!));
-    setEmailValidation(validateInput(emailRef.current!));
-    setPasswordValidation(validateInput(passwordRef.current!));
-    setConfirmPasswordValidation(validateInput(confirmPasswordRef.current!));
-
-    return isValid();
-  }
-
-  const isValid = (): boolean => {
-    return (!firstNameValidation || firstNameValidation.errors.length === 0) &&
-      (!lastNameValidation || lastNameValidation.errors.length === 0) &&
-      (!emailValidation || emailValidation!.errors.length === 0) && 
-      (!passwordValidation || passwordValidation!.errors.length === 0) &&
-      (!confirmPasswordValidation || confirmPasswordValidation!.errors.length) === 0;
   }
 
   const switchForm = () => {
@@ -119,12 +90,45 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
   }
 
   const validateChange = (event: Event) => {
-    const target: HTMLIonInputElement = event.target;
-    applyError(validateInput(target));
+    const target: HTMLIonInputElement = event.target as HTMLIonInputElement;
+    var validation = validateIonInput(target);
+    applyValidation(validation);
+  }
+
+  const validateModel = (): boolean => {
+    const validations: ValidationError[] = [
+      validateIonInput(firstNameRef.current!),
+      validateIonInput(lastNameRef.current!),
+      validateIonInput(emailRef.current!),
+      validateIonInput(passwordRef.current!),
+      validateIonInput(confirmPasswordRef.current!)
+    ];    
+
+    for (let i = 0; i < validations.length; i++) {
+      applyValidation(validations[i]);
+    }
+
+    return !validations.some((value) => { return value.errors.length > 0 });
+  }
+ 
+  const applyValidation = (validation: ValidationError) => {
+    if (validation.key === firstNameRef.current?.name) {
+      setFirstNameValidation(validation);
+    } else if (validation.key === lastNameRef.current?.name) {
+      setLastNameValidation(validation);
+    } else if (validation.key === emailRef.current?.name) {
+      setEmailValidation(validation);
+    } else if (validation.key === passwordRef.current?.name) {
+      setPasswordValidation(validation);
+    } else if (validation.key === confirmPasswordRef.current?.name) {
+      setConfirmPasswordValidation(validation);
+    } else {
+      setGlobalValidation(validation);
+    }
   }
 
   return (
-    <IonCard>
+    <IonCard className='register-card'>
       <IonCardHeader>
         <IonCardTitle>Create new account</IonCardTitle>
       </IonCardHeader>
@@ -134,71 +138,77 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
           <IonInput
             auto-complete='off'
             aria-required='true'
-            name='firstName'
+            name='FirstName'
             required
             placeholder='Enter your first name'
             type='text'
             onIonChange={validateChange}
             ref={firstNameRef} />
-            <ValidationMessage validation={firstNameValidation} />
         </IonItem>
+        <ValidationMessage validation={firstNameValidation} />
         <IonItem>
           <IonLabel position='floating' aria-required='true'>Last Name</IonLabel>
           <IonInput
             auto-complete='off'
             aria-required='true'
-            name='lastName'
+            name='LastName'
             required
             placeholder='Enter your last name'
             type='text'
+            onIonChange={validateChange}
             ref={lastNameRef} />
-            <ValidationMessage validation={lastNameValidation} />
         </IonItem>
+        <ValidationMessage validation={lastNameValidation} />
         <IonItem>
           <IonLabel position='floating' aria-required='true'>Email</IonLabel>
           <IonInput
             auto-complete='off'
             aria-required='true'
-            name='email'
+            name='Email'
             required
             placeholder='Enter your email address'
             type='email'
+            onIonChange={validateChange}
             ref={emailRef} />
-            <ValidationMessage validation={emailValidation} />
         </IonItem>
+        <ValidationMessage validation={emailValidation} />
         <IonItem>
           <IonLabel position='floating' aria-required='true'>Password</IonLabel>
           <IonInput
             auto-complete='off'
             aria-required='true'
-            name='password'
+            name='Password'
             required
             placeholder='Enter your password'
             type='password'
+            onIonChange={validateChange}
             ref={passwordRef} />
-          <ValidationMessage validation={passwordValidation} />
         </IonItem>
+        <ValidationMessage validation={passwordValidation} />
         <IonItem>
           <IonLabel position='floating' aria-required='true'>Confirm Password</IonLabel>
           <IonInput
             auto-complete='off'
             aria-required='true'
-            name='confirmPassword'
+            name='ConfirmPassword'
             required
             placeholder='Confirm your password'
             type='password'
+            onIonChange={validateChange}
             ref={confirmPasswordRef} />
-            <ValidationMessage validation={confirmPasswordValidation} />
         </IonItem>
+        <ValidationMessage validation={confirmPasswordValidation} />
+        <ValidationMessage validation={globalValidation} />
         <IonItem className='ion-margin-top'>
-          <IonButton size='default' shape='round' color='primary' onClick={registerUser}>
+          <IonButton size='default' shape='round' color='primary' onClick={registerUser} disabled={loading}>
             <IonIcon slot='start' icon={personAddSharp} />
             Register
           </IonButton>
-          <IonButton size='default' shape='round' color='default' onClick={switchForm}>
+          <IonButton size='default' shape='round' color='default' onClick={switchForm} disabled={loading}>
             Login
           </IonButton>
         </IonItem>
+        {loading && (<IonProgressBar className='register-progress-bar' type="indeterminate" />)}
       </IonCardContent>
     </IonCard>
   );

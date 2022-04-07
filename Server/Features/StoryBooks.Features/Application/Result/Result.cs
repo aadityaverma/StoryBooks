@@ -18,10 +18,8 @@ public class Result : BaseResult
     {
     }
 
-    public Result AddError(string key, string message)
-    {
-        return AddError(new ResultError(key, message));
-    }
+    public Result AddError(string key, string message) 
+        => this.AddError(new ResultError(key, message));
 
     public Result AddError(ResultError error)
     {
@@ -35,30 +33,20 @@ public class Result : BaseResult
         return this;
     }
 
-    public static Result Success(string message)
-    {
-        return new Result(ResultCode.Ok, message);
-    }
+    public static Result Success(string message) 
+        => new(ResultCode.Ok, message);
 
-    public static Result NotFound(string message)
-    {
-        return new Result(ResultCode.NotFound, message);
-    }
+    public static Result NotFound(string message) 
+        => new(ResultCode.NotFound, message);
 
-    public static Result Fail(string message)
-    {
-        return new Result(ResultCode.BadRequest, message, null);
-    }
+    public static Result Fail(string message) 
+        => new(ResultCode.BadRequest, message, null);
 
-    public static Result Fail(string message, ResultError error)
-    {
-        return new Result(ResultCode.BadRequest, message, new List<ResultError> { error });
-    }
+    public static Result Fail(string message, ResultError error) 
+        => new(ResultCode.BadRequest, message, new List<ResultError> { error });
 
-    public static Result Fail(string message, IEnumerable<ResultError> errors)
-    {
-        return new Result(ResultCode.BadRequest, message, errors);
-    }
+    public static Result Fail(string message, IEnumerable<ResultError> errors) 
+        => new(ResultCode.BadRequest, message, errors);
 
     public static Result Fail(string message, IDictionary<string, IEnumerable<string>> errors)
     {

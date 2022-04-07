@@ -1,0 +1,8 @@
+.register-card{
+    max-width: 37.5rem;
+    margin: 1rem auto;
+}
+
+.register-card .register-progress-bar{
+    padding-top: .5rem;
+}

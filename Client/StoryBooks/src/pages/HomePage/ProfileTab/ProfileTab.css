@@ -1,0 +1,18 @@
+ion-content.profile-tab {
+    --background: none;
+    background-color: val(--ion-color-primary-contrast);
+    background-image: url('./book-doodle-2.png');
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.profile-tab ion-card {
+    opacity: .97;
+}
+
+@media (prefers-color-scheme: dark) {
+    ion-content.profile-tab {
+        background-image: url('./book-doodle-2-dark-theme.png');
+    }
+}

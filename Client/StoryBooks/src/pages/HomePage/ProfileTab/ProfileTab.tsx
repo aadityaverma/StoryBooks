@@ -20,7 +20,7 @@ import './ProfileTab.css';
 const ProfileTab: React.FC = () => {
   const [loggedUser, setLoggedUser] = useState<boolean>(true);
   const [loginVisible, setLoginVisible] = useState<boolean>(false);
-  const [present, dismiss] = useIonToast();
+  const [showToast, dismissToast] = useIonToast();
 
   useEffect(() => {
     isAuthenticated().then((authenticated) => {
@@ -32,18 +32,24 @@ const ProfileTab: React.FC = () => {
   const handleLogin = (model: UserAuthModel) => {
     setLoggedUser(true);
 
-    present({
-      buttons: [{ text: 'close', handler: () => dismiss() }],
-      message: 'Login Success!'
+    showToast({
+      buttons: [{ text: 'close', handler: () => dismissToast() }],
+      message: 'Now you can explore the full experience of Story Books.',
+      color: 'success',
+      duration: 10000,
+      header: 'Logged in successfully!'
     });
   };
 
   const handleRegistration = (model: string) => {
     setLoginVisible(true);
 
-    present({
-      buttons: [{ text: 'close', handler: () => dismiss() }],
-      message: 'Register Success!'
+    showToast({
+      buttons: [{ text: 'close', handler: () => dismissToast() }],
+      message: 'Feel free to login into your new account. Also, please check your inbox for email verification.',
+      color: 'success',
+      duration: 10000,
+      header: 'Account created!'
     });
   };
 
@@ -51,8 +57,8 @@ const ProfileTab: React.FC = () => {
     setLoginVisible(true);
     setLoggedUser(false);
 
-    present({
-      buttons: [{ text: 'close', handler: () => dismiss() }],
+    showToast({
+      buttons: [{ text: 'close', handler: () => dismissToast() }],
       message: 'Logout Success!'
     });
   };
@@ -68,7 +74,7 @@ const ProfileTab: React.FC = () => {
           <IonTitle>Profile</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen className='profile-tab'>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Profile</IonTitle>

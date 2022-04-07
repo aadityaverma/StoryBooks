@@ -21,20 +21,23 @@ using static StoryBooks.Features.Identity.Infrastructure.IdentityInfrastructureC
 
 public class IdentityService : IIdentityService
 {
-    private readonly ApplicationSettings settings;
+    private readonly ApplicationSettings appSettings;
+    private readonly IdentitySettings identitySettings;
     private readonly UserManager<User> userManager;
     private readonly IUserFactory userFactory;
     private readonly IIdentityEmailService emailService;
     private readonly IAuthTokenGeneratorService tokenGenerator;
 
     public IdentityService(
-        IOptions<ApplicationSettings> settings,
+        IOptions<ApplicationSettings> appSettings,
+        IOptions<IdentitySettings> identitySettings,
         UserManager<User> userManager,
         IUserFactory userFactory,
         IIdentityEmailService emailService,
         IAuthTokenGeneratorService tokenGenerator)
     {
-        this.settings = settings.Value;
+        this.appSettings = appSettings.Value;
+        this.identitySettings = identitySettings.Value;
         this.userManager = userManager;
         this.userFactory = userFactory;
         this.emailService = emailService;
@@ -54,12 +57,18 @@ public class IdentityService : IIdentityService
         if (identityResult.Succeeded)
         {
             userCreated = true;
-            identityResult = await this.userManager.AddToRoleAsync(user, this.settings.Roles.User);
+            identityResult = await this.userManager.AddToRoleAsync(user, this.appSettings.Roles.User);
         }
 
         if (identityResult.Succeeded)
         {
             await this.userManager.SetEmailAsync(user, userInput.Email);
+        }
+
+        if (identityResult.Succeeded && userInput.Email == this.identitySettings.MainAdminEmail)
+        {
+            identityResult = await this.userManager.AddToRoleAsync(user, this.appSettings.Roles.Admin);
+            identityResult = await this.userManager.AddToRoleAsync(user, this.appSettings.Roles.Moderator);
         }
 
         if (identityResult.Succeeded)

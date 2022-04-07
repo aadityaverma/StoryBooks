@@ -2,10 +2,11 @@
     align-self: stretch;
     width: auto;
     max-width: 100%;
+    margin: 0 1rem 1px 1rem;
 }
 
 .validation-message .validation-message-content{
-    padding: 1rem .5rem;
+    padding: .75rem 1rem;
     color: var(--ion-color-danger-contrast);
     background-color: var(--ion-color-danger-tint);
 }
