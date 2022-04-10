@@ -17,9 +17,11 @@ public record PersonalDetailsModel : IMapFrom<User>
 
     public string? PhoneNumber { get; internal set; }
 
+    public bool EmailConfirmed { get; internal set; }
+
     public IEnumerable<string> Roles { get; internal set; } = default!;
 
     public virtual void Mapping(Profile mapper)
         => mapper.CreateMap<User, PersonalDetailsModel>()
-                 .ForMember(u => u.Email, cfg => cfg.MapFrom(u => u.UserName));
+                 .ForMember(m => m.Email, cfg => cfg.MapFrom(u => u.UserName));
 }

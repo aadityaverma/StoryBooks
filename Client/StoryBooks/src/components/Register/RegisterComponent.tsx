@@ -57,25 +57,19 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
     };
    
     setLoading(true);
-    sendPost(AccountEndpoint, model)
+    sendPost<string>(AccountEndpoint, model)
       .then(registerSuccess, registerError);
-  };
+  }
 
-  const registerSuccess = async (response: Response) => {
+  const registerSuccess = async (userId: string) => {
     setLoading(false);
-    if (!response.ok) {
-      return registerError(response);
-    }
-
-    const userId: string = await response.json();
     if (!!props.onRegister) {
       props.onRegister(userId);
     }
   }
 
-  const registerError = async (responseError: Response) => {
+  const registerError = async (errors: ValidationError[]) => {
     setLoading(false);
-    const errors: ValidationError[] = await responseError.json();
     if (!!errors && errors.length > 0) {
       for (let i = 0; i < errors.length; i++) {
         applyValidation(errors[i]);
@@ -211,7 +205,7 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
         {loading && (<IonProgressBar className='register-progress-bar' type="indeterminate" />)}
       </IonCardContent>
     </IonCard>
-  );
-};
+  )
+}
 
 export default RegisterComponent

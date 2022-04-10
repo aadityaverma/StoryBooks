@@ -16,16 +16,19 @@ import ShopTab from './ShopTab/ShopTab';
 import LibraryTab from './LibraryTab/LibraryTab';
 import ProfileTab from './ProfileTab/ProfileTab';
 
-import { isAuthor, isAuthenticated } from '../../utils/user/user-store';
+import { useUserStore } from '../../utils/user/userStore';
 
 const HomePage: React.FC = () => {
+    const userStore = useUserStore();
+
     const [ loggedAuthor, setLeggedAuthor ] = useState<boolean>(false);
     const [ loggedUser, setLoggedUser ] = useState<boolean>(false);
 
     useEffect(() => {
-        isAuthor().then(setLeggedAuthor);
-        isAuthenticated().then(setLoggedUser);
-    }, []);
+        userStore.isAuthor().then(setLeggedAuthor);
+        userStore.isAuthenticated().then(setLoggedUser);
+        console.log('useEffect in HomePage');
+    }, [userStore]);
 
     return (
         <IonTabs>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ValidationError } from '../../utils/common/validation';
 
 import './ValidationMessageComponent.css';
@@ -7,19 +7,30 @@ interface ValidationMessageProperties {
     validation?: ValidationError;
 }
 
-const ValidationMessage: React.FC<ValidationMessageProperties> = (props) => {
-    let idx = 0;
-    const errorItems = props.validation?.errors.map(error => <div id={`${props.validation}-error-${idx++}`}>{error}</div>);
+const ValidationMessage: React.FC<ValidationMessageProperties> = ({ validation }) => {
+    const [errors, setErrors] = useState<JSX.Element[]>([]);
+
+    useEffect(() => {
+        if (!!validation && !!validation.errors) {
+            let idx = 0;
+            const errorItems: JSX.Element[] = validation!.errors.map(
+                error => <div key={`${validation}-error-${idx++}`}>{error}</div>);
+
+            setErrors(errorItems);
+        }
+
+        console.info('useEffect validation message')
+    }, [validation, validation?.errors])
 
     return (
         <div className='validation-message'>
-            {!!props.validation && props.validation.errors.length > 0 && (
+            {!!validation && validation.errors.length > 0 && (
                 <div className='validation-message-content'>
-                    {errorItems}
+                    {errors}
                 </div>
             )}
         </div>
-    );
-};
+    )
+}
 
 export default ValidationMessage;

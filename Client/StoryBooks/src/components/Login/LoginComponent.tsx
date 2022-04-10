@@ -10,13 +10,14 @@ import {
   IonLabel,
   IonProgressBar
 } from '@ionic/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { logIn } from 'ionicons/icons';
 
 import { sendPost } from '../../utils/common/apiCalls';
 import { ValidationError, validateIonInput } from '../../utils/common/validation';
 import ValidationMessage from '../../components/ValidationMessage/ValidationMessageComponent';
 
+import { useUserStore } from '../../utils/user/userStore';
 import { UserAuthModel } from '../../utils/user/userModels';
 import { LoginUserModel } from './LoginUserModel';
 import { LoginEndpoint } from '../../utils/constants';
@@ -29,6 +30,8 @@ interface LoginComponentProperties {
 }
 
 const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
+  const userStore = useUserStore();
+
   const emailRef = useRef<HTMLIonInputElement>(null);
   const passwordRef = useRef<HTMLIonInputElement>(null);
 
@@ -37,6 +40,11 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
   const [globalValidation, setGlobalValidation] = useState<ValidationError>();
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    return () => { 
+    };
+  }, [])
 
   const loginUser = () => {
     if (!validateModel()) {
@@ -49,37 +57,32 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
     };
 
     setLoading(true);
-    sendPost(LoginEndpoint, model)
+    sendPost<UserAuthModel>(LoginEndpoint, model)
       .then(loginSuccess, loginError);
-  };
+  }
 
-  const loginSuccess = async (response: Response) => {
+  const loginSuccess = async (authData: UserAuthModel) => {
     setLoading(false);
-    if (!response.ok) {
-      return loginError(response);
-    }
-    
+    await userStore.setUserAuth(authData);
     if (!!props.onLogin) {
-      const authData = await response.json() as UserAuthModel;
       props.onLogin(authData);
     }
-  };
+  }
 
-  const loginError = async (responseError: Response) => {
+  const loginError = async (errors: ValidationError[]) => {
     setLoading(false);
-    const errors: ValidationError[] = await responseError.json();
     if (!!errors && errors.length > 0) {
       for (let i = 0; i < errors.length; i++) {
         applyValidation(errors[i]);
       }
     }
-  };
+  }
 
   const switchForm = () => {
     if (props.onSwitch) {
       props.onSwitch();
     }
-  };
+  }
 
   const validateModel = (): boolean => {
     const validations: ValidationError[] = [
@@ -92,7 +95,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
     }
 
     return !validations.some((value) => { return value.errors.length > 0 });
-  };
+  }
 
   const applyValidation = (validation: ValidationError) => {
     if (validation.key === emailRef.current?.name) {
@@ -153,7 +156,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
         {loading && (<IonProgressBar className='login-progress-bar' type="indeterminate" />)}
       </IonCardContent>
     </IonCard>
-  );
-};
+  )
+}
 
 export default LoginComponent

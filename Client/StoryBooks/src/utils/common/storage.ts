@@ -20,7 +20,13 @@ const getValue = async (key: string): Promise<any> => {
     return await store.get(key);
 };
 
+const clearValue = async (key: string): Promise<any> => {
+    const store = await getStorage();
+    return await store.remove(key);
+}
+
 export {
     getValue,
-    setValue
+    setValue,
+    clearValue
 };

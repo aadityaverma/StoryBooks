@@ -1,6 +1,6 @@
 export interface UserAuthModel {
     id: string;
-    token: string;
+    value: string;
     expires: Date;
 };
 
@@ -10,4 +10,6 @@ export interface UserDetailsModel {
     lastName: string;
     email: string;
     roles: string[];
+    phoneNumber: string;
+    emailConfirmed: boolean;
 };

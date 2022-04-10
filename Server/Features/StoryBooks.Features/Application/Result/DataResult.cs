@@ -20,44 +20,32 @@ public class Result<TData> : BaseResult
     public TData? Data { get; protected set; }
 
     public Result<TData> AddError(string key, string message)
-    {
-        return AddError(new ResultError(key, message));
-    }
+        => this.AddError(new ResultError(key, message));
 
     public Result<TData> AddError(ResultError error)
     {
-        base.AddBaseError(error);
+        this.AddBaseError(error);
         return this;
     }
 
     public Result<TData> AddErrors(IEnumerable<ResultError> errors)
     {
-        base.AddBaseErrors(errors);
+        this.AddBaseErrors(errors);
         return this;
     }
 
     public static Result<TData> Success(string message, TData data)
-    {
-        return new Result<TData>(ResultCode.Ok, message, data);
-    }
+        => new(ResultCode.Ok, message, data);
 
     public static Result<TData> NotFound(string message)
-    {
-        return new Result<TData>(ResultCode.NotFound, message, null);
-    }
+        => new(ResultCode.NotFound, message, null);
 
-    public static Result<TData> Fail(string message)
-    {
-        return Fail(message, new ResultError(string.Empty, message));
-    }
+    public static Result<TData> Fail(string message) 
+        => Fail(message, new ResultError(string.Empty, message));
 
-    public static Result<TData> Fail(string message, ResultError error)
-    {
-        return new Result<TData>(ResultCode.BadRequest, message, new List<ResultError> { error });
-    }
+    public static Result<TData> Fail(string message, ResultError error) 
+        => new(ResultCode.BadRequest, message, new List<ResultError> { error });
 
     public static Result<TData> Fail(string message, IEnumerable<ResultError> errors)
-    {
-        return new Result<TData>(ResultCode.BadRequest, message, errors);
-    }
+        => new(ResultCode.BadRequest, message, errors);
 }
