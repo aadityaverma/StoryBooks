@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Routing;
 
 using StoryBooks.Features.Application;
 using StoryBooks.Features.Application.Commands;
+using StoryBooks.Features.Identity.Application.Commands.DeleteUser;
 using StoryBooks.Features.Identity.Application.Commands.LoginUser;
 using StoryBooks.Features.Identity.Application.Commands.RegisterUser;
 using StoryBooks.Features.Identity.Application.Commands.UpdateDetails;
@@ -44,6 +45,12 @@ public class AccountEndpointRegister : EndpointRegister
            .WithTags(tag)
            .RequireAuthorization();
 
+        app.MapDelete(endpoint, Delete)
+           .Produces(StatusCodes.Status307TemporaryRedirect)
+           .WithName($"{tag}{nameof(Delete)}")
+           .WithTags(tag)
+           .RequireAuthorization();
+
         app.MapPost($"{endpoint}/login", Login)
            .Produces(StatusCodes.Status200OK, typeof(LoginUserSuccessModel))
            .Produces(StatusCodes.Status400BadRequest, typeof(IEnumerable<ResultError>))
@@ -54,24 +61,30 @@ public class AccountEndpointRegister : EndpointRegister
 
     internal static async Task<IResult> Details(
         IMediator mediator,
-        CancellationToken cancellationToken) 
+        CancellationToken cancellationToken)
             => await mediator.Send(new GetPersonalDetailsQuery(), cancellationToken).ToIResult();
 
     internal static async Task<IResult> Register(
         IMediator mediator,
         RegisterUserCommand command,
-        CancellationToken cancellationToken) 
+        CancellationToken cancellationToken)
             => await mediator.Send(command, cancellationToken).ToIResult();
 
     internal static async Task<IResult> Update(
         IMediator mediator,
         UpdateUserDetailsCommand command,
-        CancellationToken cancellationToken) 
+        CancellationToken cancellationToken)
+            => await mediator.Send(command, cancellationToken).ToIResult();
+
+    internal static async Task<IResult> Delete(
+        IMediator mediator,
+        DeleteUserCommand command,
+        CancellationToken cancellationToken)
             => await mediator.Send(command, cancellationToken).ToIResult();
 
     internal static async Task<IResult> Login(
         IMediator mediator,
         LoginUserCommand command,
-        CancellationToken cancellationToken) 
+        CancellationToken cancellationToken)
             => await mediator.Send(command, cancellationToken).ToIResult();
 }

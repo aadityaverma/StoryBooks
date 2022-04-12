@@ -4,7 +4,6 @@ using MediatR;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 using StoryBooks.Features.Application;
 using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
@@ -29,9 +28,7 @@ internal class AccountManageEndpointRegister : EndpointRegister
            .RequireAuthorization();
 
         app.MapGet($"{endpoint}/email/{{userId}}/{{token}}", this.Email)
-           .Produces(StatusCodes.Status200OK, typeof(string))
-           .Produces(StatusCodes.Status400BadRequest, typeof(IEnumerable<ResultError>))
-           .Produces(StatusCodes.Status404NotFound)
+           .Produces(StatusCodes.Status307TemporaryRedirect)
            .WithName($"{tag}{nameof(Email)}")
            .WithTags(tag);
     }

@@ -2,24 +2,48 @@
 
 using MediatR;
 
+using Microsoft.AspNetCore.Identity;
+
 using StoryBooks.Features.Application;
 using StoryBooks.Features.Identity.Application.Services;
+using StoryBooks.Features.Identity.Domain.Entities;
 
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
-public class ConfirmEmailCommand : ConfirmEmailInputModel, IRequest<Result>
+using static StoryBooks.Features.Identity.Application.IdentityApplicationConstants;
+
+public class ConfirmEmailCommand : ConfirmEmailInputModel, IRequest<RedirectResult>
 {
-    public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, Result>
+    public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, RedirectResult>
     {
-        private readonly IIdentityService identityService;
+        private readonly UserManager<User> userManager;
+        private readonly IIdentityUrlProvider urlProvider;
 
-        public ConfirmEmailCommandHandler(IIdentityService identityService)
+        public ConfirmEmailCommandHandler(
+            UserManager<User> userManager,
+            IIdentityUrlProvider urlProvider)
         {
-            this.identityService = identityService;
+            this.userManager = userManager;
+            this.urlProvider = urlProvider;
         }
 
-        public Task<Result> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
-            => identityService.ConfirmEmail(request);
+        public async Task<RedirectResult> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken) 
+        {
+            var user = await this.userManager.FindByIdAsync(request.UserId);
+            if (user is null)
+            {
+                return new(this.urlProvider.ClientNotFoundUrl());
+            }
+
+            string? token = HttpUtility.UrlDecode(request.Token);
+            var identityResult = await this.userManager.ConfirmEmailAsync(user, token);
+            var errors = identityResult.Errors.Select(e => new ResultError(e.Code, e.Description));
+
+            return identityResult.Succeeded ?
+                new(this.urlProvider.ConfirmEmailRedirectLink(Messages.EmailConfirmed)) :
+                new(this.urlProvider.ClientErrorUrl(Messages.EmailConfirmError));
+        }
     }
 }

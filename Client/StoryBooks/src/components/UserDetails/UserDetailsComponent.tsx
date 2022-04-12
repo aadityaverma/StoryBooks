@@ -7,24 +7,37 @@ import {
     IonRow,
     IonItem,
     IonLabel,
-    IonInput,
     IonItemDivider,
-    IonButton,
-    IonIcon
+    IonIcon,
+    IonItemGroup
 } from '@ionic/react';
-import { useEffect, useState } from 'react';
-import { keyOutline, logOutOutline, mailUnreadOutline, pencilOutline } from 'ionicons/icons';
+import {
+    alertCircleOutline,
+    book,
+    calendarOutline,
+    callOutline,
+    clipboard,
+    cogOutline,
+    keyOutline,
+    logOutOutline,
+    mailOutline,
+    mailUnreadOutline,
+    maleFemaleOutline,
+    sendOutline,
+    trashBinOutline
+} from 'ionicons/icons';
 
+import { useEffect, useState } from 'react';
 import { useUserStore } from '../../utils/user/userStore';
 import { sendGet } from '../../utils/common/apiCalls';
 import { UserAuthModel, UserDetailsModel } from '../../utils/user/userModels';
 import { AccountEndpoint } from '../../utils/constants';
 
-interface LoginComponentProperties {
+interface UserDetailsComponentProperties {
     onLogout?: () => void;
 }
 
-const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
+const LoginComponent: React.FC<UserDetailsComponentProperties> = (props) => {
     const userStore = useUserStore();
     const [userData, setUserData] = useState<UserDetailsModel>();
     const [isAuthor, setIsAuthor] = useState<boolean>(false);
@@ -38,7 +51,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
 
     const loadUserData = async () => {
         var userData: UserDetailsModel = await userStore.getUserDetails();
-        if (!userData) {
+        if (!userData || !userData.emailConfirmed) {
             const authData: UserAuthModel = await userStore.getAuthData();
             if (authData == null) {
                 return;
@@ -63,78 +76,104 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
 
     return (
         <IonRow>
-            <IonCol>
+            <IonCol size='12' sizeMd='10' offsetMd='1' sizeLg='8' offsetLg='2' sizeXl='6' offsetXl='3'  >
                 <IonCard>
                     <IonCardHeader>
-                        <IonCardTitle>Welcome, {userData?.firstName || 'There'}!</IonCardTitle>
+                        <IonCardTitle>{userData?.firstName} {userData?.lastName}</IonCardTitle>
                     </IonCardHeader>
                     {!!userData && (
                         <IonCardContent>
-                            {!isConfirmed && (
-                                <div>Please confirm your email address</div>
-                             )}
-                            <IonItem>
-                                <IonLabel position="stacked">First name</IonLabel>
-                                <IonInput value={userData.firstName}> </IonInput>
-                            </IonItem>
-                            <IonItem>
-                                <IonLabel position="stacked">Last name</IonLabel>
-                                <IonInput value={userData.lastName}> </IonInput>
-                            </IonItem>
-                            <IonItem>
-                                <IonLabel position="stacked">Phone number</IonLabel>
-                                <IonInput value={userData.phoneNumber} type='tel'> </IonInput>
-                            </IonItem>
-                            <IonItemDivider>
-                                <IonLabel>Read-only</IonLabel>
-                            </IonItemDivider>
-                            <IonItem>
-                                <IonLabel position="stacked">Email</IonLabel>
-                                <IonInput value={userData.email} disabled={true}> </IonInput>
-                            </IonItem>
-                            <IonItem>
-                                <IonLabel position="stacked">Roles</IonLabel>
-                                <IonInput value={userData.roles.join(', ')} disabled={true}> </IonInput>
-                            </IonItem>
-                        </IonCardContent>
-                    )}
-                </IonCard>
-            </IonCol>
-            <IonCol>
-                <IonCard>
-                    <IonCardHeader>
-                        <IonCardTitle>Profile actions!</IonCardTitle>
-                    </IonCardHeader>
-                    {!!userData && (
-                        <IonCardContent>
-                            <IonItem>
-                                <IonButton expand='block'>
-                                    Change password
-                                    <IonIcon slot="end" icon={keyOutline} />
-                                </IonButton>
-                            </IonItem>
-                            {!isConfirmed && (
+                            <IonItemGroup id='personal-items'>
+                                <IonItemDivider>
+                                    <IonLabel>Personal Information</IonLabel>
+                                </IonItemDivider>
                                 <IonItem>
-                                    <IonButton>
-                                        Re-send confirmation email
-                                        <IonIcon slot="end" icon={mailUnreadOutline} />
-                                    </IonButton>
+                                    <IonIcon slot='start' icon={mailOutline} />
+                                    <IonLabel>{userData.email}</IonLabel>
                                 </IonItem>
-                            )}
-                            {isConfirmed && !isAuthor && (
+                                {!isConfirmed && (
+                                    <IonItem>
+                                        <IonIcon slot='start' icon={alertCircleOutline} />
+                                        <IonLabel color='warning'>Please confirm your email address!</IonLabel>
+                                    </IonItem>
+                                )}
                                 <IonItem>
-                                    <IonButton expand='block' onClick={logout}>
-                                        Become an Author
-                                        <IonIcon slot="end" icon={pencilOutline} />
-                                    </IonButton>
+                                    <IonIcon slot='start' icon={maleFemaleOutline} />
+                                    <IonLabel></IonLabel>
                                 </IonItem>
-                            )}
-                            <IonItem>
-                                <IonButton expand='block' onClick={logout}>
-                                    Logout
-                                    <IonIcon slot="end" icon={logOutOutline} />
-                                </IonButton>
-                            </IonItem>
+                                <IonItem>
+                                    <IonIcon slot='start' icon={calendarOutline} />
+                                    <IonLabel></IonLabel>
+                                </IonItem>
+                                <IonItem>
+                                    <IonIcon slot='start' icon={callOutline} />
+                                    <IonLabel>{userData.phoneNumber}</IonLabel>
+                                </IonItem>
+                            </IonItemGroup>
+                            <IonItemGroup>
+                                <IonItemDivider>
+                                    <IonLabel>Permissions</IonLabel>
+                                </IonItemDivider>
+                                {userData.roles.map(role => <IonItem key={role}><IonLabel>{role}</IonLabel></IonItem>)}
+                            </IonItemGroup>
+                            <IonItemGroup id='actions-items'>
+                                <IonItemDivider>
+                                    <IonLabel>Actions</IonLabel>
+                                </IonItemDivider>
+                                <IonItem button>
+                                    <IonIcon slot="start" icon={clipboard} />
+                                    <IonLabel>Edit Profile</IonLabel>
+                                </IonItem>
+                                <IonItem button >
+                                    <IonIcon slot="start" icon={keyOutline} />
+                                    <IonLabel>Change Password</IonLabel>
+                                </IonItem>
+                                <IonItem button>
+                                    <IonIcon slot="start" icon={cogOutline} />
+                                    <IonLabel>Preferences</IonLabel>
+                                </IonItem>
+                                {!isConfirmed && (
+                                    <IonItem button>
+                                        <IonIcon slot="start" icon={mailUnreadOutline} />
+                                        <IonLabel>Re-send confirmation email</IonLabel>
+                                        <IonIcon slot="end" icon={sendOutline} />
+                                    </IonItem>
+                                )}
+                                {isConfirmed && !isAuthor && (
+                                    <IonItem button>
+                                        <IonIcon slot="start" icon={book} />
+                                        <IonLabel>Become an Author</IonLabel>
+                                    </IonItem>
+                                )}
+                            </IonItemGroup>
+                            <IonItemGroup id='quick-links-items'>
+                                <IonItemDivider>
+                                    <IonLabel>Quick Links</IonLabel>
+                                </IonItemDivider>
+                                <IonItem href='/about'>
+                                    <IonLabel>About</IonLabel>
+                                </IonItem>
+                                <IonItem href='/contact'>
+                                    <IonLabel>Contact Us</IonLabel>
+                                </IonItem>
+                                <IonItem href='/faq'>
+                                    <IonLabel>FAQ</IonLabel>
+                                </IonItem>
+                                <IonItem href='/privacy'>
+                                    <IonLabel>Privacy Policy</IonLabel>
+                                </IonItem>
+                            </IonItemGroup>
+                            <IonItemGroup id='danger-items'>
+                                <IonItem button color='warning' onClick={logout}>
+                                    <IonIcon slot="start" icon={logOutOutline} />
+                                    <IonLabel>Logout</IonLabel>
+                                </IonItem>
+                                <IonItemDivider></IonItemDivider>
+                                <IonItem button color='danger' onClick={logout}>
+                                    <IonIcon slot="start" icon={trashBinOutline} />
+                                    <IonLabel>Delete Profile</IonLabel>
+                                </IonItem>
+                            </IonItemGroup>
                         </IonCardContent>
                     )}
                 </IonCard>

@@ -50,8 +50,7 @@ public static class IdentityConfigurationExtensions
         services.AddDataProtection()
             .PersistKeysToDbContext<TContext>();
 
-        services.AddTransient<IIdentityService, IdentityService>()
-                .AddTransient<IIdentityEmailService, IdentityEmailService>()
+        services.AddTransient<IIdentityEmailService, IdentityEmailService>()
                 .AddSingleton<IIdentityUrlProvider, IdentityUrlProvider>()
                 .AddSingleton<IAuthTokenGeneratorService, JwtTokenGeneratorService>();
 

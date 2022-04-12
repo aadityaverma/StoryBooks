@@ -7,7 +7,7 @@ public abstract class BaseResult
     protected BaseResult()
     {
         this.Message = string.Empty;
-        _errors = new Dictionary<string, ResultError>();
+        this._errors = new Dictionary<string, ResultError>();
     }
 
     protected BaseResult(ResultCode code, string generalMessage) : this()
@@ -25,7 +25,7 @@ public abstract class BaseResult
 
         if (errors != null)
         {
-            AddBaseErrors(errors);
+            this.AddBaseErrors(errors);
         }
     }
 
@@ -47,33 +47,29 @@ public abstract class BaseResult
     /// <summary>
     /// Shows if any error is present from the action
     /// </summary>
-    public bool HasError => _errors.IsNotEmpty();
+    public bool HasError => this._errors.IsNotEmpty();
 
     /// <summary>
     /// Dictionary with all errors occurred when executing the action.
     /// The key is the name of the failed property with list of error messages
     /// </summary>
-    public IEnumerable<ResultError> Errors => _errors.Select(e => e.Value);
+    public IEnumerable<ResultError> Errors => this._errors.Select(e => e.Value);
 
-    protected static bool IsSuccessCode(ResultCode code)
-    {
-        return code == ResultCode.Ok;
-    }
+    protected static bool IsSuccessCode(ResultCode code) 
+        => code == ResultCode.Ok;
 
-    protected void AddBaseError(string key, string message)
-    {
-        AddBaseError(new ResultError(key, message));
-    }
+    protected void AddBaseError(string key, string message) 
+        => this.AddBaseError(new ResultError(key, message));
 
     protected void AddBaseError(ResultError error)
     {
-        if (!_errors.ContainsKey(error.Key))
+        if (!this._errors.ContainsKey(error.Key))
         {
-            _errors.Add(error.Key, error);
+            this._errors.Add(error.Key, error);
         }
         else
         {
-            _errors[error.Key].Errors.AddRange(error.Errors);
+            this._errors[error.Key].Errors.AddRange(error.Errors);
         }
     }
 
@@ -81,7 +77,7 @@ public abstract class BaseResult
     {
         foreach (var error in errors)
         {
-            AddBaseError(error);
+            this.AddBaseError(error);
         }
     }
 }

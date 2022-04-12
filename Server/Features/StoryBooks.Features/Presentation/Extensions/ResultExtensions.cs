@@ -87,6 +87,7 @@ public static class ResultExtensions
             return Results.Unauthorized();
         }
 
+
         return Results.Problem();
     }
 
@@ -117,6 +118,28 @@ public static class ResultExtensions
         if (result.Code == ResultCode.NotAuthorized)
         {
             return Results.Unauthorized();
+        }
+
+        return Results.Problem();
+    }
+
+    public static async Task<IResult> ToIResult<TData>(this Task<Application.RedirectResult> resultTask)
+    {
+        var result = await resultTask;
+
+        if (result.RedirectUrl is not null)
+        {
+            return Results.Redirect(result.RedirectUrl);
+        }
+
+        if (result.Code == ResultCode.BadRequest)
+        {
+            return Results.BadRequest(result.Errors);
+        }
+
+        if (result.Code == ResultCode.NotFound)
+        {
+            return Results.NotFound(result.Message);
         }
 
         return Results.Problem();

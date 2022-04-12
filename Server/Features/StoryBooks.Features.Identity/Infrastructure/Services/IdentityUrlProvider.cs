@@ -21,16 +21,25 @@ internal class IdentityUrlProvider : IIdentityUrlProvider
         this.linker = linker;
     }
 
-    public string ClientUrl => settings.URLs.ClientUrl;
+    public string ClientUrl => this.settings.URLs.ClientUrl;
 
-    public string CoreApiUrl => settings.URLs.CoreApiUrl;
+    public string CoreApiUrl => this.settings.URLs.CoreApiUrl;
 
     public string ConfirmEmailLink(string userId, string token)
-        => PrependServerUrl(
-            linker.GetPathByName(ConfirmEmailEndpointName, values: new { userId, token }));
+        => this.PrependServerUrl(
+            this.linker.GetPathByName(ConfirmEmailEndpointName, values: new { userId, token }));
 
-    private string PrependServerUrl(string? path)
-    {
-        return $"{CoreApiUrl}{path}";
-    }
+    #region Client URLs
+    public string ClientErrorUrl(string message)
+        => $"{this.ClientUrl}/error?message={message}";
+
+    public string ConfirmEmailRedirectLink(string message) 
+        => $"{this.ClientUrl}/profile?message={message}";
+
+    public string ClientNotFoundUrl()
+         => $"{this.ClientUrl}/not-found";
+    #endregion
+
+    private string PrependServerUrl(string? path) 
+        => $"{this.CoreApiUrl}{path}";
 }
