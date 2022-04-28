@@ -8,15 +8,19 @@ import {
 } from '@ionic/react';
 
 import React, { useState, useEffect } from 'react';
-import { useUserStore } from '../../../utils/user/userStore';
+import { useUserStore } from '../../utils/user/userStore';
 
-import LoginComponent from '../../../components/Login/LoginComponent';
-import RegisterComponent from '../../../components/Register/RegisterComponent';
-import UserDetailsComponent from '../../../components/UserDetails/UserDetailsComponent';
+import LoginComponent from '../../components/Login/LoginComponent';
+import RegisterComponent from '../../components/Register/RegisterComponent';
+import UserDetailsComponent from '../../components/UserDetails/UserDetailsComponent';
 
 import './ProfileTab.css';
 
-const ProfileTab: React.FC = () => {
+interface ProfileTabProperties {
+  onUserChange?: () => void;
+}
+
+const ProfileTab: React.FC<ProfileTabProperties> = (props) => {
   const userStore = useUserStore();
 
   const [loggedUser, setLoggedUser] = useState<boolean>(false);
@@ -31,12 +35,13 @@ const ProfileTab: React.FC = () => {
       setRegisterVisible(false);
       console.info('useEffect in ProfileTab');
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedUser])
 
   const handleLogin = () => {
     setLoggedUser(true);
-    
+    fireUserChange();
+
     showToast({
       buttons: [{ text: 'close', handler: () => dismissToast() }],
       message: 'Now you can explore the full experience of Story Books.',
@@ -59,8 +64,9 @@ const ProfileTab: React.FC = () => {
     })
   }
 
-  const handleLogOut = () => {
+  const handleLogout = () => {
     setLoggedUser(false);
+    fireUserChange();
 
     showToast({
       buttons: [{ text: 'close', handler: () => dismissToast() }],
@@ -68,6 +74,24 @@ const ProfileTab: React.FC = () => {
       color: 'warning',
       duration: 10000,
       header: 'Logged out!'
+    });
+  }
+
+  const fireUserChange = () => {
+    if (!!props.onUserChange) {
+      props.onUserChange();
+    }
+  }
+
+  const handleDelete = () => {
+    setLoggedUser(false);
+
+    showToast({
+      buttons: [{ text: 'close', handler: () => dismissToast() }],
+      message: 'Your profile is deleted! You need to make new registration to be able to login',
+      color: 'danger',
+      duration: 10000,
+      header: 'Profile deleted!'
     });
   }
 
@@ -100,7 +124,7 @@ const ProfileTab: React.FC = () => {
           </React.Fragment>
         )}
         {loggedUser && (
-          <UserDetailsComponent onLogout={handleLogOut} />
+          <UserDetailsComponent onLogout={handleLogout} onDelete={handleDelete} />
         )}
       </IonContent>
     </IonPage>

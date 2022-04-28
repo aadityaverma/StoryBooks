@@ -26,8 +26,7 @@ internal class IdentityUrlProvider : IIdentityUrlProvider
     public string CoreApiUrl => this.settings.URLs.CoreApiUrl;
 
     public string ConfirmEmailLink(string userId, string token)
-        => this.PrependServerUrl(
-            this.linker.GetPathByName(ConfirmEmailEndpointName, values: new { userId, token }));
+        => $"{this.CoreApiUrl}{this.linker.GetPathByName(ConfirmEmailEndpointName, values: new { userId, token })}";
 
     #region Client URLs
     public string ClientErrorUrl(string message)
@@ -39,7 +38,4 @@ internal class IdentityUrlProvider : IIdentityUrlProvider
     public string ClientNotFoundUrl()
          => $"{this.ClientUrl}/not-found";
     #endregion
-
-    private string PrependServerUrl(string? path) 
-        => $"{this.CoreApiUrl}{path}";
 }

@@ -12,41 +12,61 @@ import { bagHandleOutline, libraryOutline, personOutline, pencilOutline } from '
 
 import { useState, useEffect } from 'react';
 
-import ShopTab from './ShopTab/ShopTab';
-import LibraryTab from './LibraryTab/LibraryTab';
-import ProfileTab from './ProfileTab/ProfileTab';
+import ShopTab from '../ShopTabPage/ShopTab';
+import LibraryTab from '../LibraryTabPage/LibraryTab';
+import ProfileTab from '../ProfileTabPage/ProfileTab';
 
 import { useUserStore } from '../../utils/user/userStore';
+import AboutPage from '../AboutPage/AboutPage';
+import FAQPage from '../FAQPage/FAQPage';
+import PrivacyPage from '../PrivacyPage/FAQPage';
+import ContactUsPage from '../ContactUsPage/ContactUsPage';
 
 const HomePage: React.FC = () => {
     const userStore = useUserStore();
 
-    const [ loggedAuthor, setLeggedAuthor ] = useState<boolean>(false);
-    const [ loggedUser, setLoggedUser ] = useState<boolean>(false);
+    const [loggedAuthor, setLeggedAuthor] = useState<boolean>(false);
+    const [loggedUser, setLoggedUser] = useState<boolean>(false);
 
     useEffect(() => {
+        handleUserChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleUserChange = () => {
         userStore.isAuthor().then(setLeggedAuthor);
         userStore.isAuthenticated().then(setLoggedUser);
-        console.log('useEffect in HomePage');
-    }, [userStore]);
+    }
 
     return (
         <IonTabs>
             <IonRouterOutlet>
+                <Route exact path="/about">
+                    <AboutPage />
+                </Route>
+                <Route exact path="/book/edit/:id">
+                </Route>
+                <Route exact path="/book/play/:id">
+                </Route>
+                <Route exact path="/contact-us">
+                    <ContactUsPage />
+                </Route>
+                <Route exact path="/faq">
+                    <FAQPage />
+                </Route>
                 <Route exact path="/shop">
                     <ShopTab />
                 </Route>
                 <Route exact path="/library">
                     <LibraryTab />
                 </Route>
-                <Route exact path="/profile">
-                    <ProfileTab />
-                </Route>
-                <Route exact path="/book/edit/:id">
-                </Route>
-                <Route exact path="/book/play/:id">
-                </Route>
                 <Route exact path="/not-found">
+                </Route>                
+                <Route exact path="/privacy">
+                    <PrivacyPage />
+                </Route>
+                <Route exact path="/profile">
+                    <ProfileTab onUserChange={handleUserChange} />
                 </Route>
                 <Route exact path="/">
                     <Redirect to="/shop" />

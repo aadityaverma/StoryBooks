@@ -37,7 +37,9 @@ public class UpdateUserDetailsCommand : UpdateDetailsInputModel, IRequest<Result
 
             user.SetFirstName(request.FirstName)
                 .SetLastName(request.LastName)
-                .SetPhoneNumber(request.PhoneNumber);
+                .SetPhoneNumber(request.PhoneNumber)
+                .SetDateOfBirth(request.DateOfBirth)
+                .SetGender(request.Gender);
 
             var identityResult = await this.userManager.UpdateAsync(user);
             var errors = identityResult.Errors.Select(e => new ResultError(e.Code, e.Description));

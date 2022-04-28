@@ -84,12 +84,12 @@ public abstract class Entity<TKey> : IEntity
         return first.Equals(second);
     }
 
-    public static bool operator !=(Entity<TKey>? first, Entity<TKey>? second) => !(first == second);
+    public static bool operator !=(Entity<TKey>? first, Entity<TKey>? second) 
+        => !(first == second);
 
-    public override int GetHashCode() => (this.GetType().ToString() + this.Id).GetHashCode();
+    public override int GetHashCode() 
+        => (this.GetType().ToString() + this.Id).GetHashCode();
 
     protected virtual void ValidateGuidId(string id)
-    {
-        Guard.ForMaxStringLength<InvalidEntityException>(id, MaxGuidLength, InvalidGuidLength);
-    }
+        => Guard.ForMaxStringLength<InvalidEntityException>(id, MaxGuidLength, InvalidGuidLength);
 }

@@ -46,4 +46,4 @@ public class ConfirmEmailCommand : ConfirmEmailInputModel, IRequest<RedirectResu
                 new(this.urlProvider.ClientErrorUrl(Messages.EmailConfirmError));
         }
     }
-}
+} 

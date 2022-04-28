@@ -47,17 +47,6 @@ public static class ResultExtensions
         return result.Data;
     }
 
-    public static async Task<IResult> ToIResult<TData>(this Task<TData> resultTask)
-    {
-        var data = await resultTask;
-        if (data is null)
-        {
-            return Results.NotFound();
-        }
-
-        return Results.Ok(data);
-    }
-
     public static async Task<IResult> ToIResult(this Task<Result> resultTask)
     {
         var result = await resultTask;
@@ -143,5 +132,16 @@ public static class ResultExtensions
         }
 
         return Results.Problem();
+    }
+
+    public static async Task<IResult> ToIResult<TData>(this Task<TData> resultTask)
+    {
+        var data = await resultTask;
+        if (data is null)
+        {
+            return Results.NotFound();
+        }
+
+        return Results.Ok(data);
     }
 }

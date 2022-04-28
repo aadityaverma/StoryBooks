@@ -16,6 +16,7 @@ internal class IdentityApplicationConstants
         public const string PasswordChanged = "Your password is changed";
         public const string PasswordChangeError = "Could not change your password!";
 
+        public const string EmailConfirmSent = "Email with confirmation instructions is sent to you.";
         public const string EmailConfirmed = "Your email is confirmed";
         public const string EmailConfirmError = "Error confirming your email!";
 

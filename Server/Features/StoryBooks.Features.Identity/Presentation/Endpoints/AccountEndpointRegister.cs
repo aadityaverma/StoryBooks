@@ -4,6 +4,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
 using StoryBooks.Features.Application;
@@ -46,7 +47,9 @@ public class AccountEndpointRegister : EndpointRegister
            .RequireAuthorization();
 
         app.MapDelete(endpoint, Delete)
-           .Produces(StatusCodes.Status307TemporaryRedirect)
+           .Produces(StatusCodes.Status200OK, typeof(string))
+           .Produces(StatusCodes.Status400BadRequest, typeof(IEnumerable<ResultError>))
+           .Produces(StatusCodes.Status404NotFound)
            .WithName($"{tag}{nameof(Delete)}")
            .WithTags(tag)
            .RequireAuthorization();
@@ -77,8 +80,8 @@ public class AccountEndpointRegister : EndpointRegister
             => await mediator.Send(command, cancellationToken).ToIResult();
 
     internal static async Task<IResult> Delete(
-        IMediator mediator,
-        DeleteUserCommand command,
+        [FromServices] IMediator mediator,
+        [FromBody] DeleteUserCommand command,
         CancellationToken cancellationToken)
             => await mediator.Send(command, cancellationToken).ToIResult();
 

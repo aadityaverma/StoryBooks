@@ -5,16 +5,16 @@ const sendGet = <Type>(url: string, auth: UserAuthModel | null = null): Promise<
     return sendRequest<Type>('GET', url, null, auth);
 }
 
-const sendPut = <Type>(url: string, data: any) => {
-    return sendRequest<Type>('PUT', url, data);
+const sendPut = <Type>(url: string, data: any, auth: UserAuthModel | null = null) => {
+    return sendRequest<Type>('PUT', url, data, auth);
 }
 
-const sendPost = <Type>(url: string, data: any) => {
-    return sendRequest<Type>('POST', url, data);
+const sendPost = <Type>(url: string, data: any, auth: UserAuthModel | null = null) => {
+    return sendRequest<Type>('POST', url, data, auth);
 }
 
-const sendDelete = <Type>(url: string, data: any) => {
-    return sendRequest<Type>('DELETE', url, data);
+const sendDelete = <Type>(url: string, data: any, auth: UserAuthModel | null = null) => {
+    return sendRequest<Type>('DELETE', url, data, auth);
 }
 
 const sendRequest = async <Type>(
@@ -46,6 +46,12 @@ const sendRequest = async <Type>(
                     reject(errors);
                     return;
                 }
+
+                if (response.status === 401) {
+                    const errors: ValidationError[] = [{ key: '', errors: [ 'Not authorized!' ] }];
+                    reject(errors);
+                    return;
+                }
                 
                 const errors = await response.json();
                 if (typeof(errors) === typeof([])) {
@@ -55,10 +61,28 @@ const sendRequest = async <Type>(
                 
                 reject([{ key: '', errors: [ response.statusText ] }]);
             })
-            .catch((response: Response)=>{
+            .catch((response: Response| TypeError)=>{
                 const errors: ValidationError[] = [];
-                errors.push({ key: '', errors: [ response.statusText ] })
-                reject(errors);
+                if (!response) {
+                    errors.push({ key: '', errors: [ 'Something went wrong!' ] });
+                    reject(errors);
+                    return;
+                }
+
+                if (response as TypeError) {
+                    const typeErr = response as TypeError;
+                    if(typeErr.message === 'Failed to fetch'){
+                        errors.push({ key: '', errors: [ 'No connection to the server!' ] });
+                    } else {
+                        errors.push({ key: '', errors: [ typeErr.message ] });
+                    }
+                    
+                    reject(errors);
+                } else if (response as Response){
+                    const typeErr = response as Response;
+                    errors.push({ key: '', errors: [ typeErr.statusText ] });
+                    reject(errors);
+                }
             });
         });
     }

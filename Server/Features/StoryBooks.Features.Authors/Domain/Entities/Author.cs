@@ -15,7 +15,7 @@ public class Author : Entity<string>, IAggregateRoot
 
     internal Author(string userId, string name)
     {
-        Validate(userId, name);
+        this.Validate(userId, name);
 
         this.UserId = userId;
         this.Name = name;
@@ -27,12 +27,12 @@ public class Author : Entity<string>, IAggregateRoot
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "For EF")]
     private Author(string userId, string name, string alias, string description)
     {
-        UserId = userId;
-        Name = name;
-        Alias = alias;
-        Description = description;
+        this.UserId = userId;
+        this.Name = name;
+        this.Alias = alias;
+        this.Description = description;
 
-        books = new HashSet<Book>();
+        this.books = new HashSet<Book>();
     }
 
     public string UserId { get; private set; }
@@ -87,16 +87,14 @@ public class Author : Entity<string>, IAggregateRoot
 
     private void Validate(string userId, string name)
     {
-        ValidateGuidId(userId);
+        this.ValidateGuidId(userId);
         ValidateName(name, nameof(name));
     }
 
-    private static void ValidateName(string name, string propName)
-    {
-        Guard.ForStringLength<InvalidAuthorException>(
+    private static void ValidateName(string name, string propName) 
+        => Guard.ForStringLength<InvalidAuthorException>(
             value: name,
             minLength: MinAuthorNameLength,
             maxLength: MaxAuthorNameLength,
             name: propName);
-    }
 }

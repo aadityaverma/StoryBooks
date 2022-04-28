@@ -16,15 +16,12 @@ import {
     book,
     calendarOutline,
     callOutline,
-    clipboard,
     cogOutline,
     keyOutline,
-    logOutOutline,
     mailOutline,
     mailUnreadOutline,
     maleFemaleOutline,
-    sendOutline,
-    trashBinOutline
+    sendOutline
 } from 'ionicons/icons';
 
 import { useEffect, useState } from 'react';
@@ -33,8 +30,13 @@ import { sendGet } from '../../utils/common/apiCalls';
 import { UserAuthModel, UserDetailsModel } from '../../utils/user/userModels';
 import { AccountEndpoint } from '../../utils/constants';
 
+import DeleteProfileComponent from './DeleteProfileComponent';
+import LogoutComponent from './LogoutComponents';
+import EditProfileComponent from './EditProfileComponent';
+
 interface UserDetailsComponentProperties {
     onLogout?: () => void;
+    onDelete?: () => void;
 }
 
 const LoginComponent: React.FC<UserDetailsComponentProperties> = (props) => {
@@ -67,10 +69,14 @@ const LoginComponent: React.FC<UserDetailsComponentProperties> = (props) => {
     }
 
     const logout = async () => {
-        await userStore.clearCurrentUser();
-
         if (!!props.onLogout) {
             props.onLogout();
+        }
+    }
+
+    const deleteProfile = () => {
+        if (!!props.onDelete) {
+            props.onDelete();
         }
     }
 
@@ -110,7 +116,7 @@ const LoginComponent: React.FC<UserDetailsComponentProperties> = (props) => {
                                     <IonLabel>{userData.phoneNumber}</IonLabel>
                                 </IonItem>
                             </IonItemGroup>
-                            <IonItemGroup>
+                            <IonItemGroup id='profile-permissions-items'>
                                 <IonItemDivider>
                                     <IonLabel>Permissions</IonLabel>
                                 </IonItemDivider>
@@ -120,10 +126,7 @@ const LoginComponent: React.FC<UserDetailsComponentProperties> = (props) => {
                                 <IonItemDivider>
                                     <IonLabel>Actions</IonLabel>
                                 </IonItemDivider>
-                                <IonItem button>
-                                    <IonIcon slot="start" icon={clipboard} />
-                                    <IonLabel>Edit Profile</IonLabel>
-                                </IonItem>
+                                <EditProfileComponent model={userData} />
                                 <IonItem button >
                                     <IonIcon slot="start" icon={keyOutline} />
                                     <IonLabel>Change Password</IonLabel>
@@ -153,7 +156,7 @@ const LoginComponent: React.FC<UserDetailsComponentProperties> = (props) => {
                                 <IonItem href='/about'>
                                     <IonLabel>About</IonLabel>
                                 </IonItem>
-                                <IonItem href='/contact'>
+                                <IonItem href='/contact-us'>
                                     <IonLabel>Contact Us</IonLabel>
                                 </IonItem>
                                 <IonItem href='/faq'>
@@ -164,15 +167,9 @@ const LoginComponent: React.FC<UserDetailsComponentProperties> = (props) => {
                                 </IonItem>
                             </IonItemGroup>
                             <IonItemGroup id='danger-items'>
-                                <IonItem button color='warning' onClick={logout}>
-                                    <IonIcon slot="start" icon={logOutOutline} />
-                                    <IonLabel>Logout</IonLabel>
-                                </IonItem>
-                                <IonItemDivider></IonItemDivider>
-                                <IonItem button color='danger' onClick={logout}>
-                                    <IonIcon slot="start" icon={trashBinOutline} />
-                                    <IonLabel>Delete Profile</IonLabel>
-                                </IonItem>
+                                <LogoutComponent onLogout={logout} />
+                                <IonItemDivider />
+                                <DeleteProfileComponent onDelete={deleteProfile} />
                             </IonItemGroup>
                         </IonCardContent>
                     )}

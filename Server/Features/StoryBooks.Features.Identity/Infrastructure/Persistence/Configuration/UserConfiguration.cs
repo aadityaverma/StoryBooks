@@ -20,5 +20,11 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             .Property(u => u.LastName)
             .IsRequired()
             .HasMaxLength(Validation.MaxNameLength);
+
+        builder.OwnsOne(b => b.Gender, s =>
+        {
+            s.WithOwner();
+            s.Property(e => e.Value);//.IsRequired();
+        });
     }
 }

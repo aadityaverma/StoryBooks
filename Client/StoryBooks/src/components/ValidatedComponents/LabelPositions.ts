@@ -1,0 +1,1 @@
+export type LabelPositions = 'fixed' | 'floating' | 'stacked' | undefined;

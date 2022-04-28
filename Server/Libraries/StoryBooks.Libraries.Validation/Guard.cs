@@ -3,6 +3,8 @@ namespace StoryBooks.Libraries.Validation;
 using System;
 using System.Text.RegularExpressions;
 
+using static StoryBooks.Libraries.Validation.CommonValidationConstants;
+
 public static class Guard
 {
     public static void ForNull<TValue, TException>(TValue value, string? message = null, string name = "Value")
@@ -133,6 +135,19 @@ public static class Guard
         }
 
         string msg = message ?? $"Value for '{name}' has incorrect format.";
+        ThrowException<TException>(msg);
+    }
+
+    public static void ForValidDateOfBirth<TException>(DateTime dateOfBirth, string? message, string name = "Date of birth")
+        where TException : ValidationException, new()
+    {
+        int age = dateOfBirth.UtcAge();
+        if (age is < MaxAge and > 0)
+        {
+            return;
+        }
+
+        string msg = message ?? $"'{name}' has incorrect format.";
         ThrowException<TException>(msg);
     }
 

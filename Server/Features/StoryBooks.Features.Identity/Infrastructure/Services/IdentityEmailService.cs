@@ -2,10 +2,9 @@
 
 using AutoMapper;
 
-using Microsoft.AspNetCore.Identity;
-
 using StoryBooks.Features.Identity.Application.Services;
 using StoryBooks.Features.Identity.Domain.Entities;
+using StoryBooks.Features.Identity.Resources.EmailTemplates.EmailConfirmation;
 using StoryBooks.Features.Identity.Resources.EmailTemplates.UserRegistration;
 using StoryBooks.Libraries.Email.Models;
 using StoryBooks.Libraries.Email.Services;
@@ -40,6 +39,21 @@ public class IdentityEmailService : IIdentityEmailService
         var emailModel = new SendEmailModel<UserRegistrationEmailModel>(
             to: user.UserName,
             subject: Email.UserRegistrationSubject,
+            model: bodyModel);
+
+        await this.emailService.SendAsync(emailModel);
+    }
+
+    public async Task SendConfirmEmail(User user, string token)
+    {
+        var bodyModel = this.mapper.Map<EmailConfirmationEmailModel>(user);
+
+        bodyModel.ServerUrl = this.urlProvider.CoreApiUrl;
+        bodyModel.ConfirmUrl = this.urlProvider.ConfirmEmailLink(user.Id, token);
+
+        var emailModel = new SendEmailModel<EmailConfirmationEmailModel>(
+            to: user.UserName,
+            subject: Email.EmailConfirmationSubject,
             model: bodyModel);
 
         await this.emailService.SendAsync(emailModel);

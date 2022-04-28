@@ -22,7 +22,7 @@ public class MappingProfile : Profile
 
         foreach (var type in types)
         {
-            var instance = Activator.CreateInstance(type);
+            object? instance = Activator.CreateInstance(type);
 
             const string mappingMethodName = "Mapping";
 

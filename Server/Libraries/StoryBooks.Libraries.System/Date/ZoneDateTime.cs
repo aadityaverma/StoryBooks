@@ -1,15 +1,15 @@
 ﻿namespace System;
 
 /*
- *  UtcDateTime.Instance.Now();
- *  UtcDateTime.SetOverride(d => new DateTime(2000, 1, 1))
- *  UtcDateTime.Instance.Now();
- *  UtcDateTime.ResetToNormal();
- *  UtcDateTime.Instance.Now();
+ *  ZoneDateTime.Instance.Now();
+ *  ZoneDateTime.SetOverride(d => new DateTime(2000, 1, 1))
+ *  ZoneDateTime.Instance.Now();
+ *  ZoneDateTime.ResetToNormal();
+ *  ZoneDateTime.Instance.Now();
  */
-public class UtcDateTime : IDateTime
+public class ZoneDateTime : IDateTime
 {
-    private static UtcDateTime DateInstance => new();
+    private static ZoneDateTime DateInstance => new();
     private static readonly AsyncLocal<Func<DateTime>?> overrideUtcNowFunc = new();
 
     public DateOnly Date() => DateOnly.FromDateTime(this.Now());
@@ -17,11 +17,11 @@ public class UtcDateTime : IDateTime
     public DateTime Now() =>
         overrideUtcNowFunc.Value != null ?
             overrideUtcNowFunc.Value() :
-            DateTime.UtcNow;
+            DateTime.Now;
 
     public TimeOnly Time() => TimeOnly.FromDateTime(this.Now());
 
-    public static UtcDateTime Instance => DateInstance;
+    public static ZoneDateTime Instance => DateInstance;
 
     public static void SetOverride(Func<DateTime> func) => overrideUtcNowFunc.Value = func;
 

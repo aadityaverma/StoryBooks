@@ -5,9 +5,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonIcon,
-  IonInput,
   IonItem,
-  IonLabel,
   IonProgressBar
 } from '@ionic/react';
 import { useRef, useState } from 'react';
@@ -21,6 +19,7 @@ import { RegisterUserModel } from './RegisterUserModel';
 import ValidationMessage from '../../components/ValidationMessage/ValidationMessageComponent';
 
 import './RegisterComponent.css';
+import ValidatedInputComponent from '../ValidatedComponents/ValidatedInputComponent';
 
 interface RegisterComponentProperties {
   onRegister?: (userId: string) => void;
@@ -42,7 +41,7 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
   const [globalValidation, setGlobalValidation] = useState<ValidationError>();
 
   const [loading, setLoading] = useState<boolean>(false);
- 
+
   const registerUser = () => {
     if (!validateModel()) {
       return;
@@ -55,7 +54,7 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
       password: passwordRef.current!.value?.toLocaleString() ?? '',
       confirmPassword: confirmPasswordRef.current!.value?.toLocaleString() ?? ''
     };
-   
+
     setLoading(true);
     sendPost<string>(AccountEndpoint, model)
       .then(registerSuccess, registerError);
@@ -83,12 +82,6 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
     }
   }
 
-  const validateChange = (event: Event) => {
-    const target: HTMLIonInputElement = event.target as HTMLIonInputElement;
-    var validation = validateIonInput(target);
-    applyValidation(validation);
-  }
-
   const validateModel = (): boolean => {
     const validations: ValidationError[] = [
       validateIonInput(firstNameRef.current!),
@@ -96,7 +89,7 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
       validateIonInput(emailRef.current!),
       validateIonInput(passwordRef.current!),
       validateIonInput(confirmPasswordRef.current!)
-    ];    
+    ];
 
     for (let i = 0; i < validations.length; i++) {
       applyValidation(validations[i]);
@@ -104,7 +97,7 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
 
     return !validations.some((value) => { return value.errors.length > 0 });
   }
- 
+
   const applyValidation = (validation: ValidationError) => {
     if (validation.key === firstNameRef.current?.name) {
       setFirstNameValidation(validation);
@@ -127,71 +120,49 @@ const RegisterComponent: React.FC<RegisterComponentProperties> = (props) => {
         <IonCardTitle>Create new account</IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
-        <IonItem>
-          <IonLabel position='floating' aria-required='true'>First Name</IonLabel>
-          <IonInput
-            auto-complete='off'
-            aria-required='true'
-            name='FirstName'
-            required
-            placeholder='Enter your first name'
-            type='text'
-            onIonChange={validateChange}
-            ref={firstNameRef} />
-        </IonItem>
-        <ValidationMessage validation={firstNameValidation} />
-        <IonItem>
-          <IonLabel position='floating' aria-required='true'>Last Name</IonLabel>
-          <IonInput
-            auto-complete='off'
-            aria-required='true'
-            name='LastName'
-            required
-            placeholder='Enter your last name'
-            type='text'
-            onIonChange={validateChange}
-            ref={lastNameRef} />
-        </IonItem>
-        <ValidationMessage validation={lastNameValidation} />
-        <IonItem>
-          <IonLabel position='floating' aria-required='true'>Email</IonLabel>
-          <IonInput
-            auto-complete='off'
-            aria-required='true'
-            name='Email'
-            required
-            placeholder='Enter your email address'
-            type='email'
-            onIonChange={validateChange}
-            ref={emailRef} />
-        </IonItem>
-        <ValidationMessage validation={emailValidation} />
-        <IonItem>
-          <IonLabel position='floating' aria-required='true'>Password</IonLabel>
-          <IonInput
-            auto-complete='off'
-            aria-required='true'
-            name='Password'
-            required
-            placeholder='Enter your password'
-            type='password'
-            onIonChange={validateChange}
-            ref={passwordRef} />
-        </IonItem>
-        <ValidationMessage validation={passwordValidation} />
-        <IonItem>
-          <IonLabel position='floating' aria-required='true'>Confirm Password</IonLabel>
-          <IonInput
-            auto-complete='off'
-            aria-required='true'
-            name='ConfirmPassword'
-            required
-            placeholder='Confirm your password'
-            type='password'
-            onIonChange={validateChange}
-            ref={confirmPasswordRef} />
-        </IonItem>
-        <ValidationMessage validation={confirmPasswordValidation} />
+        <ValidatedInputComponent
+          name='FirstName'
+          label='First Name'
+          labelPosition='floating'
+          required={true}
+          placeholder='Enter your first name'
+          validation={firstNameValidation}
+          ref={firstNameRef} />
+        <ValidatedInputComponent
+          name='LastName'
+          label='Last Name'
+          labelPosition='floating'
+          required={true}
+          placeholder='Enter your last name'
+          validation={lastNameValidation}
+          ref={lastNameRef} />
+        <ValidatedInputComponent
+          name='Email'
+          type='email'
+          label='Email'
+          labelPosition='floating'
+          required={true}
+          placeholder='Enter your email address'
+          validation={emailValidation}
+          ref={emailRef} />
+        <ValidatedInputComponent
+          type='password'
+          name='Password'
+          label='Password'
+          labelPosition='floating'
+          required={true}
+          placeholder='Enter your password'
+          validation={passwordValidation}
+          ref={passwordRef} />
+        <ValidatedInputComponent
+          type='password'
+          name='ConfirmPassword'
+          label='Confirm Password'
+          labelPosition='floating'
+          required={true}
+          placeholder='Confirm your password'
+          validation={confirmPasswordValidation}
+          ref={confirmPasswordRef} />
         <ValidationMessage validation={globalValidation} />
         <IonItem className='ion-margin-top'>
           <IonButton size='default' shape='round' color='primary' onClick={registerUser} disabled={loading}>

@@ -5,9 +5,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonIcon,
-  IonInput,
   IonItem,
-  IonLabel,
   IonProgressBar
 } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
@@ -23,6 +21,7 @@ import { LoginUserModel } from './LoginUserModel';
 import { LoginEndpoint } from '../../utils/constants';
 
 import './LoginComponent.css';
+import ValidatedInputComponent from '../ValidatedComponents/ValidatedInputComponent';
 
 interface LoginComponentProperties {
   onLogin?: (model: UserAuthModel) => void;
@@ -42,7 +41,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    return () => { 
+    return () => {
     };
   }, [])
 
@@ -51,7 +50,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
       return;
     }
 
-    var model: LoginUserModel = {
+    const model: LoginUserModel = {
       email: emailRef.current!.value as string,
       password: passwordRef.current!.value as string
     };
@@ -88,7 +87,7 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
     const validations: ValidationError[] = [
       validateIonInput(emailRef.current!),
       validateIonInput(passwordRef.current!)
-    ];    
+    ];
 
     for (let i = 0; i < validations.length; i++) {
       applyValidation(validations[i]);
@@ -113,36 +112,24 @@ const LoginComponent: React.FC<LoginComponentProperties> = (props) => {
         <IonCardTitle>Login</IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
-        <IonItem>
-          <IonLabel position='floating' aria-required='true'>
-            Email
-          </IonLabel>
-          <IonInput
-            auto-complete='off'
-            aria-required='true'
-            name='Email'
-            required
-            placeholder='Enter your email address'
-            type='email'
-            ref={emailRef}>
-          </IonInput>
-        </IonItem>
-        <ValidationMessage validation={emailValidation} />
-        <IonItem>
-          <IonLabel position='floating' aria-required='true'>
-            Password
-          </IonLabel>
-          <IonInput
-            auto-complete='off'
-            aria-required='true'
-            name='Password'
-            placeholder='Enter your email address'
-            required
-            type='password'
-            ref={passwordRef}>
-          </IonInput>
-        </IonItem>
-        <ValidationMessage validation={passwordValidation} />
+        <ValidatedInputComponent
+          type='email'
+          name='Email'
+          label='Email'
+          labelPosition='floating'
+          required={true}
+          placeholder='Enter your email address'
+          validation={emailValidation}
+          ref={emailRef} />
+        <ValidatedInputComponent
+          type='password'
+          name='Password'
+          label='Password'
+          labelPosition='floating'
+          required={true}
+          placeholder='Enter your password'
+          validation={passwordValidation}
+          ref={passwordRef} />
         <ValidationMessage validation={globalValidation} />
         <IonItem className='ion-margin-top'>
           <IonButton size='default' shape='round' color='primary' onClick={loginUser} disabled={loading}>

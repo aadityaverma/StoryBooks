@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoryBooks.Features.Identity.Infrastructure.Persistence;
 
@@ -11,9 +12,10 @@ using StoryBooks.Features.Identity.Infrastructure.Persistence;
 namespace StoryBooks.Features.Identity.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(IdentityUserDbContext))]
-    partial class IdentityUserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220426073053_IdentityUserDetails")]
+    partial class IdentityUserDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

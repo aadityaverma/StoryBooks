@@ -1,0 +1,9 @@
+.delete-profile-alert {
+    color: var(--ion-color-danger);
+
+
+}
+
+.delete-profile-alert .danger {
+    color: var(--ion-color-danger);
+}

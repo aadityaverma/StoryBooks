@@ -6,4 +6,8 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\StoryBooks.Libraries.System\StoryBooks.Libraries.System.csproj" />
+	</ItemGroup>
+
 </Project>
