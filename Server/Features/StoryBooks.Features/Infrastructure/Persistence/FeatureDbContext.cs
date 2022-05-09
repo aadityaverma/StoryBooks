@@ -20,7 +20,7 @@ public abstract class FeatureDbContext : DbContext
         this.savesChangesTracker = new Stack<object>();
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         this.savesChangesTracker.Push(new object());
 

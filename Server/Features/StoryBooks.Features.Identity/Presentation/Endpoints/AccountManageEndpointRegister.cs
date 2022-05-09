@@ -44,9 +44,5 @@ internal class AccountManageEndpointRegister : EndpointRegister
         string userId,
         string token,
         CancellationToken cancellationToken)
-            => await mediator.Send(new ConfirmEmailCommand
-            {
-                UserId = userId,
-                Token = token
-            }, cancellationToken).ToIResult();
+            => await mediator.Send(new ConfirmEmailCommand(userId, token), cancellationToken).ToIResult();
 }

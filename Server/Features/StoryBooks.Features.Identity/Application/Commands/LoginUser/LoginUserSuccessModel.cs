@@ -2,13 +2,7 @@
 
 using StoryBooks.Features.Identity.Application.Services;
 
-public record LoginUserSuccessModel : TokenModel
-{
-    public LoginUserSuccessModel(string userId, string token, DateTime? expires)
-        : base(token, expires)
-    {
-        this.UserId = userId;
-    }
-
-    public string UserId { get; }
-}
+public record LoginUserSuccessModel(
+    string UserId, 
+    string Token, 
+    DateTime? Expires) : TokenModel(Token, Expires);

@@ -25,5 +25,9 @@ internal class IdentityApplicationConstants
         public const string UserDeletedSuccess = "Your profile is deleted!";
         public const string UserDeletedError = "Could not delete your profile!";
         public const string UserDeletedPasswordError = "Invalid password!";
+
+        public const string BecomeAuthorSuccess = "Congrats! You've become a 'Story Books' author!";
+        public const string BecomeAuthorError = "Error becoming an author!";
+        public const string AlreadyAuthorError = "Your already an author!";
     }
 }

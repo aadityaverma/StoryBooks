@@ -34,7 +34,7 @@ internal static class InfrastructureConfigurationExtensions
         string? connectionString)
         where TContext : DbContext
     {
-        var connection = configuration.GetConnectionString(connectionString);
+        string? connection = configuration.GetConnectionString(connectionString);
         return services
             .AddDbContext<TContext>(options => options
                 .UseSqlServer(connection ?? GetDefaultConnectionString(configuration),
@@ -60,12 +60,10 @@ internal static class InfrastructureConfigurationExtensions
     private static IServiceCollection AddDbInitializers(
         this IServiceCollection services,
         Assembly featureAssembly)
-    {
-        return services.Scan(scan => scan
+        => services.Scan(scan => scan
             .FromAssemblies(featureAssembly)
             .AddClasses(classes => classes
                 .AssignableTo(typeof(IDataInitializer)))
             .AsImplementedInterfaces()
             .WithTransientLifetime());
-    }
 }
