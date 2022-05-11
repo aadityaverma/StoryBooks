@@ -1,11 +1,10 @@
 ﻿namespace StoryBooks.Features.Identity.Presentation.Endpoints;
 
-using MediatR;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
 using StoryBooks.Features.Application;
+using StoryBooks.Features.Identity.Application.Commands.BecomeAuthor;
 using StoryBooks.Features.Identity.Application.Commands.ChangePassword;
 using StoryBooks.Features.Identity.Application.Commands.ConfirmEmail;
 using StoryBooks.Features.Presentation.Endpoints;
@@ -19,7 +18,7 @@ internal class AccountManageEndpointRegister : EndpointRegister
         string endpoint = $"{prefix}/account/manage";
         string tag = this.GetTag<AccountManageEndpointRegister>();
 
-        app.MapPut($"{endpoint}/password", this.Password)
+        app.MapPut($"{endpoint}/password", Password)
            .Produces(StatusCodes.Status200OK, typeof(string))
            .Produces(StatusCodes.Status400BadRequest, typeof(IEnumerable<ResultError>))
            .Produces(StatusCodes.Status404NotFound)
@@ -27,22 +26,36 @@ internal class AccountManageEndpointRegister : EndpointRegister
            .WithTags(tag)
            .RequireAuthorization();
 
-        app.MapGet($"{endpoint}/email/{{userId}}/{{token}}", this.Email)
+        app.MapGet($"{endpoint}/email/{{userId}}/{{token}}", Email)
            .Produces(StatusCodes.Status307TemporaryRedirect)
            .WithName($"{tag}{nameof(Email)}")
            .WithTags(tag);
+
+        app.MapPost($"{endpoint}/become-author", BecomeAuthor)
+           .Produces(StatusCodes.Status200OK, typeof(string))
+           .Produces(StatusCodes.Status400BadRequest, typeof(IEnumerable<ResultError>))
+           .Produces(StatusCodes.Status404NotFound)
+           .WithName($"{tag}{nameof(BecomeAuthor)}")
+           .WithTags(tag)
+           .RequireAuthorization();
     }
 
-    internal async Task<IResult> Password(
+    internal static async Task<IResult> Password(
         IMediator mediator,
-        ChangePasswordCommand command,
+        ChangePasswordCommand request,
         CancellationToken cancellationToken)
-            => await mediator.Send(command, cancellationToken).ToIResult();
+            => await mediator.Send(request, cancellationToken).ToIResult();
 
-    internal async Task<IResult> Email(
+    internal static async Task<IResult> Email(
         IMediator mediator,
         string userId,
         string token,
         CancellationToken cancellationToken)
             => await mediator.Send(new ConfirmEmailCommand(userId, token), cancellationToken).ToIResult();
+
+    internal static async Task<IResult> BecomeAuthor(
+        IMediator mediator,
+        BecomeAuthorCommand request,
+        CancellationToken cancellationToken)
+            => await mediator.Send(request, cancellationToken).ToIResult();
 }

@@ -1,78 +1,80 @@
-﻿namespace StoryBooks.Libraries.EventBus.Services
+﻿namespace StoryBooks.Libraries.EventBus.Services;
+
+using Hangfire;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+using Models;
+
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class MessagesHostedService : IHostedService
 {
-    using Hangfire;
+    private readonly IRecurringJobManager recurringJob;
+    private readonly IServiceScopeFactory serviceScopeFactory;
+    private readonly IMessagePublisher publisher;
 
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-
-    using Models;
-
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public class MessagesHostedService : IHostedService
+    public MessagesHostedService(
+        IRecurringJobManager recurringJob,
+        IServiceScopeFactory serviceScopeFactory,
+        IMessagePublisher publisher)
     {
-        private readonly IRecurringJobManager recurringJob;
-        private readonly IServiceScopeFactory serviceScopeFactory;
-        private readonly IPublisher publisher;
+        this.recurringJob = recurringJob;
+        this.serviceScopeFactory = serviceScopeFactory;
+        this.publisher = publisher;
+    }
 
-        public MessagesHostedService(
-            IRecurringJobManager recurringJob,
-            IServiceScopeFactory serviceScopeFactory,
-            IPublisher publisher)
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        using var scope = this.serviceScopeFactory.CreateScope();
+        var data = scope.ServiceProvider.GetService<DbContext>();
+
+        if (data is not null && !data.Database.CanConnect())
         {
-            this.recurringJob = recurringJob;
-            this.serviceScopeFactory = serviceScopeFactory;
-            this.publisher = publisher;
+            data.Database.Migrate();
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        this.recurringJob.AddOrUpdate(
+            nameof(MessagesHostedService),
+            () => this.ProcessPendingMessages(),
+            "*/5 * * * * *");
+
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+        => Task.CompletedTask;
+
+    public void ProcessPendingMessages()
+    {
+        using var scope = this.serviceScopeFactory.CreateScope();
+
+        var data = scope.ServiceProvider.GetService<DbContext>();
+        if (data is null)
         {
-            using var scope = this.serviceScopeFactory.CreateScope();
-            var data = scope.ServiceProvider.GetService<DbContext>();
-
-            if (data is not null && !data.Database.CanConnect())
-            {
-                data.Database.Migrate();
-            }
-
-            this.recurringJob.AddOrUpdate(
-                nameof(MessagesHostedService),
-                () => this.ProcessPendingMessages(),
-                "*/5 * * * * *");
-
-            return Task.CompletedTask;
+            return;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
-            => Task.CompletedTask;
+        var messages = data
+            .Set<Message>()
+            .Where(m => !m.Published)
+            .OrderBy(m => m.Id)
+            .ToList();
 
-        public void ProcessPendingMessages()
+        foreach (var message in messages)
         {
-            using var scope = this.serviceScopeFactory.CreateScope();
+            this.publisher
+                .Publish(message.Data, message.Type)
+                .GetAwaiter()
+                .GetResult();
 
-            var data = scope.ServiceProvider.GetService<DbContext>();
-            if (data is null) return;
+            message.MarkAsPublished();
 
-            var messages = data
-                .Set<Message>()
-                .Where(m => !m.Published)
-                .OrderBy(m => m.Id)
-                .ToList();
-
-            foreach (var message in messages)
-            {
-                this.publisher
-                    .Publish(message.Data, message.Type)
-                    .GetAwaiter()
-                    .GetResult();
-
-                message.MarkAsPublished();
-
-                data.SaveChanges();
-            }
+            data.SaveChanges();
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Queries.PersonalAccount;
 
-using AutoMapper;
-
 using StoryBooks.Features.Application.Mapping;
 using StoryBooks.Features.Identity.Domain.Entities;
 

@@ -1,26 +1,25 @@
-﻿namespace StoryBooks.Libraries.EventBus.Persistence
+﻿namespace StoryBooks.Libraries.EventBus.Persistence;
+
+using Microsoft.EntityFrameworkCore;
+
+using Models;
+
+using System.Reflection;
+
+public abstract class MessageDbContext : DbContext
 {
-    using Microsoft.EntityFrameworkCore;
-
-    using Models;
-
-    using System.Reflection;
-
-    public abstract class MessageDbContext : DbContext
+    protected MessageDbContext(DbContextOptions options)
+        : base(options)
     {
-        protected MessageDbContext(DbContextOptions options)
-            : base(options)
-        {
-        }
+    }
 
-        public DbSet<Message> Messages { get; set; } = default!;
+    public DbSet<Message> Messages { get; set; } = default!;
 
-        protected abstract Assembly ConfigurationsAssembly { get; }
+    protected abstract Assembly ConfigurationsAssembly { get; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.ApplyConfiguration(new MessageConfiguration());
-            base.OnModelCreating(builder);
-        }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfiguration(new MessageConfiguration());
+        base.OnModelCreating(builder);
     }
 }

@@ -1,16 +1,11 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Commands.ResendConfirmEmail;
 
-using MediatR;
-
 using Microsoft.AspNetCore.Identity;
 
-using StoryBooks.Features.Application;
 using StoryBooks.Features.Application.Interfaces;
 using StoryBooks.Features.Identity.Application.Services;
 using StoryBooks.Features.Identity.Domain.Entities;
 
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 
 using static StoryBooks.Features.Identity.Application.IdentityApplicationConstants;

@@ -1,18 +1,11 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Queries.PersonalAccount;
 
-using AutoMapper;
-
-using MediatR;
-
 using Microsoft.AspNetCore.Identity;
 
 using StoryBooks.Features.Application.Interfaces;
 using StoryBooks.Features.Identity.Domain.Entities;
 using StoryBooks.Features.Identity.Domain.Exceptions;
 using StoryBooks.Libraries.Validation;
-
-using System.Threading;
-using System.Threading.Tasks;
 
 public class GetPersonalDetailsQuery : IRequest<PersonalDetailsModel>
 {

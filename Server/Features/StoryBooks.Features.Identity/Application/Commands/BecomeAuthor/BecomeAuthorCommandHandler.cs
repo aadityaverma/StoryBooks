@@ -1,17 +1,14 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Commands.BecomeAuthor;
 
-using MediatR;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-using StoryBooks.Features.Application;
 using StoryBooks.Features.Application.Interfaces;
+using StoryBooks.Features.Application.Messages;
 using StoryBooks.Features.Identity.Domain.Entities;
 using StoryBooks.Features.Identity.Domain.Exceptions;
+using StoryBooks.Libraries.EventBus.Services;
 using StoryBooks.Libraries.Validation;
-
-using System.Threading.Tasks;
 
 using static StoryBooks.Features.Identity.Application.IdentityApplicationConstants;
 
@@ -19,15 +16,18 @@ internal class BecomeAuthorCommandHandler : IRequestHandler<BecomeAuthorCommand,
 {
     private readonly ApplicationSettings settings;
     private readonly UserManager<User> userManager;
+    private readonly IMessagePublisher publisher;
     private readonly ICurrentUser currentUser;
 
     public BecomeAuthorCommandHandler(
+        IMessagePublisher publisher,
         ICurrentUser currentUser,
-        UserManager<User> userManager,
+        UserManager<User> userManager,        
         IOptions<ApplicationSettings> appSettings)
     {
         this.settings = appSettings.Value;
         this.userManager = userManager;
+        this.publisher = publisher;
         this.currentUser = currentUser;
     }
 
@@ -46,7 +46,8 @@ internal class BecomeAuthorCommandHandler : IRequestHandler<BecomeAuthorCommand,
 
         if (identityResult.Succeeded)
         {
-            //TODO: Send author created event
+            var newAuthorMsg = new BecomeAuthorMessage(user.Id, user.Email, user.FirstName, request.Alias);
+            await this.publisher.Publish(newAuthorMsg, cancellationToken);
         }
 
         return identityResult.Succeeded ?

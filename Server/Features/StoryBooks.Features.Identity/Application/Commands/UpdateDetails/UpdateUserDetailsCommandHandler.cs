@@ -1,17 +1,11 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Commands.UpdateDetails;
 
-using MediatR;
-
 using Microsoft.AspNetCore.Identity;
 
-using StoryBooks.Features.Application;
 using StoryBooks.Features.Application.Interfaces;
 using StoryBooks.Features.Identity.Domain.Entities;
 using StoryBooks.Features.Identity.Domain.Exceptions;
 using StoryBooks.Libraries.Validation;
-
-using System.Linq;
-using System.Threading.Tasks;
 
 using static StoryBooks.Features.Identity.Application.IdentityApplicationConstants;
 

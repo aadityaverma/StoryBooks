@@ -11,9 +11,9 @@ public class AuthorEndpointRegister : EndpointRegister
     public override void AddEndpoints(WebApplication app, string? endpointPrefix)
     {
         string prefix = endpointPrefix ?? string.Empty;
-        string tag = GetTag<AuthorEndpointRegister>();
+        string tag = this.GetTag<AuthorEndpointRegister>();
 
-        app.MapGet($"{prefix}/list", GetList)
+        app.MapGet($"{prefix}/list", this.GetList)
            .Produces<IEnumerable<int>>(StatusCodes.Status200OK)
            .WithName($"{tag}{nameof(GetList)}")
            .WithTags(tag)

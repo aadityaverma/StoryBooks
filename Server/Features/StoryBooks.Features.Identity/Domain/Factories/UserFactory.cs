@@ -43,7 +43,7 @@ public class UserFactory : IUserFactory
             throw new InvalidIdentityUserException(ErrorMessages.InvalidUserFields);
         }
 
-        return new User(email, firstName, lastName);
+        return new User(this.email, this.firstName, this.lastName);
     }
 
     public void Reset()

@@ -1,15 +1,10 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Commands.ConfirmEmail;
 
-using MediatR;
-
 using Microsoft.AspNetCore.Identity;
 
-using StoryBooks.Features.Application;
 using StoryBooks.Features.Identity.Application.Services;
 using StoryBooks.Features.Identity.Domain.Entities;
 
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 
 using static StoryBooks.Features.Identity.Application.IdentityApplicationConstants;

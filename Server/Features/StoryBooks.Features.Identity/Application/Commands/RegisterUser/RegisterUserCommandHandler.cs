@@ -1,18 +1,13 @@
 ﻿namespace StoryBooks.Features.Identity.Application.Commands.RegisterUser;
 
-using MediatR;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-using StoryBooks.Features.Application;
 using StoryBooks.Features.Application.Commands;
 using StoryBooks.Features.Identity.Application.Services;
 using StoryBooks.Features.Identity.Domain.Entities;
 using StoryBooks.Features.Identity.Domain.Factories;
 
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 
 using static StoryBooks.Features.Identity.Application.IdentityApplicationConstants;

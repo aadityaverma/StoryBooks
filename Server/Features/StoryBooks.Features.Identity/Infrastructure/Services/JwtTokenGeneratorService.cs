@@ -6,11 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using StoryBooks.Features.Identity.Application.Services;
 using StoryBooks.Features.Identity.Domain.Entities;
 
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 public class JwtTokenGeneratorService : IAuthTokenGeneratorService
 {

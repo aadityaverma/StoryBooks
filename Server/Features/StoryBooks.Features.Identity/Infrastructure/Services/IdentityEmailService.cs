@@ -1,15 +1,11 @@
 ﻿namespace StoryBooks.Features.Identity.Infrastructure.Services;
 
-using AutoMapper;
-
 using StoryBooks.Features.Identity.Application.Services;
 using StoryBooks.Features.Identity.Domain.Entities;
 using StoryBooks.Features.Identity.Resources.EmailTemplates.EmailConfirmation;
 using StoryBooks.Features.Identity.Resources.EmailTemplates.UserRegistration;
 using StoryBooks.Libraries.Email.Models;
 using StoryBooks.Libraries.Email.Services;
-
-using System.Threading.Tasks;
 
 using static StoryBooks.Features.Identity.Infrastructure.IdentityInfrastructureConstants;
 

@@ -11,9 +11,43 @@ using Microsoft.Extensions.DependencyInjection;
 using StoryBooks.Libraries.EventBus.Services;
 
 using System.Data.SqlClient;
+using System.Reflection;
 
 public static class MessagesConfigurationExtensions
 {
+    public static IServiceCollection AddInMemoryTransit(
+        this IServiceCollection services,
+        params Assembly[] consumersAssemblies)
+    {
+        services
+            .AddTransient<IMessagePublisher, MessagePublisher>()
+            .AddMassTransit(mt =>
+            {
+                mt.SetKebabCaseEndpointNameFormatter();
+
+                foreach (var assembly in consumersAssemblies)
+                {
+                    mt.AddConsumers(assembly);
+                }
+
+                mt.UsingInMemory((ctx, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(ctx);
+                });
+            });
+
+        services
+            .AddOptions<MassTransitHostOptions>()
+            .Configure(options =>
+            {
+                options.WaitUntilStarted = true;
+                options.StartTimeout = TimeSpan.FromSeconds(10);
+                options.StopTimeout = TimeSpan.FromSeconds(30);
+            });
+
+        return services;
+    }
+
     public static IServiceCollection AddMessagesFeature(
         this IServiceCollection services,
         IConfiguration configuration,
@@ -21,7 +55,7 @@ public static class MessagesConfigurationExtensions
             => services
                 //TODO Add MQ Database context
                 .AddMessaging(configuration, true, consumers);
-            
+
     private static MessageQueueSettings GetMessageQueueSettings(IConfiguration configuration)
     {
         var settings = configuration.GetSection(nameof(MessageQueueSettings));
@@ -41,9 +75,7 @@ public static class MessagesConfigurationExtensions
         bool usePolling = true,
         params Type[] consumers)
     {
-        services
-            .AddTransient<IPublisher, Publisher>()
-            .AddTransient<IMessageService, MessageService>();
+        services.AddTransient<IMessagePublisher, MessagePublisher>();
 
         var messageQueueSettings = GetMessageQueueSettings(configuration);
 

@@ -6,16 +6,19 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class Publisher : IPublisher
+public class MessagePublisher : IMessagePublisher
 {
     private const int TimeoutMilliseconds = 2000;
 
     private readonly IBus bus;
 
-    public Publisher(IBus bus) => this.bus = bus;
+    public MessagePublisher(IBus bus) => this.bus = bus;
 
     public Task Publish<TMessage>(TMessage message)
         => this.bus.Publish(message  ?? default!, GetCancellationToken());
+
+    public Task Publish<TMessage>(TMessage message, CancellationToken cancellationToken)
+        => this.bus.Publish(message ?? default!, cancellationToken);
 
     public Task Publish<TMessage>(TMessage message, Type messageType)
         => this.bus.Publish(message ?? default!, messageType, GetCancellationToken());
